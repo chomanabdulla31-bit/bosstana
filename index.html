@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberCoin Dash 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gold: #ffcf40;
+            --dark-gold: #b8860b;
+            --bg-deep: #05070a;
+            --card-glass: rgba(15, 23, 42, 0.7);
+            --neon-blue: #00f2ff;
+            --glow: 0 0 15px rgba(255, 207, 64, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sora', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 242, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 207, 64, 0.05) 0%, transparent 20%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* --- Header Section --- */
+        .header {
+            background: var(--card-glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            box-shadow: var(--glow);
+        }
+
+        .user-info h2 { font-size: 1.2rem; color: var(--neon-blue); }
+
+        .coin-main-display {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 2px solid var(--primary-gold);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            box-shadow: 0 0 20px rgba(255, 207, 64, 0.2);
+        }
+
+        .coin-main-display i {
+            color: var(--primary-gold);
+            filter: drop-shadow(0 0 5px var(--primary-gold));
+            animation: rotateCoin 3s infinite linear;
+        }
+
+        @keyframes rotateCoin {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        /* --- Main Grid --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .glass-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 28px;
+            padding: 25px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-gold);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #cbd5e1;
+        }
+
+        /* --- Mining Bot Center --- */
+        .mining-section {
+            grid-column: span 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .mine-bot {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, #ffcf40 0%, #b8860b 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 40px rgba(255, 207, 64, 0.4);
+            margin-bottom: 20px;
+            border: 8px solid rgba(255, 255, 255, 0.2);
+            transition: 0.1s;
+            position: relative;
+        }
+
+        .mine-bot:active { transform: scale(0.92); }
+        .mine-bot i { font-size: 5rem; color: white; }
+
+        .mining-status {
+            font-size: 0.8rem;
+            color: var(--neon-blue);
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* --- List Styles --- */
+        .task-list { list-style: none; }
+        .task-item {
+            background: rgba(255, 255, 255, 0.03);
+            margin-bottom: 12px;
+            padding: 15px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- Buttons --- */
+        .btn-premium {
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn-premium:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 15px var(--primary-gold);
+        }
+
+        /* --- Spin Wheel --- */
+        .wheel-box {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+        }
+        .wheel-svg {
+            width: 100%;
+            height: 100%;
+            transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1);
+        }
+
+        /* --- Animations --- */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); opacity: 0; }
+        }
+        .floating-text {
+            position: absolute;
+            color: var(--primary-gold);
+            font-weight: bold;
+            pointer-events: none;
+            animation: float 0.8s ease-out forwards;
+        }
+
+        /* --- Leaderboard Highlight --- */
+        .rank-1 { border: 1px solid var(--primary-gold); background: rgba(255, 207, 64, 0.05); }
+
+        @media (max-width: 600px) {
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="user-info">
+            <h2><i class="fas fa-shield-halved"></i> COMMANDER_BOT</h2>
+            <p style="font-size: 0.7rem; color: var(--text-dim);">LEVEL 42 PREMIUM ACCOUNT</p>
+        </div>
+        <div class="coin-main-display" id="coin-balance-container">
+            <i class="fas fa-coins"></i>
+            <span id="balance">5,240</span>
+        </div>
+        <button class="btn-premium" style="width: auto; padding: 10px 20px;">LOGOUT</button>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <!-- TAP MINE BOT -->
+        <div class="glass-card mining-section">
+            <div class="card-title"><i class="fas fa-microchip"></i> Mining Central</div>
+            <div class="mine-bot" id="mine-trigger">
+                <i class="fas fa-hammer"></i>
+            </div>
+            <div class="mining-status">SYSTEM ACTIVE: +1.5 / TAP</div>
+            <button class="btn-premium" style="margin-top: 20px;">UPGRADE GEAR</button>
+        </div>
+
+        <!-- VIDEO REWARDS -->
+        <div class="glass-card">
+            <div class="card-title"><i class="fas fa-bolt"></i> Fast Earn</div>
+            <div class="task-list">
+                <div class="task-item">
+                    <span>Premium Ad #1</span>
+                    <button class="btn-premium" style="width:auto; font-size: 0.7rem;" onclick="earn(50)">+50</button>
+                </div>
+                <div class="task-item">
+                    <span>Sponsor Clip</span>
+                    <button class="btn-premium" style="width:auto; font-size: 0.7rem;" onclick="earn(30)">+30</button>
+                </div>
+                <div class="task-item">
+                    <span>Quick Survey</span>
+                    <button class="btn-premium" style="width:auto; font-size: 0.7rem;" onclick="earn(100)">+100</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPIN & WIN -->
+        <div class="glass-card" style="text-align: center;">
+            <div class="card-title"><i class="fas fa-dharmachakra"></i> Lucky Vortex</div>
+            <div class="wheel-box">
+                <img src="https://cdn-icons-png.flaticon.com/512/6119/6119539.png" class="wheel-svg" id="wheel-img">
+                <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); color:red; font-size:2rem; z-index:10;">▼</div>
+            </div>
+            <button class="btn-premium" onclick="spinWheel()">SPIN FOR 100</button>
+        </div>
+
+        <!-- LEADERBOARD -->
+        <div class="glass-card">
+            <div class="card-title"><i class="fas fa-trophy"></i> Global Ranks</div>
+            <div class="task-list">
+                <div class="task-item rank-1">
+                    <span>1. CryptoKing</span>
+                    <span style="color:var(--primary-gold)">99,240</span>
+                </div>
+                <div class="task-item">
+                    <span>2. WhaleMiner</span>
+                    <span style="color:var(--primary-gold)">85,100</span>
+                </div>
+                <div class="task-item">
+                    <span>3. SatoshiKid</span>
+                    <span style="color:var(--primary-gold)">72,400</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- WITHDRAW -->
+        <div class="glass-card">
+            <div class="card-title"><i class="fas fa-wallet"></i> Cash Out</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
+                <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; text-align:center;">
+                    <i class="fab fa-paypal" style="font-size:1.5rem; color:#0070ba"></i>
+                    <p style="font-size:0.8rem; margin-top:5px;">$10.00</p>
+                </div>
+                <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; text-align:center;">
+                    <i class="fab fa-google-play" style="font-size:1.5rem; color:#34a853"></i>
+                    <p style="font-size:0.8rem; margin-top:5px;">$10.00</p>
+                </div>
+            </div>
+            <button class="btn-premium" onclick="alert('Insufficient Balance')">WITHDRAW NOW</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentBalance = 5240;
+        const balanceEl = document.getElementById('balance');
+        const mineTrigger = document.getElementById('mine-trigger');
+
+        // Tap Mining Logic
+        mineTrigger.addEventListener('click', (e) => {
+            currentBalance += 1.5;
+            updateDisplay();
+            createFloatingText(e.clientX, e.clientY, "+1.5");
+        });
+
+        function earn(amount) {
+            currentBalance += amount;
+            updateDisplay();
+            alert(`Collected ${amount} coins!`);
+        }
+
+        function updateDisplay() {
+            balanceEl.innerText = Math.floor(currentBalance).toLocaleString();
+
+            // Pulse effect
+            const container = document.getElementById('coin-balance-container');
+            container.style.transform = "scale(1.1)";
+            setTimeout(() => container.style.transform = "scale(1)", 100);
+        }
+
+        function createFloatingText(x, y, text) {
+            const el = document.createElement('div');
+            el.className = 'floating-text';
+            el.innerText = text;
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 800);
+        }
+
+        let isSpinning = false;
+        function spinWheel() {
+            if (isSpinning) return;
+            if (currentBalance < 100) { alert("Not enough coins!"); return; }
+
+            currentBalance -= 100;
+            updateDisplay();
+
+            isSpinning = true;
+            const wheel = document.getElementById('wheel-img');
+            const deg = Math.floor(Math.random() * 360) + 1800;
+
+            wheel.style.transform = `rotate(${deg}deg)`;
+
+            setTimeout(() => {
+                isSpinning = false;
+                const win = [50, 200, 500, 0, 1000][Math.floor(Math.random()*5)];
+                currentBalance += win;
+                updateDisplay();
+                alert(`You won ${win} coins!`);
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
