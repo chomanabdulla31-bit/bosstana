@@ -3,196 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Geminicoins Premium - Iraq</title>
+    <title>GEMINICOIN - Premium Miner</title>
     
-    <!-- SDKs - بەکارهێنانی وەشانی جێگیر بۆ فایەربەیس -->
+    <!-- SDKs -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-    
+    <script src="https://adsgram.org/js/adman.js"></script>
+
     <style>
         :root {
             --gold: #ffcc00;
-            --bg: #050505;
-            --card-bg: #121212;
-            --cyan: #00d2ff;
-            --purple: #9d50bb;
-            --red: #ff4444;
+            --bg: #000000;
+            --card-bg: #0c0c0c;
+            --border: #1a1a1a;
+            --text-gray: #7a7a7a;
+            --accent-blue: #00d2ff;
+            --accent-purple: #9d50bb;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body {
             margin: 0; background-color: var(--bg); color: white;
-            font-family: 'Segoe UI', Tahoma, sans-serif; overflow: hidden;
-            user-select: none;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden; user-select: none;
         }
 
         /* Splash Screen */
         #splash {
-            position: fixed; inset: 0; background: black; z-index: 1000;
+            position: fixed; inset: 0; background: black; z-index: 2000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        .loader-ring { width: 80px; height: 80px; border: 3px solid #333; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* Main Container */
+        /* Main Layout */
         .app-container { display: none; height: 100vh; flex-direction: column; }
-        .content { flex-grow: 1; overflow-y: auto; padding: 20px; padding-bottom: 110px; }
-        .page { display: none; flex-direction: column; width: 100%; }
-        .active-page { display: flex; }
+        .top-nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; background: rgba(0,0,0,0.8); z-index: 10;
+        }
+        .user-pill { display: flex; align-items: center; gap: 10px; background: var(--card-bg); padding: 5px 12px; border-radius: 12px; border: 1px solid var(--border); }
+        .wisdom-btn { background: rgba(255,204,0,0.1); border: 1px solid var(--gold); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 5px; }
 
-        /* Top Bar */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(0,0,0,0.5); }
-        .user-info { display: flex; align-items: center; gap: 10px; }
-        .rank-badge { background: var(--gold); color: black; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; }
+        .content { flex-grow: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .active-page { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Balance Display */
-        .balance-hero { text-align: center; margin: 20px 0; }
-        .balance-hero h1 { font-size: 50px; margin: 0; color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .balance-hero p { color: #777; letter-spacing: 2px; font-size: 12px; margin-top: 5px; }
+        /* Titles */
+        .page-title { font-size: 28px; font-weight: 800; font-style: italic; margin: 0; text-transform: uppercase; }
+        .page-subtitle { color: var(--text-gray); font-size: 11px; letter-spacing: 2px; margin-bottom: 25px; }
 
-        /* Tap Mechanism */
-        .tap-area { flex-grow: 1; display: flex; justify-content: center; align-items: center; position: relative; }
-        .coin-btn {
+        /* Mine Page Specifics */
+        .balance-container { text-align: center; margin: 30px 0; }
+        .balance-val { font-size: 55px; font-weight: bold; color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .mining-status { color: #00ff88; font-size: 10px; letter-spacing: 1px; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+        .coin-wrapper { position: relative; width: 260px; height: 260px; margin: 0 auto; display: flex; justify-content: center; align-items: center; }
+        .coin-button {
             width: 240px; height: 240px; border-radius: 50%;
-            background: radial-gradient(circle, #222 0%, #000 100%);
-            border: 8px solid #1a1a1a; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 30px rgba(255, 204, 0, 0.1); transition: transform 0.05s;
-            cursor: pointer;
+            background: radial-gradient(circle, #111 0%, #000 100%);
+            border: 4px solid #1a1a1a; position: relative; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 50px rgba(0,0,0,1); transition: transform 0.05s;
         }
-        .coin-btn:active { transform: scale(0.95); }
+        .coin-button:active { transform: scale(0.92); }
+        .coin-button img { width: 140px; pointer-events: none; }
 
-        /* Cards & Shop */
-        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1px solid #222; display: flex; align-items: center; gap: 15px; }
-        .card-icon { width: 45px; height: 45px; background: #1a1a1a; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; }
-        .card-info { flex-grow: 1; }
-        .card-info h4 { margin: 0; font-size: 14px; }
-        .card-info p { margin: 4px 0 0; font-size: 11px; color: #777; }
-        .buy-btn { background: var(--gold); color: black; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; font-size: 12px; }
+        /* Energy Section */
+        .energy-section { margin-top: 40px; padding: 0 20px; }
+        .energy-info { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+        .energy-bar-bg { height: 12px; background: #1a1a1a; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
+        .energy-bar-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #ffcc00, #ff8800); transition: width 0.3s; }
 
-        /* Progress Footer */
-        .footer-progress { padding: 0 20px 20px; }
-        .bar-bg { width: 100%; height: 12px; background: #222; border-radius: 10px; overflow: hidden; margin-top: 8px; border: 1px solid #333; }
-        .bar-fill { width: 100%; height: 100%; background: linear-gradient(90deg, var(--gold), #ff8800); transition: width 0.3s; }
+        /* Cards Style (Shared for Earn, Boost, Friends) */
+        .card-item {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 20px; padding: 18px; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 15px; position: relative;
+        }
+        .card-icon-box { width: 50px; height: 50px; background: #141414; border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 22px; color: var(--gold); }
+        .card-content { flex-grow: 1; }
+        .card-content h4 { margin: 0; font-size: 14px; text-transform: uppercase; }
+        .card-content p { margin: 4px 0 0; font-size: 11px; color: var(--gold); font-weight: bold; }
+        .arrow-right { color: #333; font-size: 20px; }
 
-        /* Bottom Nav */
+        /* Rank Page Podium */
+        .rank-podium { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-bottom: 30px; padding-top: 20px; }
+        .podium-item { text-align: center; width: 100px; }
+        .podium-avatar { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #333; margin: 0 auto 10px; position: relative; }
+        .podium-1 .podium-avatar { border-color: var(--gold); width: 80px; height: 80px; }
+        .podium-box { background: #1a1a1a; border-radius: 10px 10px 0 0; padding: 10px 0; font-weight: bold; }
+        .podium-1 .podium-box { background: var(--gold); color: black; height: 80px; }
+        .podium-2 .podium-box { height: 60px; }
+        .podium-3 .podium-box { height: 45px; }
+
+        /* Profile/Wallet Page */
+        .profile-header { text-align: center; margin-bottom: 30px; }
+        .profile-avatar { width: 80px; height: 80px; background: #222; border-radius: 20px; margin: 0 auto 15px; display: flex; justify-content: center; align-items: center; font-size: 40px; border: 2px solid var(--border); }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 20px; text-align: left; }
+        .stat-card p { margin: 0; font-size: 10px; color: var(--text-gray); text-transform: uppercase; }
+        .stat-card h3 { margin: 5px 0 0; font-size: 18px; color: var(--gold); }
+
+        .wallet-card { background: linear-gradient(135deg, #111, #000); border: 1px solid var(--gold); border-radius: 25px; padding: 25px; text-align: center; margin-bottom: 20px; }
+        .withdraw-btn { width: 100%; background: white; color: black; border: none; padding: 15px; border-radius: 15px; font-weight: bold; font-size: 16px; margin-top: 15px; }
+
+        /* Navigation Bar */
         .nav-bar {
-            position: fixed; bottom: 15px; left: 5%; width: 90%; height: 70px;
-            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(15px);
-            border-radius: 20px; border: 1px solid #333;
-            display: flex; justify-content: space-around; align-items: center; z-index: 100;
+            position: fixed; bottom: 10px; left: 10px; right: 10px; height: 75px;
+            background: rgba(12, 12, 12, 0.95); backdrop-filter: blur(10px);
+            border-radius: 25px; border: 1px solid var(--border);
+            display: flex; justify-content: space-around; align-items: center; z-index: 1000;
         }
-        .nav-item { text-align: center; color: #555; font-size: 10px; cursor: pointer; transition: 0.3s; flex: 1; }
+        .nav-item { flex: 1; text-align: center; color: var(--text-gray); font-size: 10px; font-weight: bold; transition: 0.3s; }
         .nav-item.active { color: var(--gold); }
-        .nav-item div { font-size: 22px; margin-bottom: 2px; }
+        .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; display: block; margin-left: auto; margin-right: auto; }
+        .nav-item.active svg { fill: var(--gold); }
 
-        /* Floating +1 Animation */
-        .tap-anim { position: absolute; color: white; font-weight: bold; font-size: 28px; pointer-events: none; animation: floatUp 0.8s ease-out forwards; z-index: 500; text-shadow: 0 0 10px rgba(255,204,0,0.5); }
-        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-120px); opacity: 0; } }
+        /* Animation +1 */
+        .tap-anim { position: absolute; color: white; font-weight: bold; font-size: 32px; pointer-events: none; animation: floatUp 0.8s ease-out forwards; z-index: 500; text-shadow: 0 0 10px gold; }
+        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-150px); opacity: 0; } }
     </style>
 </head>
 <body>
 
     <!-- Splash Screen -->
     <div id="splash">
-        <div style="font-size: 60px; margin-bottom: 20px;">💎</div>
-        <h1 style="color: var(--gold); letter-spacing: 5px; margin: 0;">GEMINICOINS</h1>
-        <p style="color: #444; font-size: 10px; margin-bottom: 30px; letter-spacing: 2px;">LOADING SECURE DATA...</p>
-        <div class="loader-ring"></div>
+        <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" width="100" style="filter: drop-shadow(0 0 20px gold)">
+        <h1 style="color: var(--gold); letter-spacing: 5px; margin-top: 20px;">GEMINICOIN</h1>
+        <p style="color: #444; font-size: 10px; letter-spacing: 3px;">INITIALIZING SECURE PROTOCOL...</p>
     </div>
 
-    <!-- Main App -->
     <div class="app-container" id="app">
         
-        <div class="top-bar">
-            <div class="user-info">
-                <div style="background:#222; padding:8px; border-radius:10px;">👤</div>
-                <div>
-                    <div id="rank-tag" class="rank-badge">BRONZE</div>
-                    <div id="user-display" style="font-size: 13px; font-weight: bold; margin-top:3px;">Loading...</div>
-                </div>
+        <!-- Top Bar -->
+        <div class="top-nav">
+            <div class="user-pill" onclick="switchPage('profile', this)">
+                <div style="width:24px; height:24px; background:#333; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:12px;">👤</div>
+                <div style="font-size: 11px;">STATUS: <span style="color:#00ff88">ACTIVE</span><br><b id="user-name">Miner #402</b></div>
             </div>
-            <div style="color: var(--gold); font-weight: bold; font-size: 14px;">IRAQ 🇮🇶</div>
+            <button class="wisdom-btn">🧠 SEEK WISDOM</button>
         </div>
 
         <div class="content">
             
-            <!-- PAGE: MINE (ماینینگ) -->
+            <!-- PAGE: MINE -->
             <div id="page-mine" class="page active-page">
-                <div class="balance-hero">
-                    <h1 id="balance-txt">0</h1>
-                    <p>TOTAL GEMS COLLECTED 💎</p>
+                <div class="balance-container">
+                    <div class="balance-val">
+                        <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" width="40">
+                        <span id="balance-txt">0</span>
+                    </div>
+                    <div class="mining-status">● MINING OPERATIONS ACTIVE</div>
                 </div>
 
-                <div class="tap-area">
-                    <div class="coin-btn" id="coin-trigger">
-                        <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" width="120" style="filter: drop-shadow(0 0 10px gold);">
+                <div class="coin-wrapper">
+                    <div class="coin-button" id="coin-trigger">
+                        <svg width="180" height="180" viewBox="0 0 100 100">
+                            <path d="M50 15 L85 35 L85 65 L50 85 L15 65 L15 35 Z" fill="none" stroke="var(--accent-blue)" stroke-width="0.5" opacity="0.5"/>
+                            <circle cx="50" cy="50" r="30" fill="none" stroke="var(--accent-purple)" stroke-width="1" stroke-dasharray="5 5"/>
+                            <image href="https://cdn-icons-png.flaticon.com/512/2163/2163350.png" x="25" y="25" width="50" height="50" style="filter: invert(1) sepia(1) saturate(5) hue-rotate(10deg);"/>
+                        </svg>
                     </div>
                 </div>
 
-                <div class="footer-progress">
-                    <div style="display:flex; justify-content:space-between; font-size:12px;">
-                        <span>ENERGY ⚡ <span id="energy-txt">1000</span>/1000</span>
-                        <span id="energy-percent" style="color:var(--gold)">100%</span>
+                <div class="energy-section">
+                    <div class="energy-info">
+                        <span>ENERGY SYNC</span>
+                        <span id="energy-percent">100%</span>
                     </div>
-                    <div class="bar-bg"><div class="bar-fill" id="energy-bar"></div></div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="color:var(--gold)">⚡</span>
+                        <div style="flex-grow:1">
+                            <span id="energy-txt" style="font-size:14px;">1000 / 1000</span>
+                            <div class="energy-bar-bg"><div class="energy-bar-fill" id="energy-bar"></div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- PAGE: SHOP (گەنجینە و کڕین) -->
-            <div id="page-wallet" class="page">
-                <h2 style="text-align:center; color:var(--gold)">GIFT CARDS SHOP 🛍️</h2>
-                <div style="background:#111; padding:20px; border-radius:15px; text-align:center; margin-bottom:20px; border:1px dashed #333">
-                    <p style="margin:0; font-size:12px; color:#777">YOUR BALANCE</p>
-                    <h2 id="wallet-balance" style="margin:5px 0; font-size:35px; color:var(--gold)">0 💎</h2>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon" style="color:#007AFF"></div>
-                    <div class="card-info"><h4>App Store Card $10</h4><p>Price: 10,000,000 💎</p></div>
-                    <button class="buy-btn" onclick="buyItem('App Store $10', 10000000)">BUY</button>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon" style="color:#34A853">▶</div>
-                    <div class="card-info"><h4>Google Play Card $10</h4><p>Price: 10,000,000 💎</p></div>
-                    <button class="buy-btn" onclick="buyItem('Google Play $10', 10000000)">BUY</button>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon" style="color:#FFD700">💰</div>
-                    <div class="card-info"><h4>Cash Out $50 (ZainCash)</h4><p>Price: 50,000,000 💎</p></div>
-                    <button class="buy-btn" onclick="buyItem('Cash $50', 50000000)">BUY</button>
-                </div>
-            </div>
-
-            <!-- PAGE: EARN (ئەرکەکان) -->
+            <!-- PAGE: EARN -->
             <div id="page-earn" class="page">
-                <h2 style="color:var(--gold)">EARN FAST 🎁</h2>
-                <div class="card" onclick="watchAd()">
-                    <div class="card-icon">📺</div>
-                    <div class="card-info"><h4>Watch Rewarded Ad</h4><p>Get +5,000 Gems instantly</p></div>
-                    <div style="color:var(--gold); font-weight:bold">+5k</div>
+                <h1 class="page-title">EARN STATION</h1>
+                <p class="page-subtitle">HIGH YIELD REWARDS SYSTEM</p>
+
+                <div class="card-item" onclick="watchAd()" style="background: rgba(255,204,0,0.05); border: 1px solid var(--gold);">
+                    <div class="card-icon-box" style="background: var(--gold); color: black;">▶</div>
+                    <div class="card-content">
+                        <h4>REWARDED AD</h4>
+                        <p>INSTANT 2,500 GEM + ENERGY</p>
+                    </div>
+                    <div class="arrow-right">›</div>
                 </div>
-                <div class="card">
-                    <div class="card-icon">🐦</div>
-                    <div class="card-info"><h4>Follow our News</h4><p>+50,000 Gems</p></div>
-                    <button class="buy-btn" onclick="window.open('https://t.me/your_channel')">JOIN</button>
+
+                <p style="font-size:10px; color:#555; margin: 20px 0 10px;">ACTIVE PROTOCOLS</p>
+
+                <div class="card-item">
+                    <div class="card-icon-box">▶</div>
+                    <div class="card-content"><h4>GEMINI PROTOCOL BRIEFING</h4><p>+50,000 GEM</p></div>
+                    <div class="arrow-right">›</div>
+                </div>
+                <div class="card-item">
+                    <div class="card-icon-box">📈</div>
+                    <div class="card-content"><h4>MARKET SENTIMENT ANALYSIS</h4><p>+125,000 GEM</p></div>
+                    <div class="arrow-right">›</div>
                 </div>
             </div>
 
-            <!-- PAGE: BOOST (بەهێزکەرەکان) -->
-            <div id="page-boost" class="page">
-                <h2 style="color:var(--gold)">BOOSTERS ⚡</h2>
-                <div class="card">
-                    <div class="card-icon">🔋</div>
-                    <div class="card-info"><h4>Full Energy Refill</h4><p>Get 1000 energy back</p></div>
-                    <button class="buy-btn" onclick="refillEnergy()">FREE</button>
+            <!-- PAGE: RANK -->
+            <div id="page-rank" class="page">
+                <h2 style="text-align:center">Top Tappers</h2>
+                <p style="text-align:center; color:#555; font-size:12px;">Join the elite circles of GEM miners</p>
+
+                <div class="rank-podium">
+                    <div class="podium-item podium-2">
+                        <div class="podium-avatar"></div>
+                        <div class="podium-box">#2</div>
+                    </div>
+                    <div class="podium-item podium-1">
+                        <div class="podium-avatar"></div>
+                        <div class="podium-box">#1</div>
+                    </div>
+                    <div class="podium-item podium-3">
+                        <div class="podium-avatar"></div>
+                        <div class="podium-box">#3</div>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="card-icon">🚀</div>
-                    <div class="card-info"><h4>Multi-Tap X2</h4><p>Soon...</p></div>
-                    <button class="buy-btn" style="background:#333; color:#777">LOCK</button>
+
+                <div id="leaderboard-list">
+                    <!-- Leaderboard items go here -->
+                </div>
+            </div>
+
+            <!-- PAGE: BOOST -->
+            <div id="page-boost" class="page">
+                <h1 class="page-title">BOOST HUB</h1>
+                <p class="page-subtitle">SCALE YOUR MINING INFRASTRUCTURE</p>
+
+                <div class="card-item">
+                    <div class="card-icon-box">☝️</div>
+                    <div class="card-content"><h4>Nano-Tapping <small style="color:#444">LVL 0</small></h4><p>+1 Tap Power</p></div>
+                    <div style="font-weight:bold">100 💎</div>
+                </div>
+                <div class="card-item">
+                    <div class="card-icon-box">🖥️</div>
+                    <div class="card-content"><h4>GPU Cluster <small style="color:#444">LVL 0</small></h4><p>+5 GEM/s Passive</p></div>
+                    <div style="font-weight:bold">500 💎</div>
+                </div>
+            </div>
+
+            <!-- PAGE: PROFILE / WALLET -->
+            <div id="page-profile" class="page">
+                <div class="profile-header">
+                    <div class="profile-avatar">👤</div>
+                    <h2 id="profile-name">Elite Operative <span>✔️</span></h2>
+                    <div style="display:flex; justify-content:center; gap:10px;">
+                        <span class="wisdom-btn" style="background:#111">PLATINUM LEAGUE</span>
+                        <span class="wisdom-btn" style="border-color:#00d2ff; color:#00d2ff">FIREBASE SYNCED</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card"><p>Total Taps</p><h3 id="stat-taps">0</h3></div>
+                    <div class="stat-card"><p>Click Power</p><h3>1</h3></div>
+                    <div class="stat-card"><p>Passive Rate</p><h3>0/s</h3></div>
+                    <div class="stat-card"><p>Global Rank</p><h3>#1,402</h3></div>
+                </div>
+
+                <div class="wallet-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" width="40">
+                    <p style="color:#777; font-size:12px; margin:10px 0 5px;">AVAILABLE BALANCE</p>
+                    <h1 id="wallet-val" style="margin:0; font-size:40px;">0 <small style="font-size:14px; color:var(--gold)">GEM</small></h1>
+                    <div style="display:flex; gap:10px; margin-top:20px;">
+                        <button class="withdraw-btn" style="flex:1" onclick="withdraw()">WITHDRAW</button>
+                        <button class="withdraw-btn" style="flex:1; background:#1a1a1a; color:white;" onclick="tg.showAlert('Coming Soon...')">HISTORY</button>
+                    </div>
+                </div>
+
+                <div class="card-item" style="border-style: dashed; border-color:#333;">
+                    <div class="card-icon-box">➕</div>
+                    <div class="card-content"><h4>Connect Wallet</h4><p>TON / ETH supported</p></div>
+                    <div class="arrow-right">›</div>
                 </div>
             </div>
 
@@ -200,200 +291,175 @@
 
         <!-- Navigation Bar -->
         <nav class="nav-bar">
-            <div class="nav-item active" onclick="switchPage('mine', this)"><div>⛏️</div>MINE</div>
-            <div class="nav-item" onclick="switchPage('earn', this)"><div>🎁</div>EARN</div>
-            <div class="nav-item" onclick="switchPage('boost', this)"><div>⚡</div>BOOST</div>
-            <div class="nav-item" onclick="switchPage('wallet', this)"><div>🛒</div>SHOP</div>
+            <div class="nav-item active" onclick="switchPage('mine', this)">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.8l8 4v7.4l-8 4-8-4V8.8l8-4z"/></svg>
+                MINE
+            </div>
+            <div class="nav-item" onclick="switchPage('earn', this)">
+                <svg viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                EARN
+            </div>
+            <div class="nav-item" onclick="switchPage('profile', this)">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                FRIENDS
+            </div>
+            <div class="nav-item" onclick="switchPage('boost', this)">
+                <svg viewBox="0 0 24 24"><path d="M11.5 2L11 2v9H2l10.5 11V13h9z"/></svg>
+                BOOST
+            </div>
+            <div class="nav-item" onclick="switchPage('rank', this)">
+                <svg viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 11.63 21 9.55 21 7V6c0-1.1-.9-2-2-2z"/></svg>
+                RANK
+            </div>
         </nav>
 
     </div>
 
     <script>
-        // 1. FIREBASE SETUP (بەستنەوە بە پڕۆژەکەی تۆ)
+        // 1. FIREBASE SETUP
         const firebaseConfig = {
             apiKey: "AIzaSyBMN49BmTeQ4OaFbSuiC2AaELHdkOuc_8U",
             authDomain: "geminicoins-9f1a5.firebaseapp.com",
             projectId: "geminicoins-9f1a5",
             storageBucket: "geminicoins-9f1a5.firebasestorage.app",
             messagingSenderId: "841242980001",
-            appId: "1:841242980001:web:b241ba1b7f281d691e4ae0",
-            measurementId: "G-48DT79KMS8"
+            appId: "1:841242980001:web:b241ba1b7f281d691e4ae0"
         };
-        
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 2. TELEGRAM WEBAPP INITIALIZATION
+        // 2. TELEGRAM & USER
         const tg = window.Telegram.WebApp;
         tg.expand();
         const user = tg.initDataUnsafe.user || { id: "test_user", first_name: "Developer" };
         const uid = String(user.id);
-        document.getElementById('user-display').innerText = user.first_name;
+        document.getElementById('user-name').innerText = user.first_name;
+        document.getElementById('profile-name').innerHTML = user.first_name + ' <span style="color:#00d2ff">✔️</span>';
 
         // 3. APP STATE
         let balance = 0;
         let energy = 1000;
-        let isSaving = false;
+        let totalTaps = 0;
 
-        // بارکردنی داتای بەکارهێنەر
         async function loadUser() {
-            try {
-                const docRef = db.collection("users").doc(uid);
-                const doc = await docRef.get();
-                
-                if (doc.exists) {
-                    balance = doc.data().balance || 0;
-                    energy = doc.data().energy || 1000;
-                } else {
-                    await docRef.set({
-                        name: user.first_name,
-                        balance: 0,
-                        energy: 1000,
-                        joinedAt: Date.now()
-                    });
-                }
-                updateUI();
-                setTimeout(() => {
-                    document.getElementById('splash').style.display = 'none';
-                    document.getElementById('app').style.display = 'flex';
-                }, 1000);
-            } catch (e) {
-                console.error("Error:", e);
-                alert("پەیوەندی ئینتەرنێت جێگیر نییە!");
+            const doc = await db.collection("users").doc(uid).get();
+            if (doc.exists) {
+                const data = doc.data();
+                balance = data.balance || 0;
+                energy = data.energy || 1000;
+                totalTaps = data.totalTaps || 0;
+            } else {
+                await db.collection("users").doc(uid).set({
+                    name: user.first_name, balance: 0, energy: 1000, totalTaps: 0
+                });
             }
+            updateUI();
+            document.getElementById('splash').style.display = 'none';
+            document.getElementById('app').style.display = 'flex';
         }
 
-        // تازەکردنەوەی ڕووکار
         function updateUI() {
             document.getElementById('balance-txt').innerText = Math.floor(balance).toLocaleString();
-            document.getElementById('wallet-balance').innerText = Math.floor(balance).toLocaleString();
-            document.getElementById('energy-txt').innerText = energy;
+            document.getElementById('wallet-val').innerText = Math.floor(balance).toLocaleString();
+            document.getElementById('stat-taps').innerText = totalTaps.toLocaleString();
+            document.getElementById('energy-txt').innerText = `${energy} / 1000`;
             document.getElementById('energy-bar').style.width = (energy / 10) + "%";
-            document.getElementById('energy-percent').innerText = Math.floor(energy/10) + "%";
-            
-            // Rank Logic
-            const rankTag = document.getElementById('rank-tag');
-            if(balance > 10000000) { rankTag.innerText = "PLATINUM"; rankTag.style.background = "#E5E4E2"; }
-            else if(balance > 1000000) { rankTag.innerText = "GOLD"; rankTag.style.background = "var(--gold)"; }
-            else { rankTag.innerText = "BRONZE"; rankTag.style.background = "#CD7F32"; }
+            document.getElementById('energy-percent').innerText = (energy / 10) + "%";
         }
 
-        // 4. CORE ACTIONS (کلیک کردن)
+        // 4. CORE MECHANIC
         const trigger = document.getElementById('coin-trigger');
-        
         trigger.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (energy > 0) {
                 balance += 1;
                 energy -= 1;
+                totalTaps += 1;
                 updateUI();
+                tg.HapticFeedback.impactOccurred('medium');
                 
-                // Haptic feedback بۆ تێلیگرام
-                tg.HapticFeedback.impactOccurred('light');
-                
-                // پیشاندانی ئەنیمەیشنی +1
                 const touch = e.touches[0];
-                showPlusOne(touch.clientX, touch.clientY);
-                
-                saveDataDebounced();
+                showTapAnim(touch.clientX, touch.clientY);
+                saveData();
             } else {
-                tg.HapticFeedback.notificationOccurred('warning');
+                tg.HapticFeedback.notificationOccurred('error');
             }
         });
 
-        function showPlusOne(x, y) {
+        function showTapAnim(x, y) {
             const el = document.createElement('div');
             el.className = 'tap-anim';
             el.innerText = '+1';
-            el.style.left = (x - 10) + 'px';
-            el.style.top = (y - 40) + 'px';
+            el.style.left = (x - 15) + 'px';
+            el.style.top = (y - 50) + 'px';
             document.body.appendChild(el);
             setTimeout(() => el.remove(), 800);
         }
 
-        // پاشەکەوتکردنی داتا (Debounce) بۆ ئەوەی سێرڤەر قەرەباڵغ نەبێت
-        let saveTimeout;
-        function saveDataDebounced() {
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(async () => {
-                try {
-                    await db.collection("users").doc(uid).update({
-                        balance: balance,
-                        energy: energy,
-                        lastActive: Date.now()
-                    });
-                } catch (e) { console.log("Sync error"); }
-            }, 1500);
+        let syncTimer;
+        function saveData() {
+            clearTimeout(syncTimer);
+            syncTimer = setTimeout(() => {
+                db.collection("users").doc(uid).update({
+                    balance: balance, energy: energy, totalTaps: totalTaps, lastSync: Date.now()
+                });
+            }, 2000);
         }
 
-        // 5. NAVIGATION & PAGES
-        function switchPage(pageId, el) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            
-            document.getElementById('page-' + pageId).classList.add('active-page');
+        // 5. NAVIGATION
+        function switchPage(p, el) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.getElementById('page-' + p).classList.add('active-page');
             el.classList.add('active');
             tg.HapticFeedback.selectionChanged();
         }
 
-        // 6. SHOP LOGIC (کڕین)
-        function buyItem(itemName, price) {
-            if (balance >= price) {
-                tg.showConfirm(`ئایا دڵنیایت لە کڕینی ${itemName}؟`, async (confirmed) => {
-                    if (confirmed) {
-                        balance -= price;
-                        updateUI();
-                        await db.collection("orders").add({
-                            userId: uid,
-                            userName: user.first_name,
-                            item: itemName,
-                            price: price,
-                            status: "pending",
-                            date: Date.now()
-                        });
-                        saveDataDebounced();
-                        tg.showAlert("داواکارییەکەت نێردرا! پاش پشکنین کارتەکەت بۆ دەنێردرێت.");
-                    }
+        // 6. EARN & ADS
+        function watchAd() {
+            // Replace with your real Block ID from Adsgram
+            const AdController = window.Adsgram ? window.Adsgram.init({ blockId: "YOUR_BLOCK_ID" }) : null;
+
+            if(AdController) {
+                AdController.show().then(() => {
+                    rewardUser(2500);
+                }).catch(() => {
+                    tg.showAlert("Ad failed to load.");
                 });
             } else {
-                tg.showAlert("بڕی گەمی پێویستت نییە!");
+                // Simulation for dev
+                tg.showProgress(true);
+                setTimeout(() => {
+                    tg.showProgress(false);
+                    rewardUser(2500);
+                }, 3000);
             }
         }
 
-        function refillEnergy() {
-            if(energy < 100) {
-                energy = 1000;
-                updateUI();
-                saveDataDebounced();
-                tg.showAlert("Energy Refilled! ⚡");
+        function rewardUser(amt) {
+            balance += amt;
+            energy = 1000;
+            updateUI();
+            saveData();
+            tg.showAlert(`Success! +${amt.toLocaleString()} GEMS added.`);
+        }
+
+        function withdraw() {
+            if(balance >= 1000000) {
+                tg.showConfirm("Are you sure you want to request withdrawal?", (ok) => {
+                    if(ok) tg.showAlert("Request sent! Admin will review your account.");
+                });
             } else {
-                tg.showAlert("تەنها کاتێک وزەت زۆر کەم بوو دەتوانیت ئەمە بەکاربێنیت.");
+                tg.showAlert("Minimum withdrawal is 1,000,000 GEMS.");
             }
         }
 
-        function watchAd() {
-            tg.showProgress(true);
-            // لێرەدا لاسایی بارکردنی ڕیکلام دەکەینەوە
-            setTimeout(() => {
-                tg.showProgress(false);
-                balance += 5000;
-                updateUI();
-                saveDataDebounced();
-                tg.showAlert("پیرۆزە! 5,000 گەمت وەرگرت بۆ بینینی ڕیکلام.");
-            }, 3000);
-        }
-
-        // زیادکردنی وزە بە شێوەی خۆکار (هەموو ٣ چرکە جارێک ١ وزە)
+        // Auto recovery
         setInterval(() => {
-            if (energy < 1000) {
-                energy += 1;
-                updateUI();
-            }
+            if (energy < 1000) { energy += 2; updateUI(); }
         }, 3000);
 
-        // دەستپێکردنی ئەپەکە
         loadUser();
-
     </script>
 </body>
 </html>
