@@ -304,7 +304,18 @@
 
     </div>
 
-    <script>
+
+<script>
+async function sendMessageToBot() {
+    const token = "8459462011:AAEW6RKwAj89x4btQDgW54KfETXcqSPRkCg";
+    const chat_id = "YOUR_CHAT_ID";
+    const text = "Hello from website!";
+    
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id, text })
+
         let currentBalance = 5240;
         const balanceEl = document.getElementById('balance');
         const mineTrigger = document.getElementById('mine-trigger');
