@@ -64,6 +64,7 @@
             background: radial-gradient(circle, #222 0%, #000 100%);
             border: 8px solid #1a1a1a; display: flex; justify-content: center; align-items: center;
             position: relative; cursor: pointer; transition: 0.1s;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
         }
         .tap-area:active { transform: scale(0.92); }
         .tap-area img { width: 140px; filter: drop-shadow(0 0 15px var(--gold)); }
@@ -121,7 +122,7 @@
     <div id="splash">
         <img src="https://cdn-icons-png.flaticon.com/512/2163/2163350.png" width="80" style="filter: invert(1) sepia(1) saturate(5) hue-rotate(10deg);">
         <h1 style="color: var(--gold); letter-spacing: 5px; font-family: 'Orbitron'; margin-top: 20px;">GEMINICOIN</h1>
-        <p style="color: #444; font-size: 10px;">ULTRA PROTOCOL v3.5 PRO</p>
+        <p style="color: #444; font-size: 10px;">PRO VERSION ACTIVE (BLOCK: 23327)</p>
     </div>
 
     <div class="app-container" id="app">
@@ -130,9 +131,9 @@
         <div class="header">
             <div class="user-pill" onclick="switchPage('profile')">
                 <img id="u-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="user-avatar">
-                <div style="font-size: 11px;">STATUS: <span style="color:#00ff88">ACTIVE</span><br><b id="u-name">Miner</b></div>
+                <div style="font-size: 11px;">RANK: <span id="rank-tag" style="color:gold">MINER</span><br><b id="u-name">...</b></div>
             </div>
-            <button class="wisdom-btn" style="background:none; border:1px solid gold; color:gold; border-radius:20px; padding:5px 10px; font-size:10px;" onclick="switchPage('earn')">🎁 DAILY</button>
+            <button class="wisdom-btn" style="background:none; border:1px solid gold; color:gold; border-radius:20px; padding:5px 10px; font-size:10px;" onclick="claimDaily()">🎁 CLAIM GIFT</button>
         </div>
 
         <div class="content">
@@ -161,16 +162,14 @@
             <!-- PAGE: EARN (Ads & Streak) -->
             <div id="page-earn" class="page">
                 <h1 style="color:var(--gold); font-family:'Orbitron';">REWARDS</h1>
-                <p style="color:#555; font-size:12px; margin-bottom:20px;">Complete protocols to earn millions</p>
                 
                 <h4 style="font-size:12px; color:#555; margin-bottom:10px;">30-DAY DAILY STREAK</h4>
                 <div class="streak-grid" id="streak-container"></div>
-                <button class="btn-action" style="width:100%; padding:15px; margin-top:10px; font-size:14px;" onclick="claimDaily()">CLAIM TODAY'S GIFT</button>
 
-                <h4 style="font-size:12px; color:#555; margin:25px 0 10px;">NO-SKIP VIDEO ADS</h4>
+                <h4 style="font-size:12px; color:#555; margin:25px 0 10px;">VIDEO AD PROTOCOLS (NO-SKIP)</h4>
                 <div class="card" onclick="watchAd(25000)">
                     <div class="card-icon">🎬</div>
-                    <div class="card-info"><h4>Premium Video Sync</h4><p>+25,000 GEMS</p></div>
+                    <div class="card-info"><h4>Premium Reward Sync</h4><p>+25,000 GEMS</p></div>
                     <button class="btn-action">WATCH</button>
                 </div>
                 <div class="card" onclick="watchAd(100000)">
@@ -183,7 +182,7 @@
             <!-- PAGE: RANK -->
             <div id="page-rank" class="page">
                 <h1 style="color:var(--gold); font-family:'Orbitron';">RANKING</h1>
-                <p style="color:#555; font-size:12px; margin-bottom:20px;">Top 10 Global Miners</p>
+                <p style="color:#555; font-size:12px; margin-bottom:20px;">Top 10 Global Players</p>
                 <div id="leader-list"></div>
             </div>
 
@@ -208,11 +207,11 @@
 
             <!-- PAGE: PROFILE -->
             <div id="page-profile" class="page">
-                <h1 style="color:var(--gold); font-family:'Orbitron';">PROFILE</h1>
+                <h1 style="color:var(--gold); font-family:'Orbitron';">SETTINGS</h1>
                 <div class="energy-wrap" style="text-align:center;">
                     <img id="p-avatar" src="" style="width:100px; height:100px; border-radius:25px; border:2px solid var(--gold); margin-bottom:15px; object-fit:cover;">
                     <input type="text" id="p-name" class="edit-input" placeholder="Update Name">
-                    <input type="text" id="p-pic" class="edit-input" placeholder="Pic URL (https://...)">
+                    <input type="text" id="p-pic" class="edit-input" placeholder="Profile Pic Link (https://...)">
                     <button class="btn-action" style="width:100%; margin-top:15px; padding:12px;" onclick="updateProfile()">SAVE SETTINGS</button>
                 </div>
 
@@ -249,38 +248,31 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 2. GLOBALS
+        // 2. ADSGRAM & TELEGRAM GLOBALS
+        const AD_BLOCK_ID = "23327"; // Block IDـەکەت لێرە جێگیر کرا
         const tg = window.Telegram.WebApp;
         tg.expand();
-        const user = tg.initDataUnsafe.user || { id: "test_user", first_name: "Miner" };
+        const user = tg.initDataUnsafe.user || { id: "dev_user", first_name: "Miner" };
         const uid = String(user.id);
 
-        let balance = 0, energy = 1000, streak = 0, lastClaim = 0;
-        let uName = user.first_name, uPic = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+        let balance = 0, energy = 1000, streak = 0, lastClaim = 0, uName = user.first_name, uPic = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
         let selMethod = "ZainCash";
 
-        // 3. STARTUP
-        async function loadAppData() {
+        // 3. INIT
+        async function init() {
             try {
                 const doc = await db.collection("users").doc(uid).get();
                 if (doc.exists) {
                     const d = doc.data();
-                    balance = d.balance || 0;
-                    energy = d.energy || 1000;
-                    streak = d.streak || 0;
-                    lastClaim = d.lastClaim || 0;
-                    uName = d.name || uName;
-                    uPic = d.pic || uPic;
+                    balance = d.balance || 0; energy = d.energy || 1000; streak = d.streak || 0; lastClaim = d.lastClaim || 0;
+                    uName = d.name || uName; uPic = d.pic || uPic;
                 } else {
-                    await db.collection("users").doc(uid).set({
-                        name: uName, pic: uPic, balance: 0, energy: 1000, streak: 0, lastClaim: 0
-                    });
+                    await db.collection("users").doc(uid).set({ name: uName, pic: uPic, balance: 0, energy: 1000, streak: 0, lastClaim: 0 });
                 }
-                updateUI();
-                buildStreak();
+                updateUI(); buildStreak();
                 document.getElementById('splash').style.display = 'none';
                 document.getElementById('app').style.display = 'flex';
-            } catch (e) { console.error(e); alert("Firebase Error!"); }
+            } catch (e) { alert("Internet Error!"); }
         }
 
         function updateUI() {
@@ -293,13 +285,12 @@
             document.getElementById('p-avatar').src = uPic;
         }
 
-        // 4. MINE ACTION
+        // 4. TAP LOGIC
         document.getElementById('coin-trigger').addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (energy > 0) {
                 balance += 1; energy -= 1;
-                updateUI();
-                tg.HapticFeedback.impactOccurred('medium');
+                updateUI(); tg.HapticFeedback.impactOccurred('medium');
                 showPop(e.touches[0].clientX, e.touches[0].clientY);
                 saveData();
             }
@@ -313,40 +304,18 @@
             setTimeout(() => el.remove(), 800);
         }
 
-        // 5. EARN & ADS (Adsgram)
+        // 5. ADSGRAM (REWARDED ADS)
         function watchAd(reward) {
-            const AdController = window.Adsgram.init({ blockId: "4683" }); // Replace with your ID
+            const AdController = window.Adsgram.init({ blockId: AD_BLOCK_ID });
             AdController.show().then(() => {
-                balance += reward; updateUI(); saveData();
-                tg.showAlert(`SUCCESS! +${reward.toLocaleString()} GEMS added.`);
+                balance += reward; energy = 1000; updateUI(); saveData();
+                tg.showAlert(`SUCCESS! +${reward.toLocaleString()} GEMS & Energy Refilled.`);
             }).catch(() => {
-                // Test Simulation
-                balance += reward; updateUI(); saveData();
+                tg.showAlert("بۆ وەرگرتنی سکە دەبێت ڤیدیۆکە تا کۆتایی ببینی!");
             });
         }
 
-        function buildStreak() {
-            const container = document.getElementById('streak-container');
-            container.innerHTML = "";
-            for (let i = 1; i <= 30; i++) {
-                container.innerHTML += `<div class="day-box ${i<=streak?'active':''}">Day ${i}<br><b>+${i*5}k</b></div>`;
-            }
-        }
-
-        function claimDaily() {
-            const now = Date.now();
-            if (now - lastClaim < 24 * 60 * 60 * 1000) return tg.showAlert("بەیانی وەرەوه!");
-            
-            streak = (now - lastClaim < 48 * 60 * 60 * 1000) ? streak + 1 : 1;
-            if (streak > 30) streak = 1;
-            
-            const reward = streak * 5000;
-            balance += reward; lastClaim = now;
-            updateUI(); buildStreak(); saveData();
-            tg.showAlert(`خەڵاتی ڕۆژی ${streak} وەرگیرا!`);
-        }
-
-        // 6. RANK & PROFILE
+        // 6. RANKING & PROFILE
         async function loadRank() {
             const list = document.getElementById('leader-list');
             const snap = await db.collection("users").orderBy("balance", "desc").limit(10).get();
@@ -364,7 +333,7 @@
             const p = document.getElementById('p-pic').value;
             if(n) uName = n; if(p) uPic = p;
             updateUI(); saveData();
-            tg.showAlert("Profile Updated!");
+            tg.showAlert("Profile Settings Updated!");
         }
 
         // 7. WITHDRAWAL
@@ -376,25 +345,45 @@
 
         function processWithdraw() {
             const addr = document.getElementById('w-address').value;
-            if(balance < 10000000) return tg.showAlert("Min 10,000,000 GEMS!");
-            if(!addr) return tg.showAlert("Enter Address!");
+            if(balance < 10000000) return tg.showAlert("Minimum 10,000,000 GEMS!");
+            if(!addr) return tg.showAlert("تکایە ناونیشان یان ژمارە بنووسە");
             
-            db.collection("withdrawals").add({ uid, name: uName, amount: balance, method: selMethod, address: addr, date: Date.now() });
+            db.collection("withdrawals").add({ uid, name: uName, amount: balance, method: selMethod, address: addr, status: "pending", date: Date.now() });
             balance = 0; updateUI(); saveData();
-            tg.showAlert("Request Sent!");
+            tg.showAlert("داواکارییەکەت نێردرا! پاش پشکنین پارەکەت بۆ دەنێردرێت.");
         }
 
-        // Utils
+        // 8. HELPERS
         function switchPage(p, el) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.getElementById('page-' + p).classList.add('active-page');
             if(el) el.classList.add('active');
+            if(p === 'rank') loadRank();
+        }
+
+        function buildStreak() {
+            const container = document.getElementById('streak-container');
+            container.innerHTML = "";
+            for (let i = 1; i <= 30; i++) {
+                container.innerHTML += `<div class="day-box ${i<=streak?'active':''}">Day ${i}<br><b>+${i*5}k</b></div>`;
+            }
+        }
+
+        function claimDaily() {
+            const now = Date.now();
+            if (now - lastClaim < 24 * 60 * 60 * 1000) return tg.showAlert("بەیانی وەرەوه بۆ وەرگرتنی دیاری نوێ!");
+            streak = (now - lastClaim < 48 * 60 * 60 * 1000) ? streak + 1 : 1;
+            if (streak > 30) streak = 1;
+            const reward = streak * 5000;
+            balance += reward; lastClaim = now;
+            updateUI(); buildStreak(); saveData();
+            tg.showAlert(`خەڵاتی ڕۆژی ${streak}ت وەرگرت!`);
         }
 
         function shareRef() {
-            const link = `https://t.me/Geminicoin_bot/play?startapp=${uid}`;
-            window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Join me on Geminicoin!`);
+            const link = `https://t.me/kurd4coin_bot/gimcoin?startapp=${uid}`;
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Join my network on Geminicoin!`);
         }
 
         let timer;
@@ -402,12 +391,12 @@
             clearTimeout(timer);
             timer = setTimeout(() => {
                 db.collection("users").doc(uid).update({ balance, energy, streak, lastClaim, name: uName, pic: uPic });
-            }, 2000);
+            }, 1500);
         }
 
         setInterval(() => { if(energy < 1000) { energy += 1; updateUI(); } }, 3000);
 
-        loadAppData();
+        init();
     </script>
 </body>
 </html>
