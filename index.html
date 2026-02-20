@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GEMINICOIN - Premium Miner</title>
+    <title>GEMINICOIN PRO - Ultimate Edition</title>
     
     <!-- SDKs -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -12,305 +12,234 @@
     <script src="https://adsgram.org/js/adman.js"></script>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+Arabic:wght@400;700&display=swap');
+
         :root {
-            --gold: #ffcc00;
-            --bg: #000000;
-            --card-bg: #0c0c0c;
-            --border: #1a1a1a;
-            --text-gray: #7a7a7a;
-            --accent-blue: #00d2ff;
-            --accent-purple: #9d50bb;
+            --gold-gradient: linear-gradient(135deg, #ffcc00 0%, #ff9500 100%);
+            --bg-dark: #050505;
+            --card-dark: #121212;
+            --border-color: #222;
+            --text-main: #ffffff;
+            --text-muted: #888;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            margin: 0; background-color: var(--bg); color: white;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; background-color: var(--bg-dark); color: var(--text-main);
+            font-family: 'Noto Sans Arabic', 'Segoe UI', sans-serif;
             overflow: hidden; user-select: none;
         }
 
-        /* Splash Screen */
+        /* Splash Screen PRO */
         #splash {
-            position: fixed; inset: 0; background: black; z-index: 2000;
+            position: fixed; inset: 0; background: black; z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
+        .diamond-loader { width: 100px; height: 100px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } }
 
-        /* Main Layout */
-        .app-container { display: none; height: 100vh; flex-direction: column; }
-        .top-nav {
+        /* App Layout */
+        .app-container { display: none; height: 100vh; flex-direction: column; position: relative; }
+        
+        /* Language & Settings Header */
+        .header-tools {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 20px; background: rgba(0,0,0,0.8); z-index: 10;
+            padding: 15px; background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--border-color);
         }
-        .user-pill { display: flex; align-items: center; gap: 10px; background: var(--card-bg); padding: 5px 12px; border-radius: 12px; border: 1px solid var(--border); }
-        .wisdom-btn { background: rgba(255,204,0,0.1); border: 1px solid var(--gold); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+        .lang-btn { background: var(--card-dark); border: 1px solid var(--gold-gradient); color: white; padding: 5px 10px; border-radius: 8px; font-size: 12px; }
 
-        .content { flex-grow: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
-        .page { display: none; animation: fadeIn 0.3s ease; }
+        .content { flex-grow: 1; overflow-y: auto; padding: 20px; padding-bottom: 110px; }
+        .page { display: none; animation: slideIn 0.3s ease-out; }
         .active-page { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
 
-        /* Titles */
-        .page-title { font-size: 28px; font-weight: 800; font-style: italic; margin: 0; text-transform: uppercase; }
-        .page-subtitle { color: var(--text-gray); font-size: 11px; letter-spacing: 2px; margin-bottom: 25px; }
+        /* Balance Hero Section */
+        .balance-card { text-align: center; margin: 20px 0; }
+        .balance-card h1 { font-size: 48px; font-family: 'Orbitron'; color: #ffcc00; margin: 0; text-shadow: 0 0 20px rgba(255, 204, 0, 0.4); }
+        .balance-card p { font-size: 12px; color: var(--text-muted); letter-spacing: 2px; }
 
-        /* Mine Page Specifics */
-        .balance-container { text-align: center; margin: 30px 0; }
-        .balance-val { font-size: 55px; font-weight: bold; color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .mining-status { color: #00ff88; font-size: 10px; letter-spacing: 1px; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px; }
-
-        .coin-wrapper { position: relative; width: 260px; height: 260px; margin: 0 auto; display: flex; justify-content: center; align-items: center; }
-        .coin-button {
-            width: 240px; height: 240px; border-radius: 50%;
-            background: radial-gradient(circle, #111 0%, #000 100%);
-            border: 4px solid #1a1a1a; position: relative; cursor: pointer;
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 50px rgba(0,0,0,1); transition: transform 0.05s;
+        /* Tapping Mechanism */
+        .tap-zone { height: 300px; display: flex; justify-content: center; align-items: center; position: relative; }
+        .main-coin {
+            width: 220px; height: 220px; border-radius: 50%;
+            background: radial-gradient(circle, #222 0%, #000 100%);
+            border: 6px solid #1a1a1a; cursor: pointer;
+            box-shadow: 0 0 40px rgba(255, 204, 0, 0.1);
+            transition: transform 0.05s; position: relative;
         }
-        .coin-button:active { transform: scale(0.92); }
-        .coin-button img { width: 140px; pointer-events: none; }
+        .main-coin:active { transform: scale(0.94); }
+        .main-coin img { width: 120px; filter: drop-shadow(0 0 10px gold); }
 
-        /* Energy Section */
-        .energy-section { margin-top: 40px; padding: 0 20px; }
-        .energy-info { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-        .energy-bar-bg { height: 12px; background: #1a1a1a; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
-        .energy-bar-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #ffcc00, #ff8800); transition: width 0.3s; }
+        /* Progress Bar */
+        .energy-wrap { background: var(--card-dark); padding: 15px; border-radius: 20px; border: 1px solid var(--border-color); }
+        .bar-outer { height: 12px; background: #222; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+        .bar-inner { height: 100%; width: 100%; background: var(--gold-gradient); transition: width 0.3s; }
 
-        /* Cards Style (Shared for Earn, Boost, Friends) */
-        .card-item {
-            background: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 20px; padding: 18px; margin-bottom: 12px;
-            display: flex; align-items: center; gap: 15px; position: relative;
+        /* Card Styling */
+        .item-list { display: flex; flex-direction: column; gap: 10px; }
+        .premium-card {
+            background: var(--card-dark); border-radius: 18px; border: 1px solid var(--border-color);
+            padding: 15px; display: flex; align-items: center; gap: 15px;
         }
-        .card-icon-box { width: 50px; height: 50px; background: #141414; border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 22px; color: var(--gold); }
-        .card-content { flex-grow: 1; }
-        .card-content h4 { margin: 0; font-size: 14px; text-transform: uppercase; }
-        .card-content p { margin: 4px 0 0; font-size: 11px; color: var(--gold); font-weight: bold; }
-        .arrow-right { color: #333; font-size: 20px; }
+        .icon-sq { width: 45px; height: 45px; background: #1a1a1a; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; }
+        .item-info { flex-grow: 1; }
+        .item-info h4 { margin: 0; font-size: 14px; }
+        .item-info p { margin: 4px 0 0; font-size: 11px; color: var(--gold-gradient); }
+        .action-btn { background: var(--gold-gradient); color: black; border: none; padding: 8px 16px; border-radius: 10px; font-weight: bold; font-size: 12px; cursor: pointer; }
 
-        /* Rank Page Podium */
-        .rank-podium { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-bottom: 30px; padding-top: 20px; }
-        .podium-item { text-align: center; width: 100px; }
-        .podium-avatar { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #333; margin: 0 auto 10px; position: relative; }
-        .podium-1 .podium-avatar { border-color: var(--gold); width: 80px; height: 80px; }
-        .podium-box { background: #1a1a1a; border-radius: 10px 10px 0 0; padding: 10px 0; font-weight: bold; }
-        .podium-1 .podium-box { background: var(--gold); color: black; height: 80px; }
-        .podium-2 .podium-box { height: 60px; }
-        .podium-3 .podium-box { height: 45px; }
-
-        /* Profile/Wallet Page */
-        .profile-header { text-align: center; margin-bottom: 30px; }
-        .profile-avatar { width: 80px; height: 80px; background: #222; border-radius: 20px; margin: 0 auto 15px; display: flex; justify-content: center; align-items: center; font-size: 40px; border: 2px solid var(--border); }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 20px; text-align: left; }
-        .stat-card p { margin: 0; font-size: 10px; color: var(--text-gray); text-transform: uppercase; }
-        .stat-card h3 { margin: 5px 0 0; font-size: 18px; color: var(--gold); }
-
-        .wallet-card { background: linear-gradient(135deg, #111, #000); border: 1px solid var(--gold); border-radius: 25px; padding: 25px; text-align: center; margin-bottom: 20px; }
-        .withdraw-btn { width: 100%; background: white; color: black; border: none; padding: 15px; border-radius: 15px; font-weight: bold; font-size: 16px; margin-top: 15px; }
+        /* Wallet Styles */
+        .wallet-box { background: linear-gradient(135deg, #111, #000); border: 1px solid #333; border-radius: 25px; padding: 25px; text-align: center; }
+        .withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .method-btn { background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 15px; color: white; cursor: pointer; }
+        .method-btn.active { border-color: #ffcc00; background: rgba(255, 204, 0, 0.05); }
 
         /* Navigation Bar */
-        .nav-bar {
+        .bottom-nav {
             position: fixed; bottom: 10px; left: 10px; right: 10px; height: 75px;
-            background: rgba(12, 12, 12, 0.95); backdrop-filter: blur(10px);
-            border-radius: 25px; border: 1px solid var(--border);
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px);
+            border-radius: 25px; border: 1px solid #333;
             display: flex; justify-content: space-around; align-items: center; z-index: 1000;
         }
-        .nav-item { flex: 1; text-align: center; color: var(--text-gray); font-size: 10px; font-weight: bold; transition: 0.3s; }
-        .nav-item.active { color: var(--gold); }
-        .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; display: block; margin-left: auto; margin-right: auto; }
-        .nav-item.active svg { fill: var(--gold); }
+        .nav-link { text-align: center; color: #555; font-size: 10px; text-decoration: none; transition: 0.3s; }
+        .nav-link.active { color: #ffcc00; }
+        .nav-link div { font-size: 22px; margin-bottom: 2px; }
+
+        /* Rank Podium */
+        .podium { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-bottom: 30px; }
+        .p-item { text-align: center; background: var(--card-dark); border-radius: 15px 15px 5px 5px; padding: 10px; border: 1px solid #333; }
+        .rank-1 { height: 120px; width: 100px; border-color: gold; }
+        .rank-2 { height: 100px; width: 90px; }
+        .rank-3 { height: 85px; width: 80px; }
 
         /* Animation +1 */
-        .tap-anim { position: absolute; color: white; font-weight: bold; font-size: 32px; pointer-events: none; animation: floatUp 0.8s ease-out forwards; z-index: 500; text-shadow: 0 0 10px gold; }
-        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-150px); opacity: 0; } }
+        .tap-pop { position: absolute; color: white; font-weight: bold; font-size: 28px; pointer-events: none; animation: popUp 0.8s ease-out forwards; z-index: 999; }
+        @keyframes popUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-120px) scale(1.5); opacity: 0; } }
     </style>
 </head>
 <body>
 
     <!-- Splash Screen -->
     <div id="splash">
-        <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" width="100" style="filter: drop-shadow(0 0 20px gold)">
-        <h1 style="color: var(--gold); letter-spacing: 5px; margin-top: 20px;">GEMINICOIN</h1>
-        <p style="color: #444; font-size: 10px; letter-spacing: 3px;">INITIALIZING SECURE PROTOCOL...</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" class="diamond-loader">
+        <h2 style="color: gold; letter-spacing: 4px; font-family: 'Orbitron';">GEMINICOIN PRO</h2>
+        <div style="width: 150px; height: 4px; background: #222; border-radius: 5px; margin-top: 20px; overflow: hidden;">
+            <div style="width: 50%; height: 100%; background: gold; animation: load 2s infinite;"></div>
+        </div>
     </div>
 
     <div class="app-container" id="app">
         
-        <!-- Top Bar -->
-        <div class="top-nav">
-            <div class="user-pill" onclick="switchPage('profile', this)">
-                <div style="width:24px; height:24px; background:#333; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:12px;">👤</div>
-                <div style="font-size: 11px;">STATUS: <span style="color:#00ff88">ACTIVE</span><br><b id="user-name">Miner #402</b></div>
+        <!-- Header Tools -->
+        <div class="header-tools">
+            <div id="user-info" style="font-size: 12px; font-weight: bold;">
+                <span id="txt-welcome">Welcome,</span> <span id="user-name" style="color: gold;">Miner</span>
             </div>
-            <button class="wisdom-btn">🧠 SEEK WISDOM</button>
+            <select class="lang-btn" id="lang-select" onchange="changeLanguage()">
+                <option value="ku">Kurdî</option>
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+            </select>
         </div>
 
         <div class="content">
             
             <!-- PAGE: MINE -->
             <div id="page-mine" class="page active-page">
-                <div class="balance-container">
-                    <div class="balance-val">
-                        <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" width="40">
-                        <span id="balance-txt">0</span>
-                    </div>
-                    <div class="mining-status">● MINING OPERATIONS ACTIVE</div>
+                <div class="balance-card">
+                    <p id="txt-balance-label">TOTAL GEM BALANCE</p>
+                    <h1 id="balance-txt">0</h1>
                 </div>
 
-                <div class="coin-wrapper">
-                    <div class="coin-button" id="coin-trigger">
-                        <svg width="180" height="180" viewBox="0 0 100 100">
-                            <path d="M50 15 L85 35 L85 65 L50 85 L15 65 L15 35 Z" fill="none" stroke="var(--accent-blue)" stroke-width="0.5" opacity="0.5"/>
-                            <circle cx="50" cy="50" r="30" fill="none" stroke="var(--accent-purple)" stroke-width="1" stroke-dasharray="5 5"/>
-                            <image href="https://cdn-icons-png.flaticon.com/512/2163/2163350.png" x="25" y="25" width="50" height="50" style="filter: invert(1) sepia(1) saturate(5) hue-rotate(10deg);"/>
-                        </svg>
-                    </div>
+                <div class="tap-zone">
+                    <button class="main-coin" id="coin-trigger">
+                        <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png">
+                    </button>
                 </div>
 
-                <div class="energy-section">
-                    <div class="energy-info">
-                        <span>ENERGY SYNC</span>
-                        <span id="energy-percent">100%</span>
+                <div class="energy-wrap">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                        <span id="txt-energy">ENERGY SYNC</span>
+                        <span id="energy-txt">1000 / 1000</span>
                     </div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span style="color:var(--gold)">⚡</span>
-                        <div style="flex-grow:1">
-                            <span id="energy-txt" style="font-size:14px;">1000 / 1000</span>
-                            <div class="energy-bar-bg"><div class="energy-bar-fill" id="energy-bar"></div></div>
-                        </div>
+                    <div class="bar-outer"><div class="bar-inner" id="energy-bar"></div></div>
+                </div>
+            </div>
+
+            <!-- PAGE: EARN (Video Ad List) -->
+            <div id="page-earn" class="page">
+                <h2 id="txt-earn-title">Earn More Gems</h2>
+                <p class="page-subtitle" id="txt-earn-sub">Watch ads and complete tasks</p>
+
+                <div class="item-list">
+                    <div class="premium-card">
+                        <div class="icon-sq">🎬</div>
+                        <div class="item-info"><h4 id="txt-ad1-title">Reward Video #1</h4><p>+10,000 GEMS</p></div>
+                        <button class="action-btn" onclick="watchVideoAd(10000)">WATCH</button>
+                    </div>
+                    <div class="premium-card">
+                        <div class="icon-sq">🎬</div>
+                        <div class="item-info"><h4 id="txt-ad2-title">Reward Video #2</h4><p>+25,000 GEMS</p></div>
+                        <button class="action-btn" onclick="watchVideoAd(25000)">WATCH</button>
+                    </div>
+                    <div class="premium-card">
+                        <div class="icon-sq">📢</div>
+                        <div class="item-info"><h4 id="txt-join-tg">Join Telegram Channel</h4><p>+100,000 GEMS</p></div>
+                        <button class="action-btn" onclick="openLink('https://t.me/yourchannel')">JOIN</button>
                     </div>
                 </div>
             </div>
 
-            <!-- PAGE: EARN -->
-            <div id="page-earn" class="page">
-                <h1 class="page-title">EARN STATION</h1>
-                <p class="page-subtitle">HIGH YIELD REWARDS SYSTEM</p>
-
-                <div class="card-item" onclick="watchAd()" style="background: rgba(255,204,0,0.05); border: 1px solid var(--gold);">
-                    <div class="card-icon-box" style="background: var(--gold); color: black;">▶</div>
-                    <div class="card-content">
-                        <h4>REWARDED AD</h4>
-                        <p>INSTANT 2,500 GEM + ENERGY</p>
-                    </div>
-                    <div class="arrow-right">›</div>
+            <!-- PAGE: FRIENDS -->
+            <div id="page-friends" class="page">
+                <h2 id="txt-friends-title">Invite Friends</h2>
+                <div class="wallet-box" style="margin-bottom: 20px;">
+                    <h1 style="font-size: 50px;">🎁</h1>
+                    <p id="txt-friends-sub">Share your link and get 50,000 Gems for each friend!</p>
+                    <button class="withdraw-btn" onclick="shareRefLink()" style="background: gold; border:none; padding:15px; border-radius:15px; font-weight:bold; width:100%; color:black;">INVITE A FRIEND</button>
                 </div>
-
-                <p style="font-size:10px; color:#555; margin: 20px 0 10px;">ACTIVE PROTOCOLS</p>
-
-                <div class="card-item">
-                    <div class="card-icon-box">▶</div>
-                    <div class="card-content"><h4>GEMINI PROTOCOL BRIEFING</h4><p>+50,000 GEM</p></div>
-                    <div class="arrow-right">›</div>
-                </div>
-                <div class="card-item">
-                    <div class="card-icon-box">📈</div>
-                    <div class="card-content"><h4>MARKET SENTIMENT ANALYSIS</h4><p>+125,000 GEM</p></div>
-                    <div class="arrow-right">›</div>
-                </div>
+                <h4 id="txt-your-friends">Your Referrals: <span id="ref-count">0</span></h4>
             </div>
 
             <!-- PAGE: RANK -->
             <div id="page-rank" class="page">
-                <h2 style="text-align:center">Top Tappers</h2>
-                <p style="text-align:center; color:#555; font-size:12px;">Join the elite circles of GEM miners</p>
-
-                <div class="rank-podium">
-                    <div class="podium-item podium-2">
-                        <div class="podium-avatar"></div>
-                        <div class="podium-box">#2</div>
-                    </div>
-                    <div class="podium-item podium-1">
-                        <div class="podium-avatar"></div>
-                        <div class="podium-box">#1</div>
-                    </div>
-                    <div class="podium-item podium-3">
-                        <div class="podium-avatar"></div>
-                        <div class="podium-box">#3</div>
-                    </div>
+                <h2 style="text-align: center;" id="txt-rank-title">Global Leaderboard</h2>
+                <div class="podium">
+                    <div class="p-item rank-2">🥈<br><small id="r2-name">...</small></div>
+                    <div class="p-item rank-1">🥇<br><small id="r1-name">...</small></div>
+                    <div class="p-item rank-3">🥉<br><small id="r3-name">...</small></div>
                 </div>
-
-                <div id="leaderboard-list">
-                    <!-- Leaderboard items go here -->
+                <div id="leaderboard-list" class="item-list">
+                    <!-- Dynamic List -->
                 </div>
             </div>
 
-            <!-- PAGE: BOOST -->
-            <div id="page-boost" class="page">
-                <h1 class="page-title">BOOST HUB</h1>
-                <p class="page-subtitle">SCALE YOUR MINING INFRASTRUCTURE</p>
-
-                <div class="card-item">
-                    <div class="card-icon-box">☝️</div>
-                    <div class="card-content"><h4>Nano-Tapping <small style="color:#444">LVL 0</small></h4><p>+1 Tap Power</p></div>
-                    <div style="font-weight:bold">100 💎</div>
-                </div>
-                <div class="card-item">
-                    <div class="card-icon-box">🖥️</div>
-                    <div class="card-content"><h4>GPU Cluster <small style="color:#444">LVL 0</small></h4><p>+5 GEM/s Passive</p></div>
-                    <div style="font-weight:bold">500 💎</div>
-                </div>
-            </div>
-
-            <!-- PAGE: PROFILE / WALLET -->
-            <div id="page-profile" class="page">
-                <div class="profile-header">
-                    <div class="profile-avatar">👤</div>
-                    <h2 id="profile-name">Elite Operative <span>✔️</span></h2>
-                    <div style="display:flex; justify-content:center; gap:10px;">
-                        <span class="wisdom-btn" style="background:#111">PLATINUM LEAGUE</span>
-                        <span class="wisdom-btn" style="border-color:#00d2ff; color:#00d2ff">FIREBASE SYNCED</span>
+            <!-- PAGE: WALLET -->
+            <div id="page-wallet" class="page">
+                <h2 id="txt-wallet-title">Withdrawal Hub</h2>
+                <div class="wallet-box">
+                    <p id="txt-available">Available Gems</p>
+                    <h1 id="wallet-balance" style="color: gold;">0</h1>
+                    
+                    <div class="withdraw-grid">
+                        <div class="method-btn active" onclick="setMethod('ton', this)">TON Wallet</div>
+                        <div class="method-btn" onclick="setMethod('zain', this)">ZainCash</div>
                     </div>
-                </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card"><p>Total Taps</p><h3 id="stat-taps">0</h3></div>
-                    <div class="stat-card"><p>Click Power</p><h3>1</h3></div>
-                    <div class="stat-card"><p>Passive Rate</p><h3>0/s</h3></div>
-                    <div class="stat-card"><p>Global Rank</p><h3>#1,402</h3></div>
-                </div>
-
-                <div class="wallet-card">
-                    <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" width="40">
-                    <p style="color:#777; font-size:12px; margin:10px 0 5px;">AVAILABLE BALANCE</p>
-                    <h1 id="wallet-val" style="margin:0; font-size:40px;">0 <small style="font-size:14px; color:var(--gold)">GEM</small></h1>
-                    <div style="display:flex; gap:10px; margin-top:20px;">
-                        <button class="withdraw-btn" style="flex:1" onclick="withdraw()">WITHDRAW</button>
-                        <button class="withdraw-btn" style="flex:1; background:#1a1a1a; color:white;" onclick="tg.showAlert('Coming Soon...')">HISTORY</button>
-                    </div>
-                </div>
-
-                <div class="card-item" style="border-style: dashed; border-color:#333;">
-                    <div class="card-icon-box">➕</div>
-                    <div class="card-content"><h4>Connect Wallet</h4><p>TON / ETH supported</p></div>
-                    <div class="arrow-right">›</div>
+                    <input type="text" id="wallet-address" placeholder="Enter Wallet Address or Number" style="width: 100%; background: #111; border: 1px solid #333; color: white; padding: 15px; border-radius: 12px; margin-top: 15px; text-align: center;">
+                    
+                    <button class="withdraw-btn" onclick="processWithdrawal()" style="background: white; border:none; padding:15px; border-radius:15px; font-weight:bold; width:100%; color:black; margin-top:15px;">WITHDRAW NOW</button>
                 </div>
             </div>
 
         </div>
 
         <!-- Navigation Bar -->
-        <nav class="nav-bar">
-            <div class="nav-item active" onclick="switchPage('mine', this)">
-                <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.8l8 4v7.4l-8 4-8-4V8.8l8-4z"/></svg>
-                MINE
-            </div>
-            <div class="nav-item" onclick="switchPage('earn', this)">
-                <svg viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-                EARN
-            </div>
-            <div class="nav-item" onclick="switchPage('profile', this)">
-                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
-                FRIENDS
-            </div>
-            <div class="nav-item" onclick="switchPage('boost', this)">
-                <svg viewBox="0 0 24 24"><path d="M11.5 2L11 2v9H2l10.5 11V13h9z"/></svg>
-                BOOST
-            </div>
-            <div class="nav-item" onclick="switchPage('rank', this)">
-                <svg viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 11.63 21 9.55 21 7V6c0-1.1-.9-2-2-2z"/></svg>
-                RANK
-            </div>
+        <nav class="bottom-nav">
+            <a href="#" class="nav-link active" onclick="switchTab('mine', this)"><div>⛏️</div><span id="nav-mine">Mine</span></a>
+            <a href="#" class="nav-link" onclick="switchTab('earn', this)"><div>🎁</div><span id="nav-earn">Earn</span></a>
+            <a href="#" class="nav-link" onclick="switchTab('friends', this)"><div>👥</div><span id="nav-friends">Friends</span></a>
+            <a href="#" class="nav-link" onclick="switchTab('rank', this)"><div>🏆</div><span id="nav-rank">Rank</span></a>
+            <a href="#" class="nav-link" onclick="switchTab('wallet', this)"><div>💳</div><span id="nav-wallet">Wallet</span></a>
         </nav>
 
     </div>
@@ -328,138 +257,229 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 2. TELEGRAM & USER
+        // 2. TELEGRAM & GLOBALS
         const tg = window.Telegram.WebApp;
         tg.expand();
-        const user = tg.initDataUnsafe.user || { id: "test_user", first_name: "Developer" };
+        const user = tg.initDataUnsafe.user || { id: "dev_123", first_name: "GUEST" };
         const uid = String(user.id);
-        document.getElementById('user-name').innerText = user.first_name;
-        document.getElementById('profile-name').innerHTML = user.first_name + ' <span style="color:#00d2ff">✔️</span>';
-
-        // 3. APP STATE
+        
         let balance = 0;
         let energy = 1000;
-        let totalTaps = 0;
+        let refCount = 0;
+        let selectedMethod = 'ton';
+        let currentLang = 'ku';
 
-        async function loadUser() {
+        // 3. LANGUAGE DICTIONARY
+        const i18n = {
+            ku: {
+                welcome: "بەخێربێیت،", balanceLabel: "کۆی گشتی گەمەکان", energy: "سینککردنی وزە", earnTitle: "پەیداکردنی گەمی زیاتر",
+                earnSub: "سەیری ڤیدیۆ بکە و سکە کۆبکەرەوە", joinTg: "جۆینکردنی کەناڵ", friendsTitle: "بانگهێشتکردنی هاوڕێیان",
+                friendsSub: "لینکی خۆت بنێرە و بۆ هەر هاوڕێیەک ٥٠،٠٠٠ گەم وەرگرە!", rankTitle: "ڕیزبەندی جیهانی",
+                walletTitle: "بەشی ڕاکێشانی پارە", available: "گەمی بەردەست", withdraw: "ڕاکێشان", navMine: "ماین",
+                navEarn: "ئێرن", navFriends: "هاوڕێیان", navRank: "ڕیزبەندی", navWallet: "جزدان"
+            },
+            ar: {
+                welcome: "أهلاً بك،", balanceLabel: "إجمالي رصيد الجواهر", energy: "مزامنة الطاقة", earnTitle: "اربح المزيد من الجواهر",
+                earnSub: "شاهد الفيديوهات واجمع النقاط", joinTg: "انضم لقناة التليجرام", friendsTitle: "دعوة الأصدقاء",
+                friendsSub: "شارك الرابط واحصل على 50,000 جوهرة لكل صديق!", rankTitle: "لوحة الصدارة العالمية",
+                walletTitle: "مركز السحب", available: "الجواهر المتاحة", withdraw: "سحب", navMine: "تعدين",
+                navEarn: "ربح", navFriends: "الأصدقاء", navRank: "الترتيب", navWallet: "المحفظة"
+            },
+            en: {
+                welcome: "Welcome,", balanceLabel: "TOTAL GEM BALANCE", energy: "ENERGY SYNC", earnTitle: "Earn More Gems",
+                earnSub: "Watch ads and complete tasks", joinTg: "Join Telegram Channel", friendsTitle: "Invite Friends",
+                friendsSub: "Share link and get 50,000 Gems for each friend!", rankTitle: "Global Leaderboard",
+                walletTitle: "Withdrawal Hub", available: "Available Gems", withdraw: "Withdraw", navMine: "Mine",
+                navEarn: "Earn", navFriends: "Friends", navRank: "Rank", navWallet: "Wallet"
+            }
+        };
+
+        // 4. CORE FUNCTIONS
+        async function loadAppData() {
             const doc = await db.collection("users").doc(uid).get();
             if (doc.exists) {
                 const data = doc.data();
                 balance = data.balance || 0;
                 energy = data.energy || 1000;
-                totalTaps = data.totalTaps || 0;
+                refCount = data.refCount || 0;
             } else {
+                // Check if user joined via ref link
+                const urlParams = new URLSearchParams(window.location.search);
+                const referrer = urlParams.get('startapp');
+                
                 await db.collection("users").doc(uid).set({
-                    name: user.first_name, balance: 0, energy: 1000, totalTaps: 0
+                    name: user.first_name, balance: 0, energy: 1000, refCount: 0, joinedAt: Date.now()
                 });
+
+                if(referrer && referrer !== uid) {
+                    await handleReferral(referrer);
+                }
             }
             updateUI();
+            loadLeaderboard();
+            document.getElementById('user-name').innerText = user.first_name;
             document.getElementById('splash').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
         }
 
         function updateUI() {
             document.getElementById('balance-txt').innerText = Math.floor(balance).toLocaleString();
-            document.getElementById('wallet-val').innerText = Math.floor(balance).toLocaleString();
-            document.getElementById('stat-taps').innerText = totalTaps.toLocaleString();
+            document.getElementById('wallet-balance').innerText = Math.floor(balance).toLocaleString();
             document.getElementById('energy-txt').innerText = `${energy} / 1000`;
             document.getElementById('energy-bar').style.width = (energy / 10) + "%";
-            document.getElementById('energy-percent').innerText = (energy / 10) + "%";
+            document.getElementById('ref-count').innerText = refCount;
         }
 
-        // 4. CORE MECHANIC
-        const trigger = document.getElementById('coin-trigger');
-        trigger.addEventListener('touchstart', (e) => {
+        // Tapping Logic
+        const coin = document.getElementById('coin-trigger');
+        coin.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (energy > 0) {
                 balance += 1;
                 energy -= 1;
-                totalTaps += 1;
                 updateUI();
-                tg.HapticFeedback.impactOccurred('medium');
-                
-                const touch = e.touches[0];
-                showTapAnim(touch.clientX, touch.clientY);
+                tg.HapticFeedback.impactOccurred('light');
+                showTapEffect(e.touches[0].clientX, e.touches[0].clientY);
                 saveData();
-            } else {
-                tg.HapticFeedback.notificationOccurred('error');
             }
         });
 
-        function showTapAnim(x, y) {
+        function showTapEffect(x, y) {
             const el = document.createElement('div');
-            el.className = 'tap-anim';
+            el.className = 'tap-pop';
             el.innerText = '+1';
-            el.style.left = (x - 15) + 'px';
-            el.style.top = (y - 50) + 'px';
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
             document.body.appendChild(el);
             setTimeout(() => el.remove(), 800);
         }
 
-        let syncTimer;
-        function saveData() {
-            clearTimeout(syncTimer);
-            syncTimer = setTimeout(() => {
-                db.collection("users").doc(uid).update({
-                    balance: balance, energy: energy, totalTaps: totalTaps, lastSync: Date.now()
-                });
-            }, 2000);
+        // Language Switcher
+        function changeLanguage() {
+            currentLang = document.getElementById('lang-select').value;
+            const t = i18n[currentLang];
+            document.getElementById('txt-welcome').innerText = t.welcome;
+            document.getElementById('txt-balance-label').innerText = t.balanceLabel;
+            document.getElementById('txt-energy').innerText = t.energy;
+            document.getElementById('txt-earn-title').innerText = t.earnTitle;
+            document.getElementById('txt-earn-sub').innerText = t.earnSub;
+            document.getElementById('txt-friends-title').innerText = t.friendsTitle;
+            document.getElementById('txt-friends-sub').innerText = t.friendsSub;
+            document.getElementById('txt-rank-title').innerText = t.rankTitle;
+            document.getElementById('txt-wallet-title').innerText = t.walletTitle;
+            document.getElementById('txt-available').innerText = t.available;
+            
+            document.getElementById('nav-mine').innerText = t.navMine;
+            document.getElementById('nav-earn').innerText = t.navEarn;
+            document.getElementById('nav-friends').innerText = t.navFriends;
+            document.getElementById('nav-rank').innerText = t.navRank;
+            document.getElementById('nav-wallet').innerText = t.navWallet;
         }
 
-        // 5. NAVIGATION
-        function switchPage(p, el) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.getElementById('page-' + p).classList.add('active-page');
-            el.classList.add('active');
-            tg.HapticFeedback.selectionChanged();
+        // 5. EARN & ADS LIST
+        function watchVideoAd(reward) {
+            // Adsgram Integration
+            const AdController = window.Adsgram.init({ blockId: "4683" }); // Replace with your Real ID
+            AdController.show().then(() => {
+                balance += reward;
+                updateUI();
+                saveData();
+                tg.showAlert(`Success! +${reward.toLocaleString()} GEMS added.`);
+            }).catch(() => {
+                // For test if no ad loaded
+                balance += reward; updateUI(); saveData();
+            });
         }
 
-        // 6. EARN & ADS
-        function watchAd() {
-            // Replace with your real Block ID from Adsgram
-            const AdController = window.Adsgram ? window.Adsgram.init({ blockId: "YOUR_BLOCK_ID" }) : null;
+        // 6. REFERRAL SYSTEM
+        function shareRefLink() {
+            const link = `https://t.me/Geminicoin_bot/start?startapp=${uid}`;
+            const text = "Join Geminicoin and mine gems with me!";
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`);
+        }
 
-            if(AdController) {
-                AdController.show().then(() => {
-                    rewardUser(2500);
-                }).catch(() => {
-                    tg.showAlert("Ad failed to load.");
+        async function handleReferral(referrerId) {
+            const refDoc = db.collection("users").doc(referrerId);
+            const doc = await refDoc.get();
+            if(doc.exists) {
+                await refDoc.update({
+                    balance: firebase.firestore.FieldValue.increment(50000),
+                    refCount: firebase.firestore.FieldValue.increment(1)
                 });
-            } else {
-                // Simulation for dev
-                tg.showProgress(true);
-                setTimeout(() => {
-                    tg.showProgress(false);
-                    rewardUser(2500);
-                }, 3000);
             }
         }
 
-        function rewardUser(amt) {
-            balance += amt;
-            energy = 1000;
+        // 7. LEADERBOARD
+        async function loadLeaderboard() {
+            const list = document.getElementById('leaderboard-list');
+            const snapshot = await db.collection("users").orderBy("balance", "desc").limit(10).get();
+            
+            list.innerHTML = "";
+            let idx = 1;
+            snapshot.forEach(doc => {
+                const d = doc.data();
+                if(idx === 1) document.getElementById('r1-name').innerText = d.name;
+                if(idx === 2) document.getElementById('r2-name').innerText = d.name;
+                if(idx === 3) document.getElementById('r3-name').innerText = d.name;
+
+                list.innerHTML += `
+                    <div class="premium-card">
+                        <div class="icon-sq">${idx}</div>
+                        <div class="item-info"><h4>${d.name}</h4><p>${Math.floor(d.balance).toLocaleString()} GEMS</p></div>
+                    </div>
+                `;
+                idx++;
+            });
+        }
+
+        // 8. WALLET LOGIC
+        function setMethod(m, el) {
+            selectedMethod = m;
+            document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('wallet-address').placeholder = m === 'ton' ? 'Enter TON Address' : 'Enter ZainCash Number';
+        }
+
+        async function processWithdrawal() {
+            const addr = document.getElementById('wallet-address').value;
+            if(balance < 1000000) return tg.showAlert("Min 1,000,000 GEMS required!");
+            if(!addr) return tg.showAlert("Please enter address/number!");
+
+            await db.collection("withdrawals").add({
+                uid, name: user.first_name, amount: balance, method: selectedMethod, address: addr, status: 'pending', date: Date.now()
+            });
+            balance = 0;
             updateUI();
             saveData();
-            tg.showAlert(`Success! +${amt.toLocaleString()} GEMS added.`);
+            tg.showAlert("Withdrawal request sent successfully!");
         }
 
-        function withdraw() {
-            if(balance >= 1000000) {
-                tg.showConfirm("Are you sure you want to request withdrawal?", (ok) => {
-                    if(ok) tg.showAlert("Request sent! Admin will review your account.");
-                });
-            } else {
-                tg.showAlert("Minimum withdrawal is 1,000,000 GEMS.");
-            }
+        // Sync & Utility
+        let timer;
+        function saveData() {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                db.collection("users").doc(uid).update({ balance, energy, refCount });
+            }, 1500);
         }
 
-        // Auto recovery
-        setInterval(() => {
-            if (energy < 1000) { energy += 2; updateUI(); }
-        }, 3000);
+        function switchTab(tab, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.getElementById('page-' + tab).classList.add('active-page');
+            el.classList.add('active');
+            if(tab === 'rank') loadLeaderboard();
+        }
 
-        loadUser();
+        function openLink(url) {
+            window.open(url, '_blank');
+            balance += 100000; updateUI(); saveData();
+        }
+
+        setInterval(() => { if(energy < 1000) { energy += 1; updateUI(); } }, 3000);
+
+        loadAppData();
+        changeLanguage();
     </script>
 </body>
 </html>
