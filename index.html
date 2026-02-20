@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Geminicoins Premium - Iraq</title>
-    <!-- SDKs -->
+    
+    <!-- SDKs - بەکارهێنانی وەشانی جێگیر بۆ فایەربەیس -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -23,6 +24,7 @@
         body {
             margin: 0; background-color: var(--bg); color: white;
             font-family: 'Segoe UI', Tahoma, sans-serif; overflow: hidden;
+            user-select: none;
         }
 
         /* Splash Screen */
@@ -42,53 +44,50 @@
         /* Top Bar */
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(0,0,0,0.5); }
         .user-info { display: flex; align-items: center; gap: 10px; }
-        .wisdom-btn { border: 1px solid var(--gold); color: var(--gold); background: rgba(255,204,0,0.1); padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; }
+        .rank-badge { background: var(--gold); color: black; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; }
 
         /* Balance Display */
         .balance-hero { text-align: center; margin: 20px 0; }
-        .balance-hero h1 { font-size: 55px; margin: 0; color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .balance-hero p { color: #555; letter-spacing: 2px; font-size: 12px; margin-top: 5px; }
+        .balance-hero h1 { font-size: 50px; margin: 0; color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .balance-hero p { color: #777; letter-spacing: 2px; font-size: 12px; margin-top: 5px; }
 
         /* Tap Mechanism */
         .tap-area { flex-grow: 1; display: flex; justify-content: center; align-items: center; position: relative; }
         .coin-btn {
-            width: 260px; height: 260px; border-radius: 50%;
-            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
-            border: 8px solid #222; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 40px rgba(255, 204, 0, 0.1); transition: transform 0.05s;
+            width: 240px; height: 240px; border-radius: 50%;
+            background: radial-gradient(circle, #222 0%, #000 100%);
+            border: 8px solid #1a1a1a; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.1); transition: transform 0.05s;
+            cursor: pointer;
         }
-        .coin-btn:active { transform: scale(0.94); }
+        .coin-btn:active { transform: scale(0.95); }
 
         /* Cards & Shop */
-        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; margin-bottom: 15px; border: 1px solid #222; display: flex; align-items: center; gap: 15px; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1px solid #222; display: flex; align-items: center; gap: 15px; }
         .card-icon { width: 45px; height: 45px; background: #1a1a1a; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; }
         .card-info { flex-grow: 1; }
         .card-info h4 { margin: 0; font-size: 14px; }
         .card-info p { margin: 4px 0 0; font-size: 11px; color: #777; }
         .buy-btn { background: var(--gold); color: black; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; font-size: 12px; }
 
-        /* Wallet Section */
-        .wallet-header { background: linear-gradient(135deg, #1a1a1a, #000); border-radius: 25px; padding: 30px; text-align: center; border: 1px solid #333; margin-bottom: 25px; }
-        .withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
         /* Progress Footer */
         .footer-progress { padding: 0 20px 20px; }
-        .bar-bg { width: 100%; height: 10px; background: #222; border-radius: 10px; overflow: hidden; margin-top: 5px; }
+        .bar-bg { width: 100%; height: 12px; background: #222; border-radius: 10px; overflow: hidden; margin-top: 8px; border: 1px solid #333; }
         .bar-fill { width: 100%; height: 100%; background: linear-gradient(90deg, var(--gold), #ff8800); transition: width 0.3s; }
 
         /* Bottom Nav */
         .nav-bar {
-            position: fixed; bottom: 15px; left: 5%; width: 90%; height: 75px;
-            background: rgba(15, 15, 15, 0.98); backdrop-filter: blur(15px);
-            border-radius: 25px; border: 1px solid #333;
-            display: flex; justify-content: space-around; align-items: center;
+            position: fixed; bottom: 15px; left: 5%; width: 90%; height: 70px;
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(15px);
+            border-radius: 20px; border: 1px solid #333;
+            display: flex; justify-content: space-around; align-items: center; z-index: 100;
         }
-        .nav-item { text-align: center; color: #555; font-size: 10px; cursor: pointer; transition: 0.3s; }
-        .nav-item.active { color: var(--gold); transform: translateY(-5px); }
-        .nav-item div { font-size: 22px; margin-bottom: 4px; }
+        .nav-item { text-align: center; color: #555; font-size: 10px; cursor: pointer; transition: 0.3s; flex: 1; }
+        .nav-item.active { color: var(--gold); }
+        .nav-item div { font-size: 22px; margin-bottom: 2px; }
 
-        /* Floating Animation */
-        .tap-anim { position: absolute; color: white; font-weight: bold; font-size: 32px; pointer-events: none; animation: floatUp 0.8s ease-out forwards; z-index: 500; }
+        /* Floating +1 Animation */
+        .tap-anim { position: absolute; color: white; font-weight: bold; font-size: 28px; pointer-events: none; animation: floatUp 0.8s ease-out forwards; z-index: 500; text-shadow: 0 0 10px rgba(255,204,0,0.5); }
         @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-120px); opacity: 0; } }
     </style>
 </head>
@@ -96,9 +95,9 @@
 
     <!-- Splash Screen -->
     <div id="splash">
-        <div style="font-size: 50px; margin-bottom: 20px;">💎</div>
+        <div style="font-size: 60px; margin-bottom: 20px;">💎</div>
         <h1 style="color: var(--gold); letter-spacing: 5px; margin: 0;">GEMINICOINS</h1>
-        <p style="color: #444; font-size: 10px; margin-bottom: 30px;">SECURE PROTOCOL V2.0</p>
+        <p style="color: #444; font-size: 10px; margin-bottom: 30px; letter-spacing: 2px;">LOADING SECURE DATA...</p>
         <div class="loader-ring"></div>
     </div>
 
@@ -109,55 +108,44 @@
             <div class="user-info">
                 <div style="background:#222; padding:8px; border-radius:10px;">👤</div>
                 <div>
-                    <div style="font-size: 9px; color: #666;">RANK: <span id="rank-tag">BRONZE</span></div>
-                    <div id="user-display" style="font-size: 13px; font-weight: bold;">Loading...</div>
+                    <div id="rank-tag" class="rank-badge">BRONZE</div>
+                    <div id="user-display" style="font-size: 13px; font-weight: bold; margin-top:3px;">Loading...</div>
                 </div>
             </div>
-            <button class="wisdom-btn" onclick="switchPage('wallet')">💳 WALLET</button>
+            <div style="color: var(--gold); font-weight: bold; font-size: 14px;">IRAQ 🇮🇶</div>
         </div>
 
         <div class="content">
             
-            <!-- PAGE: MINE -->
+            <!-- PAGE: MINE (ماینینگ) -->
             <div id="page-mine" class="page active-page">
                 <div class="balance-hero">
                     <h1 id="balance-txt">0</h1>
-                    <p>AVAILABLE GEMS 💎</p>
+                    <p>TOTAL GEMS COLLECTED 💎</p>
                 </div>
 
                 <div class="tap-area">
                     <div class="coin-btn" id="coin-trigger">
-                        <svg width="140" height="140" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="45" fill="none" stroke="url(#g)" stroke-width="2" opacity="0.2"/>
-                            <path d="M50 20 V80 M20 50 H80" stroke="var(--cyan)" stroke-width="1"/>
-                            <circle cx="50" cy="50" r="32" fill="none" stroke="var(--gold)" stroke-width="4"/>
-                            <text x="36" y="65" font-size="40" fill="white" font-weight="bold">$</text>
-                            <defs><linearGradient id="g"><stop offset="0%" stop-color="var(--cyan)"/><stop offset="100%" stop-color="var(--purple)"/></linearGradient></defs>
-                        </svg>
+                        <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" width="120" style="filter: drop-shadow(0 0 10px gold);">
                     </div>
                 </div>
 
                 <div class="footer-progress">
                     <div style="display:flex; justify-content:space-between; font-size:12px;">
-                        <span>SYNCING ENERGY ⚡ <span id="energy-txt">1000</span>/1000</span>
-                        <span style="color:var(--gold)">100%</span>
+                        <span>ENERGY ⚡ <span id="energy-txt">1000</span>/1000</span>
+                        <span id="energy-percent" style="color:var(--gold)">100%</span>
                     </div>
                     <div class="bar-bg"><div class="bar-fill" id="energy-bar"></div></div>
                 </div>
             </div>
 
-            <!-- PAGE: WALLET & SHOP -->
+            <!-- PAGE: SHOP (گەنجینە و کڕین) -->
             <div id="page-wallet" class="page">
-                <div class="wallet-header">
-                    <p style="font-size:12px; color:#777; margin:0;">YOUR BALANCE</p>
-                    <h1 style="color:var(--gold); font-size:45px; margin:10px 0;"><span id="wallet-balance">0</span> 💎</h1>
-                    <div style="display:flex; justify-content:center; gap:20px;">
-                        <button class="buy-btn" style="background:#222; color:white; border:1px solid #444" onclick="showHistory()">History</button>
-                        <button class="buy-btn" onclick="tg.showAlert('بۆ ڕاکێشانی پارە دەبێت بگەیەتە ١٠ ملیۆن گەم')">Withdraw</button>
-                    </div>
+                <h2 style="text-align:center; color:var(--gold)">GIFT CARDS SHOP 🛍️</h2>
+                <div style="background:#111; padding:20px; border-radius:15px; text-align:center; margin-bottom:20px; border:1px dashed #333">
+                    <p style="margin:0; font-size:12px; color:#777">YOUR BALANCE</p>
+                    <h2 id="wallet-balance" style="margin:5px 0; font-size:35px; color:var(--gold)">0 💎</h2>
                 </div>
-
-                <h3 style="margin-bottom:15px; font-style:italic">GIFT CARDS SHOP 🛍️</h3>
                 
                 <div class="card">
                     <div class="card-icon" style="color:#007AFF"></div>
@@ -178,33 +166,33 @@
                 </div>
             </div>
 
-            <!-- PAGE: EARN -->
+            <!-- PAGE: EARN (ئەرکەکان) -->
             <div id="page-earn" class="page">
-                <h2 style="color:var(--gold)">Earn Fast</h2>
+                <h2 style="color:var(--gold)">EARN FAST 🎁</h2>
                 <div class="card" onclick="watchAd()">
                     <div class="card-icon">📺</div>
                     <div class="card-info"><h4>Watch Rewarded Ad</h4><p>Get +5,000 Gems instantly</p></div>
-                    <div style="color:var(--gold)">+5k</div>
+                    <div style="color:var(--gold); font-weight:bold">+5k</div>
                 </div>
                 <div class="card">
                     <div class="card-icon">🐦</div>
-                    <div class="card-info"><h4>Follow our Twitter</h4><p>+50,000 Gems</p></div>
-                    <button class="buy-btn" onclick="window.open('https://twitter.com')">Follow</button>
+                    <div class="card-info"><h4>Follow our News</h4><p>+50,000 Gems</p></div>
+                    <button class="buy-btn" onclick="window.open('https://t.me/your_channel')">JOIN</button>
                 </div>
             </div>
 
-            <!-- PAGE: BOOST -->
+            <!-- PAGE: BOOST (بەهێزکەرەکان) -->
             <div id="page-boost" class="page">
-                <h2>Boosters</h2>
+                <h2 style="color:var(--gold)">BOOSTERS ⚡</h2>
                 <div class="card">
-                    <div class="card-icon">⚡</div>
-                    <div class="card-info"><h4>Full Energy</h4><p>Refill your energy bar</p></div>
+                    <div class="card-icon">🔋</div>
+                    <div class="card-info"><h4>Full Energy Refill</h4><p>Get 1000 energy back</p></div>
                     <button class="buy-btn" onclick="refillEnergy()">FREE</button>
                 </div>
                 <div class="card">
-                    <div class="card-icon">🔥</div>
-                    <div class="card-info"><h4>Multi-Tap X2</h4><p>2 Gems per tap</p></div>
-                    <button class="buy-btn" onclick="tg.showAlert('Coming Soon...')">1,000 💎</button>
+                    <div class="card-icon">🚀</div>
+                    <div class="card-info"><h4>Multi-Tap X2</h4><p>Soon...</p></div>
+                    <button class="buy-btn" style="background:#333; color:#777">LOCK</button>
                 </div>
             </div>
 
@@ -212,77 +200,104 @@
 
         <!-- Navigation Bar -->
         <nav class="nav-bar">
-            <div class="nav-item active" onclick="switchPage('mine')"><div>⛏️</div>MINE</div>
-            <div class="nav-item" onclick="switchPage('earn')"><div>🎁</div>EARN</div>
-            <div class="nav-item" onclick="switchPage('boost')"><div>⚡</div>BOOST</div>
-            <div class="nav-item" onclick="switchPage('wallet')"><div>🛒</div>SHOP</div>
+            <div class="nav-item active" onclick="switchPage('mine', this)"><div>⛏️</div>MINE</div>
+            <div class="nav-item" onclick="switchPage('earn', this)"><div>🎁</div>EARN</div>
+            <div class="nav-item" onclick="switchPage('boost', this)"><div>⚡</div>BOOST</div>
+            <div class="nav-item" onclick="switchPage('wallet', this)"><div>🛒</div>SHOP</div>
         </nav>
 
     </div>
 
     <script>
-        // 1. FIREBASE SETUP
+        // 1. FIREBASE SETUP (بەستنەوە بە پڕۆژەکەی تۆ)
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "gemini-coins.firebaseapp.com",
-            projectId: "gemini-coins",
-            storageBucket: "gemini-coins.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:12345:web:abcd"
+            apiKey: "AIzaSyBMN49BmTeQ4OaFbSuiC2AaELHdkOuc_8U",
+            authDomain: "geminicoins-9f1a5.firebaseapp.com",
+            projectId: "geminicoins-9f1a5",
+            storageBucket: "geminicoins-9f1a5.firebasestorage.app",
+            messagingSenderId: "841242980001",
+            appId: "1:841242980001:web:b241ba1b7f281d691e4ae0",
+            measurementId: "G-48DT79KMS8"
         };
+        
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 2. TELEGRAM WEBAPP
+        // 2. TELEGRAM WEBAPP INITIALIZATION
         const tg = window.Telegram.WebApp;
         tg.expand();
-        const user = tg.initDataUnsafe.user || { id: "test_user", first_name: "Guest" };
+        const user = tg.initDataUnsafe.user || { id: "test_user", first_name: "Developer" };
+        const uid = String(user.id);
         document.getElementById('user-display').innerText = user.first_name;
 
         // 3. APP STATE
         let balance = 0;
         let energy = 1000;
-        const uid = String(user.id);
+        let isSaving = false;
 
+        // بارکردنی داتای بەکارهێنەر
         async function loadUser() {
-            const doc = await db.collection("users").doc(uid).get();
-            if (doc.exists) {
-                balance = doc.data().balance || 0;
-                energy = doc.data().energy || 1000;
-            } else {
-                await db.collection("users").doc(uid).set({
-                    name: user.first_name, balance: 0, energy: 1000, taps: 0
-                });
+            try {
+                const docRef = db.collection("users").doc(uid);
+                const doc = await docRef.get();
+                
+                if (doc.exists) {
+                    balance = doc.data().balance || 0;
+                    energy = doc.data().energy || 1000;
+                } else {
+                    await docRef.set({
+                        name: user.first_name,
+                        balance: 0,
+                        energy: 1000,
+                        joinedAt: Date.now()
+                    });
+                }
+                updateUI();
+                setTimeout(() => {
+                    document.getElementById('splash').style.display = 'none';
+                    document.getElementById('app').style.display = 'flex';
+                }, 1000);
+            } catch (e) {
+                console.error("Error:", e);
+                alert("پەیوەندی ئینتەرنێت جێگیر نییە!");
             }
-            updateUI();
-            document.getElementById('splash').style.display = 'none';
-            document.getElementById('app').style.display = 'flex';
         }
 
+        // تازەکردنەوەی ڕووکار
         function updateUI() {
             document.getElementById('balance-txt').innerText = Math.floor(balance).toLocaleString();
             document.getElementById('wallet-balance').innerText = Math.floor(balance).toLocaleString();
             document.getElementById('energy-txt').innerText = energy;
             document.getElementById('energy-bar').style.width = (energy / 10) + "%";
+            document.getElementById('energy-percent').innerText = Math.floor(energy/10) + "%";
             
-            // Rank logic
-            if(balance > 1000000) document.getElementById('rank-tag').innerText = "PLATINUM";
-            else if(balance > 100000) document.getElementById('rank-tag').innerText = "GOLD";
+            // Rank Logic
+            const rankTag = document.getElementById('rank-tag');
+            if(balance > 10000000) { rankTag.innerText = "PLATINUM"; rankTag.style.background = "#E5E4E2"; }
+            else if(balance > 1000000) { rankTag.innerText = "GOLD"; rankTag.style.background = "var(--gold)"; }
+            else { rankTag.innerText = "BRONZE"; rankTag.style.background = "#CD7F32"; }
         }
 
-        // 4. CORE ACTIONS
+        // 4. CORE ACTIONS (کلیک کردن)
         const trigger = document.getElementById('coin-trigger');
+        
         trigger.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (energy > 0) {
                 balance += 1;
                 energy -= 1;
                 updateUI();
+                
+                // Haptic feedback بۆ تێلیگرام
                 tg.HapticFeedback.impactOccurred('light');
-                showPlusOne(e.touches[0].clientX, e.touches[0].clientY);
-                saveData();
+                
+                // پیشاندانی ئەنیمەیشنی +1
+                const touch = e.touches[0];
+                showPlusOne(touch.clientX, touch.clientY);
+                
+                saveDataDebounced();
             } else {
-                tg.HapticFeedback.notificationOccurred('error');
+                tg.HapticFeedback.notificationOccurred('warning');
             }
         });
 
@@ -290,45 +305,58 @@
             const el = document.createElement('div');
             el.className = 'tap-anim';
             el.innerText = '+1';
-            el.style.left = x + 'px';
-            el.style.top = y + 'px';
+            el.style.left = (x - 10) + 'px';
+            el.style.top = (y - 40) + 'px';
             document.body.appendChild(el);
             setTimeout(() => el.remove(), 800);
         }
 
-        let syncTimer;
-        function saveData() {
-            clearTimeout(syncTimer);
-            syncTimer = setTimeout(() => {
-                db.collection("users").doc(uid).update({
-                    balance: balance, energy: energy, lastUpdate: Date.now()
-                });
-            }, 2000);
+        // پاشەکەوتکردنی داتا (Debounce) بۆ ئەوەی سێرڤەر قەرەباڵغ نەبێت
+        let saveTimeout;
+        function saveDataDebounced() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                try {
+                    await db.collection("users").doc(uid).update({
+                        balance: balance,
+                        energy: energy,
+                        lastActive: Date.now()
+                    });
+                } catch (e) { console.log("Sync error"); }
+            }, 1500);
         }
 
-        function switchPage(p) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.getElementById('page-' + p).classList.add('active-page');
-            event.currentTarget.classList.add('active');
+        // 5. NAVIGATION & PAGES
+        function switchPage(pageId, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            
+            document.getElementById('page-' + pageId).classList.add('active-page');
+            el.classList.add('active');
+            tg.HapticFeedback.selectionChanged();
         }
 
-        // 5. SHOP LOGIC
-        function buyItem(name, price) {
+        // 6. SHOP LOGIC (کڕین)
+        function buyItem(itemName, price) {
             if (balance >= price) {
-                tg.showConfirm(`ئایا دڵنیایت لە کڕینی ${name} بە ${price.toLocaleString()} گەم؟`, async (ok) => {
-                    if (ok) {
+                tg.showConfirm(`ئایا دڵنیایت لە کڕینی ${itemName}؟`, async (confirmed) => {
+                    if (confirmed) {
                         balance -= price;
                         updateUI();
                         await db.collection("orders").add({
-                            userId: uid, userName: user.first_name, item: name, status: "pending", date: Date.now()
+                            userId: uid,
+                            userName: user.first_name,
+                            item: itemName,
+                            price: price,
+                            status: "pending",
+                            date: Date.now()
                         });
-                        saveData();
-                        tg.showAlert("داواکارییەکەت نێردرا! پاش پشکنین کارتەکەت بۆ دەنێردرێت لە ناو بۆتەکە.");
+                        saveDataDebounced();
+                        tg.showAlert("داواکارییەکەت نێردرا! پاش پشکنین کارتەکەت بۆ دەنێردرێت.");
                     }
                 });
             } else {
-                tg.showAlert("گەمی پێویستت نییە! زیاتر کار بکە.");
+                tg.showAlert("بڕی گەمی پێویستت نییە!");
             }
         }
 
@@ -336,30 +364,36 @@
             if(energy < 100) {
                 energy = 1000;
                 updateUI();
-                saveData();
+                saveDataDebounced();
                 tg.showAlert("Energy Refilled! ⚡");
             } else {
-                tg.showAlert("تەنها کاتێک وزەت زۆر کەم بوو دەتوانیت بەکاری بهێنیت.");
+                tg.showAlert("تەنها کاتێک وزەت زۆر کەم بوو دەتوانیت ئەمە بەکاربێنیت.");
             }
         }
 
         function watchAd() {
             tg.showProgress(true);
+            // لێرەدا لاسایی بارکردنی ڕیکلام دەکەینەوە
             setTimeout(() => {
                 tg.showProgress(false);
                 balance += 5000;
                 updateUI();
-                saveData();
-                tg.showAlert("پیرۆزە! +5,000 گەمت وەرگرت بۆ بینینی ڕیکلام.");
+                saveDataDebounced();
+                tg.showAlert("پیرۆزە! 5,000 گەمت وەرگرت بۆ بینینی ڕیکلام.");
             }, 3000);
         }
 
-        // Auto Recovery
+        // زیادکردنی وزە بە شێوەی خۆکار (هەموو ٣ چرکە جارێک ١ وزە)
         setInterval(() => {
-            if (energy < 1000) { energy += 1; updateUI(); }
+            if (energy < 1000) {
+                energy += 1;
+                updateUI();
+            }
         }, 3000);
 
+        // دەستپێکردنی ئەپەکە
         loadUser();
+
     </script>
 </body>
 </html>
