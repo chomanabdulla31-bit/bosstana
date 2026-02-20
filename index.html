@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Geminicoins - Global Mining</title>
+    <title>Geminicoins Premium - Iraq</title>
     <!-- SDKs -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -13,16 +13,16 @@
         :root {
             --gold: #ffcc00;
             --bg: #050505;
-            --card-bg: #111111;
-            --text-gray: #888888;
+            --card-bg: #121212;
             --cyan: #00d2ff;
             --purple: #9d50bb;
+            --red: #ff4444;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             margin: 0; background-color: var(--bg); color: white;
-            font-family: 'Segoe UI', Roboto, sans-serif; overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, sans-serif; overflow: hidden;
         }
 
         /* Splash Screen */
@@ -30,217 +30,205 @@
             position: fixed; inset: 0; background: black; z-index: 1000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        .gem-logo { width: 120px; margin-bottom: 20px; animation: pulse 2s infinite; }
-        
-        /* Main Layout */
-        .app-container { display: none; height: 100vh; flex-direction: column; padding: 15px; }
-        .page { display: none; flex-grow: 1; overflow-y: auto; padding-bottom: 100px; }
-        .active-page { display: flex; flex-direction: column; }
+        .loader-ring { width: 80px; height: 80px; border: 3px solid #333; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* Top Header (Status Bar) */
-        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .user-pill { display: flex; align-items: center; gap: 10px; background: #1a1a1a; padding: 5px 12px; border-radius: 12px; }
-        .wisdom-btn { border: 1px solid var(--gold); color: var(--gold); background: rgba(255,204,0,0.1); padding: 5px 15px; border-radius: 20px; font-size: 12px; }
+        /* Main Container */
+        .app-container { display: none; height: 100vh; flex-direction: column; }
+        .content { flex-grow: 1; overflow-y: auto; padding: 20px; padding-bottom: 110px; }
+        .page { display: none; flex-direction: column; width: 100%; }
+        .active-page { display: flex; }
 
-        /* MINE PAGE */
-        .balance-section { text-align: center; margin: 20px 0; }
-        .balance-val { font-size: 60px; font-weight: bold; color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .mining-active { color: #4CAF50; font-size: 12px; margin-top: 5px; }
+        /* Top Bar */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(0,0,0,0.5); }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .wisdom-btn { border: 1px solid var(--gold); color: var(--gold); background: rgba(255,204,0,0.1); padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; }
 
-        .tap-zone { flex-grow: 1; display: flex; justify-content: center; align-items: center; }
-        .main-coin {
-            width: 250px; height: 250px; border-radius: 50%;
+        /* Balance Display */
+        .balance-hero { text-align: center; margin: 20px 0; }
+        .balance-hero h1 { font-size: 55px; margin: 0; color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .balance-hero p { color: #555; letter-spacing: 2px; font-size: 12px; margin-top: 5px; }
+
+        /* Tap Mechanism */
+        .tap-area { flex-grow: 1; display: flex; justify-content: center; align-items: center; position: relative; }
+        .coin-btn {
+            width: 260px; height: 260px; border-radius: 50%;
             background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
-            border: 10px solid #222; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 50px rgba(157, 80, 187, 0.2); transition: transform 0.05s;
+            border: 8px solid #222; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 40px rgba(255, 204, 0, 0.1); transition: transform 0.05s;
         }
-        .main-coin:active { transform: scale(0.95); }
+        .coin-btn:active { transform: scale(0.94); }
 
-        .energy-footer { width: 100%; margin-top: 20px; }
-        .progress-bg { width: 100%; height: 12px; background: #222; border-radius: 10px; overflow: hidden; margin-top: 5px; }
-        .progress-fill { width: 100%; height: 100%; background: linear-gradient(90deg, #ffcc00, #ff8800); transition: width 0.3s; }
-
-        /* LIST CARDS (Earn, Boost, Rank) */
-        .card {
-            background: var(--card-bg); border-radius: 20px; padding: 15px; margin-bottom: 12px;
-            display: flex; align-items: center; gap: 15px; border: 1px solid #222;
-        }
-        .card-icon { width: 50px; height: 50px; background: #1a1a1a; border-radius: 12px; display: flex; justify-content: center; align-items: center; }
+        /* Cards & Shop */
+        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; margin-bottom: 15px; border: 1px solid #222; display: flex; align-items: center; gap: 15px; }
+        .card-icon { width: 45px; height: 45px; background: #1a1a1a; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; }
         .card-info { flex-grow: 1; }
         .card-info h4 { margin: 0; font-size: 14px; }
-        .card-info p { margin: 3px 0 0; font-size: 12px; color: var(--text-gray); }
-        .reward-val { color: var(--gold); font-weight: bold; }
+        .card-info p { margin: 4px 0 0; font-size: 11px; color: #777; }
+        .buy-btn { background: var(--gold); color: black; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; font-size: 12px; }
 
-        /* BOTTOM NAV */
-        .bottom-nav {
+        /* Wallet Section */
+        .wallet-header { background: linear-gradient(135deg, #1a1a1a, #000); border-radius: 25px; padding: 30px; text-align: center; border: 1px solid #333; margin-bottom: 25px; }
+        .withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        /* Progress Footer */
+        .footer-progress { padding: 0 20px 20px; }
+        .bar-bg { width: 100%; height: 10px; background: #222; border-radius: 10px; overflow: hidden; margin-top: 5px; }
+        .bar-fill { width: 100%; height: 100%; background: linear-gradient(90deg, var(--gold), #ff8800); transition: width 0.3s; }
+
+        /* Bottom Nav */
+        .nav-bar {
             position: fixed; bottom: 15px; left: 5%; width: 90%; height: 75px;
-            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px);
+            background: rgba(15, 15, 15, 0.98); backdrop-filter: blur(15px);
             border-radius: 25px; border: 1px solid #333;
-            display: flex; justify-content: space-around; align-items: center; z-index: 900;
+            display: flex; justify-content: space-around; align-items: center;
         }
-        .nav-item { text-align: center; color: var(--text-gray); font-size: 10px; cursor: pointer; }
-        .nav-item.active { color: var(--gold); }
-        .nav-item div { font-size: 20px; margin-bottom: 4px; }
+        .nav-item { text-align: center; color: #555; font-size: 10px; cursor: pointer; transition: 0.3s; }
+        .nav-item.active { color: var(--gold); transform: translateY(-5px); }
+        .nav-item div { font-size: 22px; margin-bottom: 4px; }
 
-        /* Animations */
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-        .floating-text { position: absolute; color: white; font-weight: bold; font-size: 28px; pointer-events: none; animation: floatUp 0.8s forwards; }
-        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100px); opacity: 0; } }
+        /* Floating Animation */
+        .tap-anim { position: absolute; color: white; font-weight: bold; font-size: 32px; pointer-events: none; animation: floatUp 0.8s ease-out forwards; z-index: 500; }
+        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-120px); opacity: 0; } }
     </style>
 </head>
 <body>
 
     <!-- Splash Screen -->
     <div id="splash">
-        <div class="gem-logo"><svg viewBox="0 0 100 100" width="100"><path d="M50 10 L90 40 L50 90 L10 40 Z" fill="none" stroke="#ffcc00" stroke-width="2"/><path d="M25 40 L50 20 L75 40 L50 60 Z" fill="#ffcc00"/></svg></div>
-        <h1 style="color: var(--gold); letter-spacing: 5px;">GEMINICOINS</h1>
-        <p style="color: #444; font-size: 12px;">INITIALIZING SECURE PROTOCOL...</p>
+        <div style="font-size: 50px; margin-bottom: 20px;">💎</div>
+        <h1 style="color: var(--gold); letter-spacing: 5px; margin: 0;">GEMINICOINS</h1>
+        <p style="color: #444; font-size: 10px; margin-bottom: 30px;">SECURE PROTOCOL V2.0</p>
+        <div class="loader-ring"></div>
     </div>
 
-    <!-- App Main Container -->
+    <!-- Main App -->
     <div class="app-container" id="app">
         
-        <!-- Shared Header -->
-        <div class="status-header">
-            <div class="user-pill">
-                <div style="background:#333; border-radius:8px; padding:5px;">👤</div>
+        <div class="top-bar">
+            <div class="user-info">
+                <div style="background:#222; padding:8px; border-radius:10px;">👤</div>
                 <div>
-                    <div style="font-size: 9px; color: #888;">STATUS: ACTIVE</div>
-                    <div id="miner-id" style="font-size: 13px; font-weight: bold;">Miner #402</div>
+                    <div style="font-size: 9px; color: #666;">RANK: <span id="rank-tag">BRONZE</span></div>
+                    <div id="user-display" style="font-size: 13px; font-weight: bold;">Loading...</div>
                 </div>
             </div>
-            <button class="wisdom-btn" onclick="openProfile()">🧠 SEEK WISDOM</button>
+            <button class="wisdom-btn" onclick="switchPage('wallet')">💳 WALLET</button>
         </div>
 
-        <!-- PAGE: MINE -->
-        <div id="page-mine" class="page active-page">
-            <div class="balance-section">
-                <div class="balance-val">💎 <span id="balance-val">0</span></div>
-                <div class="mining-active">● MINING OPERATIONS ACTIVE</div>
-            </div>
-
-            <div class="tap-zone">
-                <div class="main-coin" id="coin-btn">
-                    <svg width="150" height="150" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="45" fill="none" stroke="url(#g1)" stroke-width="2" opacity="0.3"/>
-                        <path d="M50 20 V80 M20 50 H80" stroke="var(--cyan)" stroke-width="1"/>
-                        <circle cx="50" cy="50" r="30" fill="none" stroke="url(#g1)" stroke-width="5"/>
-                        <text x="38" y="65" font-size="40" fill="white" font-weight="bold">$</text>
-                        <defs><linearGradient id="g1"><stop offset="0%" stop-color="var(--cyan)"/><stop offset="100%" stop-color="var(--purple)"/></linearGradient></defs>
-                    </svg>
-                </div>
-            </div>
-
-            <div class="energy-footer">
-                <div style="display:flex; justify-content:space-between; font-size:13px;">
-                    <span>ENERGY SYNC ⚡ <span id="energy-num">1000</span>/1000</span>
-                    <span id="energy-pct" style="color:var(--gold)">100%</span>
-                </div>
-                <div class="progress-bg"><div class="progress-fill" id="energy-fill"></div></div>
-            </div>
-        </div>
-
-        <!-- PAGE: EARN -->
-        <div id="page-earn" class="page">
-            <h2 style="font-style: italic; color:var(--gold); margin:0;">EARN STATION</h2>
-            <p style="font-size:11px; color:#666; margin-bottom:20px;">HIGH YIELD REWARDS SYSTEM</p>
+        <div class="content">
             
-            <div class="card" style="border: 1px solid var(--gold);" onclick="watchVideoAd()">
-                <div class="card-icon" style="background: rgba(255,204,0,0.2); color:var(--gold)">▶</div>
-                <div class="card-info">
-                    <h4>REWARDED AD</h4>
-                    <p>INSTANT 2,500 GEM + ENERGY</p>
+            <!-- PAGE: MINE -->
+            <div id="page-mine" class="page active-page">
+                <div class="balance-hero">
+                    <h1 id="balance-txt">0</h1>
+                    <p>AVAILABLE GEMS 💎</p>
                 </div>
-                <div>➜</div>
-            </div>
 
-            <p style="color:#444; font-size:12px; letter-spacing:2px; margin:20px 0 10px;">ACTIVE PROTOCOLS</p>
-            <div class="card">
-                <div class="card-icon">▶</div>
-                <div class="card-info"><h4>GEMINI PROTOCOL BRIEFING</h4><p class="reward-val">+50,000 GEM</p></div>
-            </div>
-            <div class="card">
-                <div class="card-icon">📈</div>
-                <div class="card-info"><h4>MARKET SENTIMENT ANALYSIS</h4><p class="reward-val">+125,000 GEM</p></div>
-            </div>
-        </div>
-
-        <!-- PAGE: FRIENDS -->
-        <div id="page-friends" class="page" style="justify-content:center; align-items:center; text-align:center;">
-            <h1 style="color:var(--gold); font-style:italic; margin:0;">FRIENDS</h1>
-            <p style="color:#666; margin-bottom:40px;">BUILD YOUR NETWORK</p>
-            <div style="background: #111; padding:40px; border-radius:30px; border:1px solid #222; width:100%;">
-                <div style="font-size:50px; margin-bottom:20px;">👥</div>
-                <p>Invite friends and get <span class="reward-val">50,000 GEM</span> instantly!</p>
-                <button class="wisdom-btn" style="width:100%; padding:15px; font-weight:bold; margin-top:20px;" onclick="inviteFriend()">INVITE A FRIEND</button>
-            </div>
-        </div>
-
-        <!-- PAGE: BOOST -->
-        <div id="page-boost" class="page">
-            <h2 style="color:var(--gold); margin:0;">BOOST HUB</h2>
-            <p style="color:#666; font-size:11px; margin-bottom:20px;">SCALE YOUR MINING INFRASTRUCTURE</p>
-            <div class="card">
-                <div class="card-icon">👆</div>
-                <div class="card-info"><h4>Nano-Tapping <small style="color:#444">LVL 1</small></h4><p>+1 Power</p></div>
-                <div class="reward-val">100 💎</div>
-            </div>
-            <div class="card">
-                <div class="card-icon">🖥️</div>
-                <div class="card-info"><h4>GPU Cluster <small style="color:#444">LVL 0</small></h4><p>+5 GEM/s</p></div>
-                <div class="reward-val">500 💎</div>
-            </div>
-        </div>
-
-        <!-- PAGE: RANK -->
-        <div id="page-rank" class="page">
-            <h2 style="text-align:center">Top Tappers</h2>
-            <div style="display:flex; justify-content:center; align-items:flex-end; gap:10px; margin:30px 0;">
-                <div style="width:80px; text-align:center;"><div style="width:60px; height:60px; background:#444; border-radius:50%; margin:auto;"></div><div style="background:#333; height:60px; margin-top:5px; padding-top:10px;">#2</div></div>
-                <div style="width:100px; text-align:center;"><div style="width:80px; height:80px; background:var(--gold); border-radius:50%; margin:auto; border:4px solid #000;"></div><div style="background:var(--gold); color:black; height:100px; margin-top:5px; padding-top:10px; font-weight:bold;">#1</div></div>
-                <div style="width:80px; text-align:center;"><div style="width:60px; height:60px; background:#222; border-radius:50%; margin:auto;"></div><div style="background:#222; height:40px; margin-top:5px; padding-top:10px;">#3</div></div>
-            </div>
-        </div>
-
-        <!-- PAGE: PROFILE/WALLET -->
-        <div id="page-profile" class="page">
-             <div style="text-align:center; margin-bottom:30px;">
-                <div style="width:80px; height:80px; background:#222; border-radius:50%; margin:auto; border:2px solid var(--gold); display:flex; justify-content:center; align-items:center; font-size:30px;">👤</div>
-                <h3>Elite Operative ✅</h3>
-                <div style="display:flex; gap:10px; justify-content:center;">
-                    <span style="background:#1a1a1a; padding:4px 12px; border-radius:10px; font-size:11px; border:1px solid var(--gold)">PLATINUM LEAGUE</span>
-                    <span style="background:#1a1a1a; padding:4px 12px; border-radius:10px; font-size:11px; border:1px solid var(--cyan)">FIREBASE SYNCED</span>
+                <div class="tap-area">
+                    <div class="coin-btn" id="coin-trigger">
+                        <svg width="140" height="140" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="url(#g)" stroke-width="2" opacity="0.2"/>
+                            <path d="M50 20 V80 M20 50 H80" stroke="var(--cyan)" stroke-width="1"/>
+                            <circle cx="50" cy="50" r="32" fill="none" stroke="var(--gold)" stroke-width="4"/>
+                            <text x="36" y="65" font-size="40" fill="white" font-weight="bold">$</text>
+                            <defs><linearGradient id="g"><stop offset="0%" stop-color="var(--cyan)"/><stop offset="100%" stop-color="var(--purple)"/></linearGradient></defs>
+                        </svg>
+                    </div>
                 </div>
-             </div>
-             <div class="card" style="justify-content:space-between">
-                <div><h4>Crypto Wallet</h4><p>WITHDRAW & DEPOSIT</p></div>
-                <div>➜</div>
-             </div>
-             <div style="text-align:center; margin-top:20px;">
-                <button style="background:none; border:none; color:#f44; font-size:12px; letter-spacing:2px;">TERMINATE PROTOCOL</button>
-             </div>
+
+                <div class="footer-progress">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>SYNCING ENERGY ⚡ <span id="energy-txt">1000</span>/1000</span>
+                        <span style="color:var(--gold)">100%</span>
+                    </div>
+                    <div class="bar-bg"><div class="bar-fill" id="energy-bar"></div></div>
+                </div>
+            </div>
+
+            <!-- PAGE: WALLET & SHOP -->
+            <div id="page-wallet" class="page">
+                <div class="wallet-header">
+                    <p style="font-size:12px; color:#777; margin:0;">YOUR BALANCE</p>
+                    <h1 style="color:var(--gold); font-size:45px; margin:10px 0;"><span id="wallet-balance">0</span> 💎</h1>
+                    <div style="display:flex; justify-content:center; gap:20px;">
+                        <button class="buy-btn" style="background:#222; color:white; border:1px solid #444" onclick="showHistory()">History</button>
+                        <button class="buy-btn" onclick="tg.showAlert('بۆ ڕاکێشانی پارە دەبێت بگەیەتە ١٠ ملیۆن گەم')">Withdraw</button>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom:15px; font-style:italic">GIFT CARDS SHOP 🛍️</h3>
+                
+                <div class="card">
+                    <div class="card-icon" style="color:#007AFF"></div>
+                    <div class="card-info"><h4>App Store Card $10</h4><p>Price: 10,000,000 💎</p></div>
+                    <button class="buy-btn" onclick="buyItem('App Store $10', 10000000)">BUY</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="color:#34A853">▶</div>
+                    <div class="card-info"><h4>Google Play Card $10</h4><p>Price: 10,000,000 💎</p></div>
+                    <button class="buy-btn" onclick="buyItem('Google Play $10', 10000000)">BUY</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="color:#FFD700">💰</div>
+                    <div class="card-info"><h4>Cash Out $50 (ZainCash)</h4><p>Price: 50,000,000 💎</p></div>
+                    <button class="buy-btn" onclick="buyItem('Cash $50', 50000000)">BUY</button>
+                </div>
+            </div>
+
+            <!-- PAGE: EARN -->
+            <div id="page-earn" class="page">
+                <h2 style="color:var(--gold)">Earn Fast</h2>
+                <div class="card" onclick="watchAd()">
+                    <div class="card-icon">📺</div>
+                    <div class="card-info"><h4>Watch Rewarded Ad</h4><p>Get +5,000 Gems instantly</p></div>
+                    <div style="color:var(--gold)">+5k</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🐦</div>
+                    <div class="card-info"><h4>Follow our Twitter</h4><p>+50,000 Gems</p></div>
+                    <button class="buy-btn" onclick="window.open('https://twitter.com')">Follow</button>
+                </div>
+            </div>
+
+            <!-- PAGE: BOOST -->
+            <div id="page-boost" class="page">
+                <h2>Boosters</h2>
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-info"><h4>Full Energy</h4><p>Refill your energy bar</p></div>
+                    <button class="buy-btn" onclick="refillEnergy()">FREE</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔥</div>
+                    <div class="card-info"><h4>Multi-Tap X2</h4><p>2 Gems per tap</p></div>
+                    <button class="buy-btn" onclick="tg.showAlert('Coming Soon...')">1,000 💎</button>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <div class="nav-item active" onclick="switchPage('mine')"><div>📦</div>MINE</div>
-            <div class="nav-item" onclick="switchPage('earn')"><div>▶</div>EARN</div>
-            <div class="nav-item" onclick="switchPage('friends')"><div>👥</div>FRIENDS</div>
+        <!-- Navigation Bar -->
+        <nav class="nav-bar">
+            <div class="nav-item active" onclick="switchPage('mine')"><div>⛏️</div>MINE</div>
+            <div class="nav-item" onclick="switchPage('earn')"><div>🎁</div>EARN</div>
             <div class="nav-item" onclick="switchPage('boost')"><div>⚡</div>BOOST</div>
-            <div class="nav-item" onclick="switchPage('rank')"><div>🏆</div>RANK</div>
+            <div class="nav-item" onclick="switchPage('wallet')"><div>🛒</div>SHOP</div>
         </nav>
 
     </div>
 
     <script>
-        // 1. FIREBASE CONFIG (تەواوی بکە بە هی خۆت)
+        // 1. FIREBASE SETUP
         const firebaseConfig = {
-            apiKey: "AIzaSy...",
-            authDomain: "geminicoins-app.firebaseapp.com",
-            projectId: "geminicoins-app",
-            storageBucket: "geminicoins-app.appspot.com",
-            messagingSenderId: "...",
-            appId: "..."
+            apiKey: "YOUR_API_KEY",
+            authDomain: "gemini-coins.firebaseapp.com",
+            projectId: "gemini-coins",
+            storageBucket: "gemini-coins.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:12345:web:abcd"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
@@ -248,23 +236,22 @@
         // 2. TELEGRAM WEBAPP
         const tg = window.Telegram.WebApp;
         tg.expand();
-        const user = tg.initDataUnsafe.user || { id: "test_user", first_name: "Miner" };
-        document.getElementById('miner-id').innerText = user.first_name + " #" + String(user.id).slice(-3);
+        const user = tg.initDataUnsafe.user || { id: "test_user", first_name: "Guest" };
+        document.getElementById('user-display').innerText = user.first_name;
 
         // 3. APP STATE
         let balance = 0;
         let energy = 1000;
-        const userId = String(user.id);
+        const uid = String(user.id);
 
-        // Load Data
-        async function loadData() {
-            const doc = await db.collection("users").doc(userId).get();
+        async function loadUser() {
+            const doc = await db.collection("users").doc(uid).get();
             if (doc.exists) {
-                balance = doc.data().balance;
-                energy = doc.data().energy;
+                balance = doc.data().balance || 0;
+                energy = doc.data().energy || 1000;
             } else {
-                await db.collection("users").doc(userId).set({
-                    balance: 0, energy: 1000, lastSeen: Date.now()
+                await db.collection("users").doc(uid).set({
+                    name: user.first_name, balance: 0, energy: 1000, taps: 0
                 });
             }
             updateUI();
@@ -273,30 +260,35 @@
         }
 
         function updateUI() {
-            document.getElementById('balance-val').innerText = balance.toLocaleString();
-            document.getElementById('energy-num').innerText = energy;
-            const pct = (energy / 1000) * 100;
-            document.getElementById('energy-fill').style.width = pct + "%";
-            document.getElementById('energy-pct').innerText = Math.floor(pct) + "%";
+            document.getElementById('balance-txt').innerText = Math.floor(balance).toLocaleString();
+            document.getElementById('wallet-balance').innerText = Math.floor(balance).toLocaleString();
+            document.getElementById('energy-txt').innerText = energy;
+            document.getElementById('energy-bar').style.width = (energy / 10) + "%";
+            
+            // Rank logic
+            if(balance > 1000000) document.getElementById('rank-tag').innerText = "PLATINUM";
+            else if(balance > 100000) document.getElementById('rank-tag').innerText = "GOLD";
         }
 
         // 4. CORE ACTIONS
-        const coinBtn = document.getElementById('coin-btn');
-        coinBtn.addEventListener('touchstart', (e) => {
+        const trigger = document.getElementById('coin-trigger');
+        trigger.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (energy > 0) {
                 balance += 1;
                 energy -= 1;
                 updateUI();
                 tg.HapticFeedback.impactOccurred('light');
-                createFloatEffect(e.touches[0].clientX, e.touches[0].clientY);
-                syncData();
+                showPlusOne(e.touches[0].clientX, e.touches[0].clientY);
+                saveData();
+            } else {
+                tg.HapticFeedback.notificationOccurred('error');
             }
         });
 
-        function createFloatEffect(x, y) {
+        function showPlusOne(x, y) {
             const el = document.createElement('div');
-            el.className = 'floating-text';
+            el.className = 'tap-anim';
             el.innerText = '+1';
             el.style.left = x + 'px';
             el.style.top = y + 'px';
@@ -304,72 +296,70 @@
             setTimeout(() => el.remove(), 800);
         }
 
-        // Sync to Firebase (Debounced)
         let syncTimer;
-        function syncData() {
+        function saveData() {
             clearTimeout(syncTimer);
             syncTimer = setTimeout(() => {
-                db.collection("users").doc(userId).update({
-                    balance: balance, energy: energy, lastSync: Date.now()
+                db.collection("users").doc(uid).update({
+                    balance: balance, energy: energy, lastUpdate: Date.now()
                 });
-            }, 3000);
+            }, 2000);
         }
 
-        // Navigation
-        function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('page-' + pageId).classList.add('active-page');
+        function switchPage(p) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.getElementById('page-' + p).classList.add('active-page');
             event.currentTarget.classList.add('active');
         }
 
-        function openProfile() {
-            switchPage('profile');
-        }
-
-        // EARN (Video Simulator)
-        function watchVideoAd() {
-            tg.showConfirm("Watch a short video to earn 2,500 GEMS?", (ok) => {
-                if(ok) {
-                    tg.MainButton.setText("WATCHING VIDEO...");
-                    tg.MainButton.show();
-                    setTimeout(() => {
-                        balance += 2500;
-                        energy = 1000;
+        // 5. SHOP LOGIC
+        function buyItem(name, price) {
+            if (balance >= price) {
+                tg.showConfirm(`ئایا دڵنیایت لە کڕینی ${name} بە ${price.toLocaleString()} گەم؟`, async (ok) => {
+                    if (ok) {
+                        balance -= price;
                         updateUI();
-                        syncData();
-                        tg.MainButton.hide();
-                        tg.showAlert("Reward Received! +2,500 GEMS 💎");
-                    }, 5000);
-                }
-            });
-        }
-
-        function inviteFriend() {
-            const link = "https://t.me/kurd4coin_bot?start=" + userId;
-            tg.openTelegramLink(`https://t.me/share/url?url=${link}&text=Join Geminicoins and mine gems with me!`);
-        }
-
-        // Auto Energy Recovery
-        setInterval(() => {
-            if (energy < 1000) {
-                energy += 1;
-                updateUI();
+                        await db.collection("orders").add({
+                            userId: uid, userName: user.first_name, item: name, status: "pending", date: Date.now()
+                        });
+                        saveData();
+                        tg.showAlert("داواکارییەکەت نێردرا! پاش پشکنین کارتەکەت بۆ دەنێردرێت لە ناو بۆتەکە.");
+                    }
+                });
+            } else {
+                tg.showAlert("گەمی پێویستت نییە! زیاتر کار بکە.");
             }
-        }, 2000);
+        }
 
-        // Start
-        setTimeout(loadData, 2500);
+        function refillEnergy() {
+            if(energy < 100) {
+                energy = 1000;
+                updateUI();
+                saveData();
+                tg.showAlert("Energy Refilled! ⚡");
+            } else {
+                tg.showAlert("تەنها کاتێک وزەت زۆر کەم بوو دەتوانیت بەکاری بهێنیت.");
+            }
+        }
 
-setTimeout(() => {
-    document.getElementById('splash').style.display = 'none';
-    document.getElementById('app').style.display = 'flex';
-}, 2500);
+        function watchAd() {
+            tg.showProgress(true);
+            setTimeout(() => {
+                tg.showProgress(false);
+                balance += 5000;
+                updateUI();
+                saveData();
+                tg.showAlert("پیرۆزە! +5,000 گەمت وەرگرت بۆ بینینی ڕیکلام.");
+            }, 3000);
+        }
 
+        // Auto Recovery
+        setInterval(() => {
+            if (energy < 1000) { energy += 1; updateUI(); }
+        }, 3000);
 
-
-
-
+        loadUser();
     </script>
 </body>
 </html>
