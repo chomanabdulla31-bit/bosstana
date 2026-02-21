@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TITAN V24 - GAME MASTER</title>
+    <title>GEMINICOIN - TITAN SUPREME</title>
     
-    <!-- External SDKs -->
+    <!-- SDKs -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -13,209 +13,281 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&family=Noto+Sans+Arabic:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
 
         :root {
             --gold: #FFD700;
-            --blue: #00D2FF;
-            --neon: #39FF14;
+            --grey-text: #888888;
             --bg: #050505;
-            --card: #0F0F0F;
+            --card-bg: #0F0F0F;
             --border: rgba(255, 215, 0, 0.15);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body {
             margin: 0; background-color: var(--bg); color: white;
-            font-family: 'Rajdhani', 'Noto Sans Arabic', sans-serif;
-            overflow: hidden; user-select: none;
-            background: radial-gradient(circle at 50% 0%, #1a1500 0%, #050505 100%);
+            font-family: 'Rajdhani', sans-serif; overflow: hidden; user-select: none;
         }
 
-        /* --- UI: SPLASH --- */
+        /* --- PRELOADER (IMAGE 6) --- */
         #splash { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .logo-box { width: 110px; filter: drop-shadow(0 0 25px var(--gold)); animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        .loader-w { width: 200px; height: 5px; background: #111; margin-top: 35px; border-radius: 10px; overflow: hidden; border: 1px solid #222; }
-        .loader-f { height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold), #ff8c00); transition: 0.1s; }
+        .p-ring { width: 140px; height: 140px; border: 2px solid #111; border-top-color: var(--gold); border-radius: 50%; animation: spin 2s linear infinite; position: absolute; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .p-diamond { width: 60px; filter: drop-shadow(0 0 20px var(--gold)); z-index: 2; }
+        .p-title { font-family: 'Orbitron'; font-style: italic; color: var(--gold); margin-top: 50px; font-size: 28px; letter-spacing: 5px; }
+        .p-status { color: #444; font-size: 10px; margin-top: 15px; letter-spacing: 2px; }
 
         .app-shell { display: none; height: 100vh; flex-direction: column; }
 
-        /* --- HEADER --- */
-        header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.85); border-bottom: 2px solid var(--border); backdrop-filter: blur(15px); }
-        .u-info { display: flex; align-items: center; gap: 12px; }
-        .u-info img { width: 45px; height: 45px; border-radius: 12px; border: 2.5px solid var(--gold); object-fit: cover; }
+        /* --- HEADER (IMAGE 1/2) --- */
+        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .u-pill { display: flex; align-items: center; gap: 10px; }
+        .u-img { width: 40px; height: 40px; background: #111; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: #444; border: 1px solid #222; overflow: hidden; }
+        .u-img img { width: 100%; height: 100%; object-fit: cover; }
+        .u-meta { font-size: 11px; color: var(--grey-text); }
+        .u-meta b { color: white; font-size: 13px; }
+        .seek-btn { background: rgba(255, 215, 0, 0.1); border: 1px solid var(--gold); padding: 6px 12px; border-radius: 20px; color: var(--gold); font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 5px; }
 
-        /* --- PAGES --- */
-        main { flex-grow: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; scrollbar-width: none; }
+        /* --- NAVIGATION --- */
+        nav { position: fixed; bottom: 0; left: 0; right: 0; height: 85px; background: rgba(0,0,0,0.9); border-top: 1px solid #111; display: flex; justify-content: space-around; align-items: center; z-index: 5000; }
+        .n-item { text-align: center; color: #444; font-size: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; flex: 1; }
+        .n-item.active { color: var(--gold); }
+        .n-item i { font-size: 22px; display: block; margin-bottom: 5px; }
+
+        /* --- MAIN SCROLLER --- */
+        main { flex-grow: 1; overflow-y: auto; padding: 0 20px 110px; scrollbar-width: none; }
         main::-webkit-scrollbar { display: none; }
         .page { display: none; }
-        .page.active { display: block; animation: slideUp 0.4s ease-out; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- GLOBAL COMPONENTS --- */
-        .glass-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 20px; margin-bottom: 15px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        /* --- MINE PAGE (IMAGE 5) --- */
+        .bal-hero { text-align: center; margin: 20px 0; }
+        .bal-hero div { font-family: 'Orbitron'; font-size: 55px; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .bal-hero img { width: 35px; }
+        .status-badge { color: var(--neon); font-size: 11px; font-weight: bold; margin-bottom: 30px; letter-spacing: 1px; }
 
-        /* --- GAME OVERLAY (THE GAME POPUP) --- */
-        #game-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 30px; backdrop-filter: blur(10px); }
-        .game-win { background: #111; border: 2px solid var(--gold); border-radius: 30px; width: 100%; max-width: 400px; padding: 30px; text-align: center; position: relative; }
-        .close-game { position: absolute; top: -15px; right: -15px; background: red; width: 35px; height: 35px; border-radius: 50%; color: white; display: flex; justify-content: center; align-items: center; cursor: pointer; border: 3px solid #000; }
+        .clicker-box { width: 260px; height: 260px; margin: 0 auto; border-radius: 50%; border: 6px solid #1a1a1a; display: flex; justify-content: center; align-items: center; position: relative; background: radial-gradient(circle, #111 0%, #000 100%); cursor: pointer; }
+        .clicker-box img { width: 140px; }
+        .clicker-box:active { transform: scale(0.96); }
 
-        /* --- MINE PAGE --- */
-        .bal-display { text-align: center; margin-bottom: 30px; }
-        .bal-display h1 { font-family: 'Orbitron'; font-size: 50px; color: var(--gold); text-shadow: 0 0 30px rgba(255,215,0,0.4); margin: 5px 0; }
-        .main-coin { width: 260px; height: 260px; margin: 0 auto; border-radius: 50%; background: radial-gradient(circle, #222 0%, #000 100%); display: flex; justify-content: center; align-items: center; border: 8px solid #111; cursor: pointer; box-shadow: 0 0 50px #000; transition: 0.1s; }
-        .main-coin img { width: 150px; filter: drop-shadow(0 0 15px var(--gold)); pointer-events: none; }
-        .main-coin:active { transform: scale(0.95); }
+        .energy-box { margin-top: 50px; color: var(--grey-text); font-size: 13px; font-weight: bold; }
+        .e-bar-w { height: 8px; background: #111; border-radius: 10px; margin-top: 10px; overflow: hidden; border: 1px solid #222; }
+        .e-bar-f { height: 100%; width: 100%; background: var(--gold); box-shadow: 0 0 10px var(--gold); transition: 0.3s; }
 
-        /* --- RANKING --- */
-        .rank-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 15px; margin-bottom: 8px; border: 1px solid rgba(255,215,0,0.05); }
+        /* --- EARN PAGE (IMAGE 2) --- */
+        .page-title { font-family: 'Orbitron'; font-style: italic; font-size: 28px; color: white; margin-bottom: 5px; }
+        .sub-title { color: var(--grey-text); font-size: 12px; margin-bottom: 25px; letter-spacing: 1px; }
+        .earn-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 25px; padding: 25px; display: flex; align-items: center; gap: 15px; margin-bottom: 12px; cursor: pointer; }
+        .earn-card .icon { width: 50px; height: 50px; background: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 22px; color: var(--gold); border: 1px solid #222; }
 
-        /* --- NAV BAR --- */
-        nav { position: fixed; bottom: 15px; left: 15px; right: 15px; height: 80px; background: rgba(10,10,10,0.98); backdrop-filter: blur(30px); border-radius: 30px; border: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
-        .nav-btn { text-align: center; color: #444; font-size: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .nav-btn.active { color: var(--gold); transform: translateY(-5px); }
-        .nav-btn i { font-size: 24px; display: block; margin-bottom: 4px; }
+        /* --- BOOST PAGE (IMAGE 4) --- */
+        .boost-item { display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid #111; }
+        .boost-icon { width: 50px; height: 50px; background: #0a0a0a; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #333; }
+        .boost-info { flex: 1; }
+        .boost-info b { font-size: 16px; color: #eee; }
+        .boost-info p { margin: 2px 0 0; font-size: 11px; color: #444; }
 
-        /* --- BUTTONS & INPUTS --- */
-        .btn-gold { background: linear-gradient(45deg, var(--gold), #ff8c00); color: #000; border: none; padding: 15px; border-radius: 15px; font-weight: 900; font-family: 'Orbitron'; font-size: 14px; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(255,215,0,0.2); }
-        input { width: 100%; background: #000; border: 1px solid #333; padding: 15px; border-radius: 12px; color: white; margin-bottom: 12px; font-family: inherit; }
+        /* --- RANK PAGE (IMAGE 1) --- */
+        .podium { display: flex; justify-content: center; align-items: flex-end; gap: 15px; margin: 40px 0; }
+        .p-item { text-align: center; }
+        .p-av { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 10px; }
+        .p-box { width: 80px; background: #111; border-radius: 10px; padding: 15px 0; border: 1px solid #222; }
+        .p-box.center { height: 110px; background: var(--gold); color: black; border: none; }
 
-        /* --- GAME VISUALS --- */
-        #dice-view { font-size: 80px; color: var(--gold); margin: 20px 0; }
-        #fast-tap-count { font-size: 60px; color: var(--blue); font-family: 'Orbitron'; }
-        #spinner-visual { width: 150px; transition: 3s cubic-bezier(0.1, 0, 0.1, 1); }
+        /* --- WALLET (IMAGE 9) --- */
+        .bal-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 25px; padding: 40px; text-align: center; margin-bottom: 20px; }
+        .bal-card h2 { font-size: 60px; margin: 10px 0; }
+        .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-w { background: white; color: black; border: none; padding: 15px; border-radius: 15px; font-weight: bold; }
+        .btn-h { background: #111; color: white; border: 1px solid #222; padding: 15px; border-radius: 15px; font-weight: bold; }
 
-        .pop { position: absolute; color: white; font-weight: 900; font-size: 40px; pointer-events: none; animation: floatUp 0.7s forwards; text-shadow: 0 0 10px gold; z-index: 1000; }
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-160px); } }
+        /* --- PROFILE (IMAGE 7/8) --- */
+        .p-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .p-stat-box { background: #0a0a0a; border: 1px solid #1a1a1a; padding: 20px; border-radius: 20px; }
+        .p-stat-box small { color: #555; text-transform: uppercase; font-size: 10px; display: block; margin-bottom: 10px; }
+        .p-stat-box b { font-size: 20px; font-family: 'Orbitron'; font-style: italic; color: #eee; }
+
+        /* --- POPUP TEXT --- */
+        .pop { position: absolute; color: var(--gold); font-weight: 900; font-size: 35px; pointer-events: none; animation: floatUp 0.7s forwards; z-index: 1000; }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-150px); } }
     </style>
 </head>
 <body>
 
-    <!-- FAILSAFE SPLASH -->
+    <!-- Splash -->
     <div id="splash">
-        <img src="https://cdn-icons-png.flaticon.com/512/2163/2163350.png" class="logo-box">
-        <h2 style="font-family:'Orbitron'; color:gold; margin-top:25px; letter-spacing:6px;">TITAN GAME MASTER</h2>
-        <div class="loader-w"><div class="loader-f" id="l-fill"></div></div>
-    </div>
-
-    <!-- GAME OVERLAY -->
-    <div id="game-overlay">
-        <div class="game-win">
-            <div class="close-game" onclick="closeGame()"><i class="fas fa-times"></i></div>
-            <h2 id="game-title" style="font-family:'Orbitron'; color:var(--gold);">GAME NAME</h2>
-            <div id="game-content">
-                <!-- Game Specific UI Injected Here -->
-            </div>
-        </div>
+        <div class="p-ring"></div>
+        <img src="https://cdn-icons-png.flaticon.com/512/261/261882.png" class="p-diamond">
+        <div class="p-title">GEMINICOIN</div>
+        <div class="loader-w"><div class="p-bar-f" id="p-fill"></div></div>
+        <div class="p-status">INITIALIZING SECURE PROTOCOL...</div>
     </div>
 
     <div class="app-shell" id="app">
-        <!-- HEADER -->
+        <!-- Header -->
         <header>
-            <div class="u-info" onclick="go('profile', this)">
-                <img id="h-av" src="">
-                <div><b id="h-name">...</b><br><span id="h-league" style="color:var(--neon); font-size:10px; font-weight:bold;">BRONZE LEAGUE</span></div>
+            <div class="u-pill" onclick="switchPage('profile', this)">
+                <div class="u-img"><img id="h-av" src=""></div>
+                <div class="u-meta">STATUS: <span style="color:var(--neon)">ACTIVE</span><br><b id="h-name">...</b></div>
             </div>
-            <div style="text-align:right;">
-                <div style="font-size:10px; color:#666;">ENERGY CORE</div>
-                <div style="color:var(--gold); font-weight:bold; font-family:'Orbitron';">⚡ <span id="en-val">1000</span></div>
+            <div class="seek-btn">
+                <i class="fas fa-brain"></i> SEEK WISDOM
             </div>
         </header>
 
         <main>
-            <!-- PAGE: MINE -->
-            <div id="p-mine" class="page active">
-                <div class="bal-display">
-                    <p style="font-size:12px; color:#555; letter-spacing:3px;">GEM ASSETS</p>
-                    <h1 id="bal">0</h1>
-                    <div style="color:var(--blue); font-size:14px; font-weight:bold;">⛏️ +<span id="pass">0</span> /H PASSIVE</div>
+            <!-- MINE PAGE -->
+            <div id="page-mine" class="page active">
+                <div class="bal-hero">
+                    <div id="bal-txt"><img src="https://cdn-icons-png.flaticon.com/512/261/261882.png"> 0</div>
+                    <div class="status-badge">• MINING OPERATIONS ACTIVE</div>
                 </div>
-                <div class="main-coin" id="tap-btn"><img src="https://cdn-icons-png.flaticon.com/512/2163/2163350.png"></div>
-                <div class="glass-card" style="margin-top:40px;">
-                    <div style="height:12px; background:#000; border-radius:10px; overflow:hidden; border:1px solid #1a1a1a;">
-                        <div id="en-bar" style="height:100%; width:100%; background:linear-gradient(90deg, #FFD700, #ff8c00); transition:0.3s;"></div>
+
+                <div class="clicker-box" id="tap-btn">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2072/2072130.png">
+                </div>
+
+                <div class="energy-box">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span>ENERGY SYNC</span>
+                        <span id="en-perc">100%</span>
                     </div>
+                    <div style="font-size:16px; margin-top:5px; color:white;">⚡ <span id="en-txt">1000 / 1000</span></div>
+                    <div class="e-bar-w"><div class="e-bar-f" id="en-bar"></div></div>
                 </div>
             </div>
 
-            <!-- PAGE: GAMES -->
-            <div id="p-games" class="page">
-                <h2 style="font-family:'Orbitron'; color:gold;">TITAN GAMES</h2>
-                <div class="grid-2">
-                    <div class="glass-card" style="text-align:center;" onclick="openGame('dice')">
-                        <i class="fas fa-dice" style="font-size:35px; color:var(--gold); margin-bottom:10px;"></i><br>
-                        <b>DICE ROLL</b><br><small>Win 10x</small>
-                    </div>
-                    <div class="glass-card" style="text-align:center;" onclick="openGame('fasttap')">
-                        <i class="fas fa-bolt" style="font-size:35px; color:var(--blue); margin-bottom:10px;"></i><br>
-                        <b>FAST TAP</b><br><small>10s Challenge</small>
-                    </div>
-                    <div class="glass-card" style="text-align:center;" onclick="openGame('spin')">
-                        <i class="fas fa-sync-alt" style="font-size:35px; color:var(--neon); margin-bottom:10px;"></i><br>
-                        <b>SPINNER</b><br><small>Jackpot</small>
-                    </div>
-                    <div class="glass-card" style="text-align:center;" onclick="openGame('logic')">
-                        <i class="fas fa-brain" style="font-size:35px; color:white; margin-bottom:10px;"></i><br>
-                        <b>LOGIC</b><br><small>Guess & Win</small>
-                    </div>
+            <!-- EARN PAGE -->
+            <div id="page-earn" class="page">
+                <h1 class="page-title">EARN STATION</h1>
+                <p class="sub-title">HIGH YIELD REWARDS SYSTEM</p>
+                
+                <div class="earn-card" onclick="watchAd()">
+                    <div class="icon"><i class="fas fa-play"></i></div>
+                    <div style="flex:1"><b>REWARDED AD</b><br><small style="color:var(--gold)">INSTANT 100,000 GEM + ENERGY</small></div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+
+                <p style="color:#444; font-size:11px; margin-top:30px; letter-spacing:1px;">ACTIVE PROTOCOLS</p>
+                <div class="earn-card">
+                    <div class="icon"><i class="fas fa-play"></i></div>
+                    <div style="flex:1"><b>GEMINI PROTOCOL BRIEFING</b><br><small style="color:var(--gold)">+50,000 GEM</small></div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="earn-card">
+                    <div class="icon" style="color:var(--blue);"><i class="fas fa-chart-line"></i></div>
+                    <div style="flex:1"><b>MARKET SENTIMENT ANALYSIS</b><br><small style="color:var(--gold)">+125,000 GEM</small></div>
+                    <i class="fas fa-chevron-right"></i>
                 </div>
             </div>
 
-            <!-- PAGE: RANK -->
-            <div id="p-rank" class="page">
-                <h2 style="font-family:'Orbitron'; color:gold;">TITAN RANKINGS</h2>
+            <!-- FRIENDS PAGE -->
+            <div id="page-friends" class="page">
+                <h1 class="page-title" style="text-align:center;">FRIENDS</h1>
+                <p class="sub-title" style="text-align:center;">BUILD YOUR NETWORK</p>
+                <div class="earn-card" style="flex-direction:column; padding:40px; text-align:center;">
+                    <i class="fas fa-users" style="font-size:50px; color:#222; margin-bottom:20px;"></i>
+                    <p style="color:#666;">Invite friends and get <span style="color:white">50,000 GEM</span> instantly!</p>
+                    <button class="btn-prime" style="width:100%; margin-top:20px; background:var(--gold); border:none; padding:18px; border-radius:40px; font-weight:bold; font-family:'Orbitron';" onclick="invite()">INVITE A FRIEND</button>
+                </div>
+            </div>
+
+            <!-- BOOST PAGE -->
+            <div id="page-boost" class="page">
+                <h1 class="page-title">BOOST HUB</h1>
+                <p class="sub-title">SCALE YOUR MINING INFRASTRUCTURE</p>
+                
+                <div class="boost-item" onclick="buy('tap')">
+                    <div class="boost-icon"><i class="fas fa-fingerprint"></i></div>
+                    <div class="boost-info"><b>Nano-Tapping <span style="font-size:10px; background:#111; padding:2px 5px; border-radius:5px; color:#555;">LVL <span id="l-tap">0</span></span></b><p>Quantum refined tap power</p><p style="color:white; margin-top:4px;">+1 Power</p></div>
+                    <div style="color:white;">500 💎</div>
+                </div>
+                <div class="boost-item" onclick="buy('pass')">
+                    <div class="boost-icon"><i class="fas fa-server"></i></div>
+                    <div class="boost-info"><b>GPU Cluster <span style="font-size:10px; background:#111; padding:2px 5px; border-radius:5px; color:#555;">LVL <span id="l-pass">0</span></span></b><p>Hash power for passive GEMs</p><p style="color:white; margin-top:4px;">+5 GEM/s</p></div>
+                    <div style="color:white;">2k 💎</div>
+                </div>
+            </div>
+
+            <!-- RANK PAGE -->
+            <div id="page-rank" class="page">
+                <h1 class="page-title" style="text-align:center;">Top Tappers</h1>
+                <p class="sub-title" style="text-align:center;">Join the elite of GEM miners</p>
+                
+                <div class="podium">
+                    <div class="p-item">
+                        <img src="https://i.pravatar.cc/150?u=2" class="p-av">
+                        <div class="p-box">#2<br>🥈</div>
+                    </div>
+                    <div class="p-item">
+                        <img src="https://i.pravatar.cc/150?u=1" class="p-av" style="border-color:white; width:90px; height:90px;">
+                        <div class="p-box center">#1<br>🥇</div>
+                    </div>
+                    <div class="p-item">
+                        <img src="https://i.pravatar.cc/150?u=3" class="p-av" style="border-color:#CD7F32;">
+                        <div class="p-box" style="border-color:#CD7F32;">#3<br>🥉</div>
+                    </div>
+                </div>
                 <div id="rank-list"></div>
             </div>
 
-            <!-- PAGE: HUB/SHOP -->
-            <div id="p-mining" class="page">
-                <h2 style="font-family:'Orbitron'; color:gold;">MINING HUB</h2>
-                <div class="glass-card">
-                    <div class="row-item" onclick="buyMiner('gpu', 5000, 150)">
-                        <div class="row-icon"><i class="fas fa-microchip"></i></div>
-                        <div style="flex:1"><b>GPU Unit</b><br><small>+150 /H</small></div>
-                        <b style="color:gold;">5k</b>
+            <!-- WALLET PAGE -->
+            <div id="page-wallet" class="page">
+                <div class="earn-card" style="flex-direction:column; padding:40px; text-align:center; border:none; background:transparent;">
+                    <div class="icon" style="width:80px; height:80px; font-size:35px; margin: 0 auto 20px;"><i class="fas fa-coins"></i></div>
+                    <p style="color:var(--grey-text); font-size:11px; letter-spacing:1px;">AVAILABLE BALANCE</p>
+                    <h2 id="wal-bal" style="font-size:70px; margin:10px 0; font-family:'Orbitron';">0</h2>
+                    <div class="btn-row" style="width:100%;">
+                        <button class="btn-w" onclick="withdraw()">WITHDRAW</button>
+                        <button class="btn-h">HISTORY</button>
                     </div>
-                    <div class="row-item" onclick="buyMiner('asic', 50000, 2000)">
-                        <div class="row-icon"><i class="fas fa-server"></i></div>
-                        <div style="flex:1"><b>ASIC Miner</b><br><small>+2,000 /H</small></div>
-                        <b style="color:gold;">50k</b>
-                    </div>
+                </div>
+
+                <p style="color:#333; font-size:10px; margin:30px 0 10px; letter-spacing:1px;">WEB3 CONNECTION</p>
+                <div class="earn-card" style="border-radius:20px; padding:15px;" onclick="connect()">
+                    <div class="icon" style="width:40px; height:40px; border-radius:10px;"><i class="fas fa-plus"></i></div>
+                    <div style="flex:1"><b>Connect Wallet</b><br><small style="color:#555">TON / ETH supported</small></div>
+                    <i class="fas fa-chevron-right" style="color:#222;"></i>
                 </div>
             </div>
 
-            <!-- PAGE: PROFILE & WALLET -->
-            <div id="p-profile" class="page">
-                <h2 style="font-family:'Orbitron'; color:gold;">IDENTITY CORE</h2>
-                <div class="glass-card" style="text-align:center;">
-                    <img id="p-av" src="" style="width:100px; height:100px; border-radius:30px; border:3px solid var(--gold); object-fit:cover;">
-                    <input type="text" id="p-name" placeholder="Titan Name" style="text-align:center; font-weight:bold; margin-top:15px;">
-                    <button class="btn-gold" onclick="saveProf()">UPDATE CORE</button>
-                    <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-top:15px;" id="av-grid"></div>
+            <!-- PROFILE PAGE -->
+            <div id="page-profile" class="page">
+                <div style="text-align:center; margin-bottom:30px;">
+                    <img id="p-av" src="" style="width:100px; height:100px; border-radius:25px; border:2px solid var(--gold); padding:5px;">
+                    <h2 id="p-name" style="font-family:'Orbitron'; margin:15px 0 5px;">...</h2>
+                    <span style="background:rgba(255,215,0,0.1); color:var(--gold); padding:4px 10px; border-radius:5px; font-size:10px; font-weight:bold; letter-spacing:2px;">PLATINUM LEAGUE</span>
                 </div>
-                <h2 style="font-family:'Orbitron'; color:gold; margin-top:25px;">WITHDRAW</h2>
-                <div class="glass-card">
-                    <input type="text" id="w-in" placeholder="Enter Details">
-                    <button class="btn-gold" onclick="withdraw()">SUBMIT REQUEST</button>
+
+                <div class="p-stat-grid">
+                    <div class="p-stat-box"><small>Total Taps</small><b id="p-total-taps">0</b></div>
+                    <div class="p-stat-box"><small>Click Power</small><b id="p-power">1</b></div>
+                    <div class="p-stat-box"><small>Passive Rate</small><b id="p-pass">0/s</b></div>
+                    <div class="p-stat-box"><small>Global Rank</small><b style="color:var(--gold)">#1,402</b></div>
+                </div>
+
+                <p style="color:#333; font-size:10px; margin-top:30px; letter-spacing:1px;">MINING CONTROLS</p>
+                <div class="earn-card" style="border-radius:20px; padding:15px;">
+                    <div class="icon" style="width:40px; height:40px; border-radius:10px; background:#111;"><i class="fas fa-wallet"></i></div>
+                    <div style="flex:1"><b>Crypto Wallet</b><br><small style="color:#444">WITHDRAW & DEPOSIT</small></div>
+                    <i class="fas fa-chevron-right" style="color:#222;"></i>
                 </div>
             </div>
         </main>
 
-        <!-- NAVIGATION -->
         <nav>
-            <div class="nav-btn active" onclick="go('mine',this)"><i class="fas fa-hammer"></i>MINE</div>
-            <div class="nav-btn" onclick="go('games',this)"><i class="fas fa-gamepad"></i>GAMES</div>
-            <div class="nav-btn" onclick="go('mining',this)"><i class="fas fa-rocket"></i>HUB</div>
-            <div class="nav-btn" onclick="go('rank',this)"><i class="fas fa-trophy"></i>RANK</div>
-            <div class="nav-btn" onclick="go('profile',this)"><i class="fas fa-user-gear"></i>TITAN</div>
+            <div class="n-item active" onclick="switchPage('mine', this)"><i class="fas fa-cube"></i>MINE</div>
+            <div class="n-item" onclick="switchPage('earn', this)"><i class="fas fa-play"></i>EARN</div>
+            <div class="n-item" onclick="switchPage('friends', this)"><i class="fas fa-user-group"></i>FRIENDS</div>
+            <div class="n-item" onclick="switchPage('boost', this)"><i class="fas fa-bolt"></i>BOOST</div>
+            <div class="n-item" onclick="switchPage('rank', this)"><i class="fas fa-trophy"></i>RANK</div>
         </nav>
     </div>
 
     <script>
-        // --- CONFIG & FIREBASE ---
-        const firebaseConfig = {
+        // --- CONFIG ---
+        const fbConfig = {
             apiKey: "AIzaSyBMN49BmTeQ4OaFbSuiC2AaELHdkOuc_8U",
             authDomain: "geminicoins-9f1a5.firebaseapp.com",
             projectId: "geminicoins-9f1a5",
@@ -223,16 +295,18 @@
             messagingSenderId: "841242980001",
             appId: "1:841242980001:web:b241ba1b7f281d691e4ae0"
         };
-        firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(fbConfig);
         const db = firebase.firestore();
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        const user = tg.initDataUnsafe.user || { id: "dev_999", first_name: "Titan_User" };
+        const AD_ID = "23328";
+        const user = tg.initDataUnsafe.user || { id: "test_88", first_name: "Titan_User" };
         const uid = String(user.id);
 
         let data = {
-            bal: 0, en: 1000, max: 1000, pass: 0, 
+            bal: 0, en: 1000, max: 1000, tPow: 1, pass: 0, 
+            lv: { tap: 0, pass: 0 }, taps: 0,
             name: user.first_name, av: "https://i.pravatar.cc/150?u=1"
         };
 
@@ -240,189 +314,119 @@
         async function init() {
             let p = 0;
             const loader = setInterval(() => {
-                p += (p < 90) ? 2 : 0.5;
-                document.getElementById('l-fill').style.width = p + "%";
-                if(p >= 100) clearInterval(loader);
+                p += 2; document.getElementById('p-fill').style.width = p + "%";
+                if(p >= 100) { clearInterval(loader); showApp(); }
             }, 30);
-
-            setTimeout(showApp, 3000);
 
             try {
                 const doc = await db.collection("users").doc(uid).get();
                 if(doc.exists) data = { ...data, ...doc.data() };
                 else await db.collection("users").doc(uid).set(data);
-                showApp();
-            } catch(e) { console.log("Firebase sync failed, offline mode."); }
+            } catch(e) { console.log("Firebase error"); }
         }
 
         function showApp() {
             document.getElementById('splash').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
-            updateUI(); buildAvatars();
+            updateUI();
+
             setInterval(() => {
-                if(data.pass > 0) data.bal += (data.pass / 3600);
-                if(data.en < data.max) data.en = Math.min(data.max, data.en + 5);
+                if(data.pass > 0) data.bal += data.pass;
+                if(data.en < data.max) data.en = Math.min(data.max, data.en + 4);
                 updateUI();
             }, 1000);
+
             setInterval(() => db.collection("users").doc(uid).set(data, {merge:true}), 5000);
         }
 
         function updateUI() {
-            document.getElementById('bal').innerText = Math.floor(data.bal).toLocaleString();
-            document.getElementById('pass').innerText = Math.floor(data.pass).toLocaleString();
-            document.getElementById('en-val').innerText = data.en;
+            document.getElementById('bal-txt').innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/261/261882.png"> ${Math.floor(data.bal).toLocaleString()}`;
+            document.getElementById('wal-bal').innerText = Math.floor(data.bal).toLocaleString();
+            document.getElementById('pass').innerText = data.pass;
+            document.getElementById('en-txt').innerText = `${data.en} / ${data.max}`;
             document.getElementById('en-bar').style.width = (data.en/data.max*100) + "%";
             document.getElementById('h-name').innerText = data.name;
             document.getElementById('h-av').src = data.av;
             document.getElementById('p-av').src = data.av;
-            document.getElementById('p-name').value = data.name;
+            document.getElementById('p-name').innerText = data.name;
+            
+            // Profile stats
+            document.getElementById('p-total-taps').innerText = data.taps;
+            document.getElementById('p-power').innerText = data.tPow;
+            document.getElementById('p-pass').innerText = data.pass + "/s";
+            
+            // Boost lvls
+            document.getElementById('l-tap').innerText = data.lv.tap;
+            document.getElementById('l-pass').innerText = data.lv.pass;
         }
 
-        // --- TAP ACTIONS ---
+        // --- ACTIONS ---
         document.getElementById('tap-btn').addEventListener('touchstart', (e) => {
             e.preventDefault();
-            const touches = e.touches.length;
-            if(data.en >= touches) {
-                data.bal += touches; data.en -= touches;
+            if(data.en >= data.tPow) {
+                data.bal += data.tPow; data.en -= data.tPow; data.taps++;
                 updateUI();
                 tg.HapticFeedback.impactOccurred('medium');
-                for(let i=0; i<touches; i++) {
-                    const t = e.touches[i];
-                    const pop = document.createElement('div');
-                    pop.className = 'pop'; pop.innerText = '+1';
-                    pop.style.left = t.clientX + 'px'; pop.style.top = t.clientY + 'px';
-                    document.body.appendChild(pop);
-                    setTimeout(() => pop.remove(), 700);
-                }
+                const t = e.touches[0];
+                const p = document.createElement('div');
+                p.className = 'pop'; p.innerText = `+${data.tPow}`;
+                p.style.left = t.clientX + 'px'; p.style.top = t.clientY + 'px';
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 700);
             }
         });
 
-        // --- MINI GAMES CORE ---
-        function openGame(game) {
-            if(data.bal < 1000) return tg.showAlert("Need 1,000 Gems to play!");
-            data.bal -= 1000;
-            updateUI();
-            
-            const overlay = document.getElementById('game-overlay');
-            const title = document.getElementById('game-title');
-            const content = document.getElementById('game-content');
-            overlay.style.display = 'flex';
-
-            if(game === 'dice') {
-                title.innerText = "DICE ROLL CHALLENGE";
-                content.innerHTML = `<div id="dice-view"><i class="fas fa-dice-one"></i></div><button class="btn-gold" onclick="rollDice()">ROLL DANCE</button>`;
-            } else if(game === 'fasttap') {
-                title.innerText = "FAST TAP (10 SEC)";
-                content.innerHTML = `<div id="fast-tap-count">0</div><button class="btn-gold" id="start-tap" onclick="startFastTap()">START CHALLENGE</button>`;
-            } else if(game === 'spin') {
-                title.innerText = "TITAN SPINNER";
-                content.innerHTML = `<img id="spinner-visual" src="https://cdn-icons-png.flaticon.com/512/610/610106.png"><br><br><button class="btn-gold" onclick="spinNow()">SPIN FOR JACKPOT</button>`;
-            } else if(game === 'logic') {
-                title.innerText = "LOGIC: GUESS 1-10";
-                content.innerHTML = `<input type="number" id="logic-val" placeholder="Enter number"><button class="btn-gold" onclick="checkLogic()">SUBMIT GUESS</button>`;
-            }
-        }
-
-        function closeGame() { document.getElementById('game-overlay').style.display = 'none'; }
-
-        // Game 1: Dice
-        function rollDice() {
-            const dice = Math.floor(Math.random() * 6) + 1;
-            const icons = ['','fa-dice-one','fa-dice-two','fa-dice-three','fa-dice-four','fa-dice-five','fa-dice-six'];
-            document.getElementById('dice-view').innerHTML = `<i class="fas ${icons[dice]}"></i>`;
-            setTimeout(() => {
-                if(dice === 6) { data.bal += 10000; tg.showAlert("TITAN LUCK! You won 10,000 GEMS!"); }
-                else tg.showAlert(`You rolled ${dice}. Better luck next time!`);
-                updateUI();
-            }, 500);
-        }
-
-        // Game 2: Fast Tap
-        let tapCount = 0;
-        function startFastTap() {
-            tapCount = 0;
-            const btn = document.getElementById('start-tap');
-            btn.innerText = "TAP TAP TAP!!!";
-            btn.onclick = () => { tapCount++; document.getElementById('fast-tap-count').innerText = tapCount; };
-            setTimeout(() => {
-                const win = tapCount * 100;
-                data.bal += win;
-                tg.showAlert(`Time's up! You tapped ${tapCount} times and won ${win} GEMS!`);
-                updateUI(); closeGame();
-            }, 10000);
-        }
-
-        // Game 3: Spin
-        function spinNow() {
-            const deg = 1800 + Math.random() * 1800;
-            document.getElementById('spinner-visual').style.transform = `rotate(${deg}deg)`;
-            setTimeout(() => {
-                const win = Math.random() > 0.8 ? 50000 : 0;
-                data.bal += win;
-                tg.showAlert(win > 0 ? "JACKPOT! +50k GEMS" : "No luck today.");
-                updateUI(); closeGame();
-            }, 3000);
-        }
-
-        // Game 4: Logic
-        function checkLogic() {
-            const val = parseInt(document.getElementById('logic-val').value);
-            const secret = Math.floor(Math.random() * 10) + 1;
-            if(val === secret) { data.bal += 15000; tg.showAlert(`CORRECT! The number was ${secret}. Won 15k!`); }
-            else tg.showAlert(`WRONG! It was ${secret}.`);
-            updateUI(); closeGame();
-        }
-
-        // --- RANK & OTHERS ---
-        async function loadRank() {
-            const list = document.getElementById('rank-list');
-            list.innerHTML = "<p style='text-align:center; color:gray;'>Syncing Rankings...</p>";
-            try {
-                const snap = await db.collection("users").orderBy("bal", "desc").limit(10).get();
-                list.innerHTML = "";
-                let i = 1;
-                snap.forEach(doc => {
-                    const d = doc.data();
-                    list.innerHTML += `<div class="rank-item"><b>#${i}</b><img src="${d.av}" style="width:35px; border-radius:50%;"><div style="flex:1">${d.name}</div><b style="color:gold;">${Math.floor(d.bal).toLocaleString()}</b></div>`;
-                    i++;
-                });
-            } catch(e) { list.innerHTML = "<p>Firebase Rules or Index required.</p>"; }
-        }
-
-        function go(p, el) {
+        function switchPage(p, el) {
             document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(nb => nb.classList.remove('active'));
-            document.getElementById('p-'+p).classList.add('active');
-            el.classList.add('active');
+            document.querySelectorAll('.n-item').forEach(nb => nb.classList.remove('active'));
+            document.getElementById('page-'+p).classList.add('active');
+            if(el) el.classList.add('active');
             if(p === 'rank') loadRank();
             tg.HapticFeedback.selectionChanged();
         }
 
-        function buyMiner(id, cost, rate) {
-            if(data.bal >= cost) { data.bal -= cost; data.pass += rate; updateUI(); tg.showAlert("Purchased!"); }
-            else tg.showAlert("No Gems!");
+        async function loadRank() {
+            const list = document.getElementById('rank-list');
+            list.innerHTML = "";
+            const snap = await db.collection("users").orderBy("bal", "desc").limit(10).get();
+            let i = 1;
+            snap.forEach(doc => {
+                const d = doc.data();
+                list.innerHTML += `<div class="rank-item"><b>#${i}</b><img src="${d.av}" style="width:35px; border-radius:50%;"><div style="flex:1"><b>${d.name}</b><br><small style="color:#555">Level ${1 + Math.floor(d.bal/10000)}</small></div><b style="color:var(--gold)">${(d.bal/1000).toFixed(1)}k <small>GEM</small></b></div>`;
+                i++;
+            });
         }
 
-        function buildAvatars() {
-            const grid = document.getElementById('av-grid');
-            for(let i=1; i<=10; i++) {
-                const img = document.createElement('img');
-                img.src = `https://i.pravatar.cc/150?u=${i+500}`;
-                img.style.width="100%"; img.style.borderRadius="10px";
-                img.onclick = () => { data.av = img.src; updateUI(); };
-                grid.appendChild(img);
-            }
+        function buy(type) {
+            let cost = type === 'tap' ? (data.lv.tap + 1) * 500 : (data.lv.pass + 1) * 2000;
+            if(data.bal >= cost) {
+                data.bal -= cost;
+                if(type === 'tap') { data.lv.tap++; data.tPow++; }
+                else { data.lv.pass++; data.pass += 5; }
+                updateUI(); tg.showAlert("Protocol Updated! 🚀");
+            } else tg.showAlert("Insufficient Gems!");
         }
 
-        function saveProf() {
-            const n = document.getElementById('p-name').value;
-            if(n) { data.name = n; updateUI(); tg.showAlert("Updated!"); }
+        function watchAd() {
+            if(!window.Adsgram) return;
+            const ad = window.Adsgram.init({ blockId: AD_ID });
+            ad.show().then(() => {
+                data.bal += 100000; data.en = data.max; updateUI();
+                tg.showAlert("Sync Success: +100k GEMS!");
+            }).catch(() => tg.showAlert("Protocol error."));
+        }
+
+        function invite() {
+            const link = `https://t.me/GeminicoinBot?start=${uid}`;
+            tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Join Gemini Titan! 💎`);
         }
 
         function withdraw() {
-            if(data.bal < 10000000) return tg.showAlert("Need 10M Gems!");
-            data.bal = 0; updateUI(); tg.showAlert("Withdrawal Request Sent!");
+            if(data.bal < 10000000) return tg.showAlert("Minimum 10M Gems required.");
+            tg.showAlert("Withdrawal Sync Initialized.");
         }
+
+        function connect() { tg.showAlert("Connecting to TON Web3..."); }
 
         init();
     </script>
