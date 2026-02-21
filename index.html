@@ -1,588 +1,315 @@
-<!DOCTYPE html>
-<html lang="ku" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GEMINICOIN - TITAN SUPREME</title>
-    
-    <!-- SDKs -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Splash -->
+<div id="splash">
+    <div class="p-ring"></div>
+    <img src="https://cdn-icons-png.flaticon.com/512/261/261882.png" class="p-diamond">
+    <div class="p-title">GEMINICOIN</div>
+    <div class="loader-w"><div class="p-bar-f" id="p-fill"></div></div>
+    <div class="p-status">INITIALIZING SECURE PROTOCOL...</div>
+</div>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
-
-        :root {
-            --gold: #FFD700;
-            --grey-text: #888888;
-            --bg: #050505;
-            --card-bg: #0F0F0F;
-            --border: rgba(255, 215, 0, 0.15);
-            --neon: #00f2ff;
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body {
-            margin: 0; background-color: var(--bg); color: white;
-            font-family: 'Rajdhani', sans-serif; overflow: hidden; user-select: none;
-        }
-
-        /* --- PRELOADER --- */
-        #splash { position: fixed; inset: 0; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .p-ring { width: 160px; height: 160px; border: 3px solid #111; border-top-color: var(--gold); border-radius: 50%; animation: spin 1.5s linear infinite; position: absolute; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .p-diamond { width: 70px; filter: drop-shadow(0 0 25px var(--gold)); z-index: 2; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        .p-title { font-family: 'Orbitron'; font-style: italic; color: var(--gold); margin-top: 50px; font-size: 32px; letter-spacing: 5px; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
-        .p-status { color: #555; font-size: 11px; margin-top: 15px; letter-spacing: 3px; text-transform: uppercase; }
-
-        .app-shell { display: none; height: 100vh; flex-direction: column; }
-
-        /* --- HEADER --- */
-        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
-        .u-pill { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .u-img { width: 42px; height: 42px; background: #111; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--gold); overflow: hidden; box-shadow: 0 0 10px rgba(255,215,0,0.2); }
-        .u-img img { width: 100%; height: 100%; object-fit: cover; }
-        .u-meta { font-size: 11px; color: var(--grey-text); }
-        .u-meta b { color: white; font-size: 14px; display: block; }
-        .seek-btn { background: linear-gradient(45deg, #111, #222); border: 1px solid var(--gold); padding: 8px 15px; border-radius: 12px; color: var(--gold); font-size: 11px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .seek-btn:active { transform: scale(0.9); box-shadow: 0 0 15px var(--gold); }
-
-        /* --- NAVIGATION --- */
-        nav { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(0,0,0,0.95); border-top: 1px solid #1a1a1a; display: flex; justify-content: space-around; align-items: center; z-index: 5000; padding-bottom: 15px; }
-        .n-item { text-align: center; color: #555; font-size: 10px; font-weight: bold; cursor: pointer; flex: 1; transition: 0.3s; }
-        .n-item.active { color: var(--gold); transform: translateY(-5px); }
-        .n-item i { font-size: 20px; display: block; margin-bottom: 4px; }
-
-        /* --- MAIN SCROLLER --- */
-        main { flex-grow: 1; overflow-y: auto; padding: 10px 20px 100px; scrollbar-width: none; background: radial-gradient(circle at top, #0d0d0d 0%, #050505 100%); }
-        main::-webkit-scrollbar { display: none; }
-        .page { display: none; }
-        .page.active { display: block; animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- MINE PAGE --- */
-        .bal-hero { text-align: center; margin: 30px 0; }
-        .bal-hero div { font-family: 'Orbitron'; font-size: 50px; color: white; display: flex; align-items: center; justify-content: center; gap: 12px; text-shadow: 0 0 20px rgba(255,255,255,0.1); }
-        .bal-hero img { width: 45px; filter: drop-shadow(0 0 10px var(--gold)); }
-
-        .clicker-box { width: 280px; height: 280px; margin: 20px auto; border-radius: 50%; border: 8px solid #111; display: flex; justify-content: center; align-items: center; position: relative; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); cursor: pointer; box-shadow: 0 0 40px rgba(0,0,0,0.5); transition: transform 0.1s; }
-        .clicker-box::before { content: ''; position: absolute; inset: -15px; border-radius: 50%; border: 1px solid rgba(255,215,0,0.1); animation: pulse 3s infinite linear; }
-        .clicker-box img { width: 160px; pointer-events: none; }
-        .clicker-box:active { transform: scale(0.95); }
-
-        /* --- PROGRESS BARS --- */
-        .energy-box { margin-top: 40px; }
-        .e-bar-w { height: 10px; background: #111; border-radius: 10px; margin-top: 10px; overflow: hidden; border: 1px solid #222; }
-        .e-bar-f { height: 100%; width: 100%; background: linear-gradient(90deg, var(--gold), #fff); box-shadow: 0 0 15px var(--gold); transition: 0.3s; }
-
-        /* --- LISTS & CARDS --- */
-        .page-title { font-family: 'Orbitron'; font-style: italic; font-size: 24px; color: white; margin-bottom: 5px; }
-        .sub-title { color: var(--grey-text); font-size: 11px; margin-bottom: 20px; letter-spacing: 1px; }
-        .earn-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 18px; display: flex; align-items: center; gap: 15px; margin-bottom: 12px; cursor: pointer; }
-        .earn-card:active { transform: scale(0.98); background: #151515; }
-        .earn-card .icon { width: 45px; height: 45px; background: #000; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; color: var(--gold); border: 1px solid #222; }
-
-        /* --- RANKINGS --- */
-        .rank-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 15px; margin-bottom: 8px; }
-        .podium { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin: 30px 0; height: 180px; }
-        .p-item { text-align: center; }
-        .p-av { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 8px; object-fit: cover; }
-        .p-box { width: 80px; background: #111; border-radius: 10px 10px 0 0; padding: 10px 0; border: 1px solid #222; }
-        .p-box.center { height: 100px; background: linear-gradient(to top, var(--gold), #b8860b); color: black; font-weight: bold; }
-
-        /* --- MODALS --- */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; display: none; padding: 40px 20px; overflow-y: auto; }
-        .modal-content { background: #0f0f0f; border: 1px solid var(--gold); border-radius: 30px; padding: 30px; }
-        .daily-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
-        .day-box { background: #1a1a1a; padding: 10px 5px; border-radius: 10px; text-align: center; font-size: 10px; border: 1px solid #333; }
-        .day-box.active { border-color: var(--gold); background: rgba(255,215,0,0.1); }
-        .day-box.claimed { opacity: 0.4; background: #000; }
-
-        /* --- POPUP TEXT --- */
-        .pop { position: absolute; color: white; font-weight: 900; font-size: 32px; pointer-events: none; animation: floatUp 0.8s forwards; z-index: 1000; text-shadow: 0 0 10px var(--gold); }
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-120px) scale(1.5); } }
-
-        /* --- UTILS --- */
-        .btn-prime { background: var(--gold); color: black; border: none; padding: 15px; border-radius: 15px; font-weight: bold; width: 100%; font-family: 'Orbitron'; font-size: 14px; cursor: pointer; }
-        .tag-reward { background: rgba(255,215,0,0.1); color: var(--gold); padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; }
-    </style>
-</head>
-<body>
-
-    <!-- Splash/Loading -->
-    <div id="splash">
-        <div class="p-ring"></div>
-        <img src="https://cdn-icons-png.flaticon.com/512/261/261882.png" class="p-diamond">
-        <div class="p-title">GEMINICOIN</div>
-        <div class="p-status" id="load-status">Connecting to Blockchain...</div>
-    </div>
-
-    <!-- Daily Reward Modal -->
-    <div id="daily-modal" class="modal">
-        <div class="modal-content">
-            <h2 style="font-family:'Orbitron'; color:var(--gold); margin-bottom:10px;">Daily Check-In</h2>
-            <p style="color:#888; font-size:12px;">Login every day to increase your streak rewards!</p>
-            <div class="daily-grid" id="daily-grid"></div>
-            <button class="btn-prime" style="margin-top:25px;" onclick="claimDaily()">CLAIM TODAY'S GEM</button>
-            <button onclick="closeModal('daily-modal')" style="background:none; border:none; color:#444; width:100%; margin-top:15px;">Close</button>
+<div class="app-shell" id="app">
+    <!-- Header -->
+    <header>
+        <div class="u-pill" onclick="switchPage('profile', this)">
+            <div class="u-img"><img id="h-av" src=""></div>
+            <div class="u-meta">STATUS: <span style="color:var(--neon)">ACTIVE</span><br><b id="h-name">...</b></div>
         </div>
-    </div>
+        <div class="seek-btn">
+            <i class="fas fa-brain"></i> SEEK WISDOM
+        </div>
+    </header>
 
-    <div class="app-shell" id="app">
-        <!-- Header -->
-        <header>
-            <div class="u-pill" onclick="switchPage('profile')">
-                <div class="u-img"><img id="h-av" src="https://i.pravatar.cc/150?u=99"></div>
-                <div class="u-meta">RANK: <span id="u-rank-name" style="color:var(--gold)">TITAN</span><br><b id="h-name">Loading...</b></div>
-            </div>
-            <button class="seek-btn" onclick="seekWisdom()">
-                <i class="fas fa-dharmachakra"></i> SEEK WISDOM
-            </button>
-        </header>
-
-        <main>
-            <!-- MINE PAGE -->
-            <div id="page-mine" class="page active">
-                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
-                    <span class="tag-reward" onclick="showDaily()"><i class="fas fa-calendar-day"></i> DAILY REWARD</span>
-                    <span class="tag-reward" style="color:var(--neon); border-color:var(--neon)"><i class="fas fa-bolt"></i> AUTO-MINING</span>
-                </div>
-
-                <div class="bal-hero">
-                    <div id="bal-txt"><img src="https://cdn-icons-png.flaticon.com/512/261/261882.png"> 0</div>
-                    <div style="font-size:12px; color:#555; margin-top:5px; font-weight:bold; letter-spacing:2px;">SECURE PROTOCOL ACTIVE</div>
-                </div>
-
-                <div class="clicker-box" id="tap-btn">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2072/2072130.png">
-                </div>
-
-                <div class="energy-box">
-                    <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:bold;">
-                        <span style="color:#666">ENERGY STAMINA</span>
-                        <span id="en-perc" style="color:white">100%</span>
-                    </div>
-                    <div class="e-bar-w"><div class="e-bar-f" id="en-bar"></div></div>
-                    <div style="text-align:center; margin-top:8px; font-size:14px; color:var(--gold); font-family:'Orbitron';" id="en-txt">1000 / 1000</div>
-                </div>
+    <main>
+        <!-- MINE PAGE -->
+        <div id="page-mine" class="page active">
+            <div class="bal-hero">
+                <div id="bal-txt"><img src="https://cdn-icons-png.flaticon.com/512/261/261882.png"> 0</div>
+                <div class="status-badge">• MINING OPERATIONS ACTIVE</div>
             </div>
 
-            <!-- TASKS PAGE (EARN) -->
-            <div id="page-earn" class="page">
-                <h1 class="page-title">TASK HUB</h1>
-                <p class="sub-title">COMPLETE MISSIONS FOR MASSIVE GEMS</p>
-                
-                <div class="earn-card" onclick="watchAd()">
-                    <div class="icon"><i class="fas fa-video"></i></div>
-                    <div style="flex:1"><b>SURVEILLANCE AD</b><br><small style="color:var(--gold)">+25,000 GEM</small></div>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-
-                <p style="color:#444; font-size:10px; margin:25px 0 10px; letter-spacing:1px; font-weight:bold;">SOCIAL PROTOCOLS</p>
-                
-                <div class="earn-card" onclick="doTask('tg', 'https://t.me/GeminicoinChannel', 50000)">
-                    <div class="icon" style="color:#229ED9"><i class="fab fa-telegram"></i></div>
-                    <div style="flex:1"><b>Join Telegram Channel</b><br><small style="color:var(--gold)">+50,000 GEM</small></div>
-                    <button class="tag-reward" id="task-tg">JOIN</button>
-                </div>
-
-                <div class="earn-card" onclick="doTask('tw', 'https://twitter.com/Geminicoin', 50000)">
-                    <div class="icon" style="color:#1DA1F2"><i class="fab fa-twitter"></i></div>
-                    <div style="flex:1"><b>Follow on X (Twitter)</b><br><small style="color:var(--gold)">+50,000 GEM</small></div>
-                    <button class="tag-reward" id="task-tw">FOLLOW</button>
-                </div>
-
-                <div class="earn-card" onclick="doTask('tk', 'https://tiktok.com/@Geminicoin', 50000)">
-                    <div class="icon" style="color:#ff0050"><i class="fab fa-tiktok"></i></div>
-                    <div style="flex:1"><b>Follow on TikTok</b><br><small style="color:var(--gold)">+50,000 GEM</small></div>
-                    <button class="tag-reward" id="task-tk">FOLLOW</button>
-                </div>
+            <div class="clicker-box" id="tap-btn">
+                <img src="https://cdn-icons-png.flaticon.com/512/2072/2072130.png">
             </div>
 
-            <!-- FRIENDS PAGE -->
-            <div id="page-friends" class="page">
-                <h1 class="page-title" style="text-align:center;">REFERRAL</h1>
-                <p class="sub-title" style="text-align:center;">EXPAND YOUR MINING NETWORK</p>
-                
-                <div class="earn-card" style="flex-direction:column; padding:30px; text-align:center; background:linear-gradient(to bottom, #111, #050505);">
-                    <div style="font-size:40px; color:var(--gold); margin-bottom:15px;"><i class="fas fa-users-rays"></i></div>
-                    <p style="font-size:14px;">Invite a friend and both of you receive <br><span style="color:var(--gold); font-size:20px; font-family:'Orbitron'">+100,000 GEM</span></p>
-                    <button class="btn-prime" style="margin-top:20px;" onclick="invite()">INVITE CONTACTS</button>
+            <div class="energy-box">
+                <div style="display:flex; justify-content:space-between;">
+                    <span>ENERGY SYNC</span>
+                    <span id="en-perc">100%</span>
                 </div>
-
-                <p style="margin-top:30px; font-size:12px; color:#444;">YOUR RECENT REFERRALS</p>
-                <div id="ref-list" style="text-align:center; color:#222; padding:20px;">
-                    No active referrals found in your node.
-                </div>
+                <div style="font-size:16px; margin-top:5px; color:white;">⚡ <span id="en-txt">1000 / 1000</span></div>
+                <div class="e-bar-w"><div class="e-bar-f" id="en-bar"></div></div>
             </div>
+        </div>
 
-            <!-- BOOST PAGE -->
-            <div id="page-boost" class="page">
-                <h1 class="page-title">UPGRADES</h1>
-                <p class="sub-title">ENHANCE CORE INFRASTRUCTURE</p>
-                
-                <div class="earn-card" onclick="buy('tap')">
-                    <div class="icon"><i class="fas fa-hand-pointer"></i></div>
-                    <div style="flex:1"><b>Fingerprint Sensor <span style="font-size:10px; color:#555;">LVL <span id="l-tap">0</span></span></b><br><small>+1 per tap</small></div>
-                    <div style="font-family:'Orbitron'; font-size:12px;" id="c-tap">500</div>
-                </div>
-
-                <div class="earn-card" onclick="buy('pass')">
-                    <div class="icon"><i class="fas fa-microchip"></i></div>
-                    <div style="flex:1"><b>GPU Cluster <span style="font-size:10px; color:#555;">LVL <span id="l-pass">0</span></span></b><br><small>+5 GEM / second</small></div>
-                    <div style="font-family:'Orbitron'; font-size:12px;" id="c-pass">2k</div>
-                </div>
-
-                <div class="earn-card" onclick="buy('max')">
-                    <div class="icon"><i class="fas fa-battery-full"></i></div>
-                    <div style="flex:1"><b>Liquid Battery <span style="font-size:10px; color:#555;">LVL <span id="l-max">0</span></span></b><br><small>+500 Max Energy</small></div>
-                    <div style="font-family:'Orbitron'; font-size:12px;" id="c-max">5k</div>
-                </div>
-            </div>
-
-            <!-- RANK PAGE -->
-            <div id="page-rank" class="page">
-                <h1 class="page-title" style="text-align:center;">LEADERBOARD</h1>
-                
-                <div class="podium" id="podium-area">
-                    <!-- Dynamic Podium -->
-                </div>
-
-                <div id="rank-list">
-                    <!-- Top 10 List -->
-                </div>
-            </div>
-
-            <!-- WALLET PAGE -->
-            <div id="page-wallet" class="page">
-                <div style="text-align:center; padding:20px 0;">
-                    <p style="color:#555; font-size:11px; letter-spacing:2px;">TOTAL ASSETS</p>
-                    <h2 id="wal-bal" style="font-size:55px; margin:5px 0; font-family:'Orbitron';">0</h2>
-                    <p style="color:var(--gold); font-size:12px;">≈ $<span id="usd-val">0.00</span> USD</p>
-                </div>
-
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-                    <button class="btn-prime" onclick="withdraw()">WITHDRAW</button>
-                    <button class="btn-prime" style="background:#111; color:white; border:1px solid #222;">SWAP</button>
-                </div>
-
-                <p style="color:#444; font-size:10px; margin:20px 0 10px; letter-spacing:1px;">WITHDRAWAL METHODS</p>
-                
-                <div class="earn-card" onclick="connectWallet('TON')">
-                    <div class="icon" style="color:#0088cc"><i class="fas fa-gem"></i></div>
-                    <div style="flex:1"><b>TON Wallet</b><br><small style="color:#444">Connect Telegram Wallet</small></div>
-                    <i class="fas fa-link"></i>
-                </div>
-
-                <div class="earn-card" onclick="connectWallet('Zain Cash')">
-                    <div class="icon" style="color:#ff0000"><i class="fas fa-wallet"></i></div>
-                    <div style="flex:1"><b>Zain Cash</b><br><small style="color:#444">Local Transfer (Iraq)</small></div>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-
-                <div class="earn-card" onclick="connectWallet('Store')">
-                    <div class="icon"><i class="fab fa-google-play"></i></div>
-                    <div style="flex:1"><b>Play Store / App Store</b><br><small style="color:#444">Redeem Gift Cards</small></div>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-            </div>
-
-            <!-- PROFILE PAGE -->
-            <div id="page-profile" class="page">
-                <div style="text-align:center; margin-bottom:30px;">
-                    <div style="position:relative; display:inline-block;">
-                        <img id="p-av" src="https://i.pravatar.cc/150?u=99" style="width:110px; height:110px; border-radius:30px; border:3px solid var(--gold); padding:5px;">
-                        <div style="position:absolute; bottom:-10px; right:-10px; background:var(--gold); color:black; padding:5px 10px; border-radius:10px; font-weight:bold; font-size:12px;">LV. <span id="p-lvl">1</span></div>
-                    </div>
-                    <h2 id="p-name" style="font-family:'Orbitron'; margin:20px 0 5px;">...</h2>
-                    <span id="p-rank-tag" style="background:rgba(255,215,0,0.1); color:var(--gold); padding:5px 15px; border-radius:20px; font-size:11px; font-weight:bold; border:1px solid var(--border);">BRONZE MINER</span>
-                </div>
-
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-                    <div style="background:#0a0a0a; padding:15px; border-radius:15px; border:1px solid #111;">
-                        <small style="color:#555; display:block; margin-bottom:5px;">TOTAL TAPS</small>
-                        <b id="p-taps" style="font-family:'Orbitron'; font-size:18px;">0</b>
-                    </div>
-                    <div style="background:#0a0a0a; padding:15px; border-radius:15px; border:1px solid #111;">
-                        <small style="color:#555; display:block; margin-bottom:5px;">TAP POWER</small>
-                        <b id="p-pow" style="font-family:'Orbitron'; font-size:18px;">1</b>
-                    </div>
-                    <div style="background:#0a0a0a; padding:15px; border-radius:15px; border:1px solid #111;">
-                        <small style="color:#555; display:block; margin-bottom:5px;">PASSIVE INCOME</small>
-                        <b id="p-pass" style="font-family:'Orbitron'; font-size:18px; color:var(--neon);">0/s</b>
-                    </div>
-                    <div style="background:#0a0a0a; padding:15px; border-radius:15px; border:1px solid #111;">
-                        <small style="color:#555; display:block; margin-bottom:5px;">GLOBAL RANK</small>
-                        <b id="p-global" style="font-family:'Orbitron'; font-size:18px; color:var(--gold);">#---</b>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <nav>
-            <div class="n-item active" onclick="switchPage('mine', this)"><i class="fas fa-cube"></i>MINE</div>
-            <div class="n-item" onclick="switchPage('earn', this)"><i class="fas fa-tasks"></i>TASKS</div>
-            <div class="n-item" onclick="switchPage('friends', this)"><i class="fas fa-user-plus"></i>FRIENDS</div>
-            <div class="n-item" onclick="switchPage('boost', this)"><i class="fas fa-rocket"></i>BOOST</div>
-            <div class="n-item" onclick="switchPage('rank', this)"><i class="fas fa-trophy"></i>RANK</div>
-        </nav>
-    </div>
-
-    <script>
-        // --- CONFIG ---
-        const fbConfig = {
-            apiKey: "AIzaSyBMN49BmTeQ4OaFbSuiC2AaELHdkOuc_8U",
-            authDomain: "geminicoins-9f1a5.firebaseapp.com",
-            projectId: "geminicoins-9f1a5",
-            storageBucket: "geminicoins-9f1a5.firebasestorage.app",
-            messagingSenderId: "841242980001",
-            appId: "1:841242980001:web:b241ba1b7f281d691e4ae0"
-        };
-        firebase.initializeApp(fbConfig);
-        const db = firebase.firestore();
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-
-        const user = tg.initDataUnsafe.user || { id: "test_99", first_name: "Trapper_Titan" };
-        const uid = String(user.id);
-
-        let data = {
-            bal: 0, en: 1000, max: 1000, tPow: 1, pass: 0, 
-            lv: { tap: 0, pass: 0, max: 0 }, taps: 0,
-            name: user.first_name, av: `https://i.pravatar.cc/150?u=${uid}`,
-            lastDaily: 0, streak: 0, 
-            tasks: { tg: false, tw: false, tk: false }
-        };
-
-        // --- ENGINE ---
-        async function init() {
-            try {
-                const doc = await db.collection("users").doc(uid).get();
-                if(doc.exists) {
-                    data = { ...data, ...doc.data() };
-                } else {
-                    await db.collection("users").doc(uid).set(data);
-                }
-                setTimeout(() => {
-                    document.getElementById('splash').style.display = 'none';
-                    document.getElementById('app').style.display = 'flex';
-                    updateUI();
-                }, 1500);
-            } catch(e) {
-                document.getElementById('load-status').innerText = "Network Error. Please restart.";
-            }
-
-            // Passive Income & Energy Reg
-            setInterval(() => {
-                if(data.pass > 0) data.bal += data.pass;
-                if(data.en < data.max) data.en = Math.min(data.max, data.en + 3);
-                updateUI();
-            }, 1000);
-
-            // Auto-save every 10 seconds
-            setInterval(() => db.collection("users").doc(uid).set(data, {merge:true}), 10000);
-        }
-
-        function updateUI() {
-            document.getElementById('bal-txt').innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/261/261882.png"> ${Math.floor(data.bal).toLocaleString()}`;
-            document.getElementById('wal-bal').innerText = Math.floor(data.bal).toLocaleString();
-            document.getElementById('usd-val').innerText = (data.bal / 1000000).toFixed(2);
-            document.getElementById('en-txt').innerText = `${data.en} / ${data.max}`;
-            document.getElementById('en-bar').style.width = (data.en/data.max*100) + "%";
-            document.getElementById('en-perc').innerText = Math.floor(data.en/data.max*100) + "%";
+        <!-- EARN PAGE -->
+        <div id="page-earn" class="page">
+            <h1 class="page-title">EARN STATION</h1>
+            <p class="sub-title">HIGH YIELD REWARDS SYSTEM</p>
             
-            // Header & Profile
-            document.getElementById('h-name').innerText = data.name;
-            document.getElementById('p-name').innerText = data.name;
-            document.getElementById('h-av').src = data.av;
-            document.getElementById('p-av').src = data.av;
-            document.getElementById('p-taps').innerText = data.taps.toLocaleString();
-            document.getElementById('p-pow').innerText = data.tPow;
-            document.getElementById('p-pass').innerText = data.pass + "/s";
-            document.getElementById('p-lvl').innerText = 1 + Math.floor(data.bal / 50000);
+            <div class="earn-card" onclick="watchAd()">
+                <div class="icon"><i class="fas fa-play"></i></div>
+                <div style="flex:1"><b>REWARDED AD</b><br><small style="color:var(--gold)">INSTANT 100,000 GEM + ENERGY</small></div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+
+            <p style="color:#444; font-size:11px; margin-top:30px; letter-spacing:1px;">ACTIVE PROTOCOLS</p>
+            <div class="earn-card">
+                <div class="icon"><i class="fas fa-play"></i></div>
+                <div style="flex:1"><b>GEMINI PROTOCOL BRIEFING</b><br><small style="color:var(--gold)">+50,000 GEM</small></div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="earn-card">
+                <div class="icon" style="color:var(--blue);"><i class="fas fa-chart-line"></i></div>
+                <div style="flex:1"><b>MARKET SENTIMENT ANALYSIS</b><br><small style="color:var(--gold)">+125,000 GEM</small></div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+
+        <!-- FRIENDS PAGE -->
+        <div id="page-friends" class="page">
+            <h1 class="page-title" style="text-align:center;">FRIENDS</h1>
+            <p class="sub-title" style="text-align:center;">BUILD YOUR NETWORK</p>
+            <div class="earn-card" style="flex-direction:column; padding:40px; text-align:center;">
+                <i class="fas fa-users" style="font-size:50px; color:#222; margin-bottom:20px;"></i>
+                <p style="color:#666;">Invite friends and get <span style="color:white">50,000 GEM</span> instantly!</p>
+                <button class="btn-prime" style="width:100%; margin-top:20px; background:var(--gold); border:none; padding:18px; border-radius:40px; font-weight:bold; font-family:'Orbitron';" onclick="invite()">INVITE A FRIEND</button>
+            </div>
+        </div>
+
+        <!-- BOOST PAGE -->
+        <div id="page-boost" class="page">
+            <h1 class="page-title">BOOST HUB</h1>
+            <p class="sub-title">SCALE YOUR MINING INFRASTRUCTURE</p>
             
-            // Boost costs
-            document.getElementById('l-tap').innerText = data.lv.tap;
-            document.getElementById('c-tap').innerText = ((data.lv.tap + 1) * 500).toLocaleString();
-            document.getElementById('l-pass').innerText = data.lv.pass;
-            document.getElementById('c-pass').innerText = ((data.lv.pass + 1) * 2000).toLocaleString();
-            document.getElementById('l-max').innerText = data.lv.max;
-            document.getElementById('c-max').innerText = ((data.lv.max + 1) * 5000).toLocaleString();
+            <div class="boost-item" onclick="buy('tap')">
+                <div class="boost-icon"><i class="fas fa-fingerprint"></i></div>
+                <div class="boost-info"><b>Nano-Tapping <span style="font-size:10px; background:#111; padding:2px 5px; border-radius:5px; color:#555;">LVL <span id="l-tap">0</span></span></b><p>Quantum refined tap power</p><p style="color:white; margin-top:4px;">+1 Power</p></div>
+                <div style="color:white;">500 💎</div>
+            </div>
+            <div class="boost-item" onclick="buy('pass')">
+                <div class="boost-icon"><i class="fas fa-server"></i></div>
+                <div class="boost-info"><b>GPU Cluster <span style="font-size:10px; background:#111; padding:2px 5px; border-radius:5px; color:#555;">LVL <span id="l-pass">0</span></span></b><p>Hash power for passive GEMs</p><p style="color:white; margin-top:4px;">+5 GEM/s</p></div>
+                <div style="color:white;">2k 💎</div>
+            </div>
+        </div>
 
-            // Task Status
-            if(data.tasks.tg) document.getElementById('task-tg').innerText = "DONE";
-            if(data.tasks.tw) document.getElementById('task-tw').innerText = "DONE";
-            if(data.tasks.tk) document.getElementById('task-tk').innerText = "DONE";
+        <!-- RANK PAGE -->
+        <div id="page-rank" class="page">
+            <h1 class="page-title" style="text-align:center;">Top Tappers</h1>
+            <p class="sub-title" style="text-align:center;">Join the elite of GEM miners</p>
+            
+            <div class="podium">
+                <div class="p-item">
+                    <img src="https://i.pravatar.cc/150?u=2" class="p-av">
+                    <div class="p-box">#2<br>🥈</div>
+                </div>
+                <div class="p-item">
+                    <img src="https://i.pravatar.cc/150?u=1" class="p-av" style="border-color:white; width:90px; height:90px;">
+                    <div class="p-box center">#1<br>🥇</div>
+                </div>
+                <div class="p-item">
+                    <img src="https://i.pravatar.cc/150?u=3" class="p-av" style="border-color:#CD7F32;">
+                    <div class="p-box" style="border-color:#CD7F32;">#3<br>🥉</div>
+                </div>
+            </div>
+            <div id="rank-list"></div>
+        </div>
+
+        <!-- WALLET PAGE -->
+        <div id="page-wallet" class="page">
+            <div class="earn-card" style="flex-direction:column; padding:40px; text-align:center; border:none; background:transparent;">
+                <div class="icon" style="width:80px; height:80px; font-size:35px; margin: 0 auto 20px;"><i class="fas fa-coins"></i></div>
+                <p style="color:var(--grey-text); font-size:11px; letter-spacing:1px;">AVAILABLE BALANCE</p>
+                <h2 id="wal-bal" style="font-size:70px; margin:10px 0; font-family:'Orbitron';">0</h2>
+                <div class="btn-row" style="width:100%;">
+                    <button class="btn-w" onclick="withdraw()">WITHDRAW</button>
+                    <button class="btn-h">HISTORY</button>
+                </div>
+            </div>
+
+            <p style="color:#333; font-size:10px; margin:30px 0 10px; letter-spacing:1px;">WEB3 CONNECTION</p>
+            <div class="earn-card" style="border-radius:20px; padding:15px;" onclick="connect()">
+                <div class="icon" style="width:40px; height:40px; border-radius:10px;"><i class="fas fa-plus"></i></div>
+                <div style="flex:1"><b>Connect Wallet</b><br><small style="color:#555">TON / ETH supported</small></div>
+                <i class="fas fa-chevron-right" style="color:#222;"></i>
+            </div>
+        </div>
+
+        <!-- PROFILE PAGE -->
+        <div id="page-profile" class="page">
+            <div style="text-align:center; margin-bottom:30px;">
+                <img id="p-av" src="" style="width:100px; height:100px; border-radius:25px; border:2px solid var(--gold); padding:5px;">
+                <h2 id="p-name" style="font-family:'Orbitron'; margin:15px 0 5px;">...</h2>
+                <span style="background:rgba(255,215,0,0.1); color:var(--gold); padding:4px 10px; border-radius:5px; font-size:10px; font-weight:bold; letter-spacing:2px;">PLATINUM LEAGUE</span>
+            </div>
+
+            <div class="p-stat-grid">
+                <div class="p-stat-box"><small>Total Taps</small><b id="p-total-taps">0</b></div>
+                <div class="p-stat-box"><small>Click Power</small><b id="p-power">1</b></div>
+                <div class="p-stat-box"><small>Passive Rate</small><b id="p-pass">0/s</b></div>
+                <div class="p-stat-box"><small>Global Rank</small><b style="color:var(--gold)">#1,402</b></div>
+            </div>
+
+            <p style="color:#333; font-size:10px; margin-top:30px; letter-spacing:1px;">MINING CONTROLS</p>
+            <div class="earn-card" style="border-radius:20px; padding:15px;">
+                <div class="icon" style="width:40px; height:40px; border-radius:10px; background:#111;"><i class="fas fa-wallet"></i></div>
+                <div style="flex:1"><b>Crypto Wallet</b><br><small style="color:#444">WITHDRAW & DEPOSIT</small></div>
+                <i class="fas fa-chevron-right" style="color:#222;"></i>
+            </div>
+        </div>
+    </main>
+
+    <nav>
+        <div class="n-item active" onclick="switchPage('mine', this)"><i class="fas fa-cube"></i>MINE</div>
+        <div class="n-item" onclick="switchPage('earn', this)"><i class="fas fa-play"></i>EARN</div>
+        <div class="n-item" onclick="switchPage('friends', this)"><i class="fas fa-user-group"></i>FRIENDS</div>
+        <div class="n-item" onclick="switchPage('boost', this)"><i class="fas fa-bolt"></i>BOOST</div>
+        <div class="n-item" onclick="switchPage('rank', this)"><i class="fas fa-trophy"></i>RANK</div>
+    </nav>
+</div>
+
+<script>
+    // --- CONFIG ---
+    const fbConfig = {
+        apiKey: "AIzaSyBMN49BmTeQ4OaFbSuiC2AaELHdkOuc_8U",
+        authDomain: "geminicoins-9f1a5.firebaseapp.com",
+        projectId: "geminicoins-9f1a5",
+        storageBucket: "geminicoins-9f1a5.firebasestorage.app",
+        messagingSenderId: "841242980001",
+        appId: "1:841242980001:web:b241ba1b7f281d691e4ae0"
+    };
+    firebase.initializeApp(fbConfig);
+    const db = firebase.firestore();
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    const AD_ID = "23328";
+    const user = tg.initDataUnsafe.user || { id: "test_88", first_name: "Titan_User" };
+    const uid = String(user.id);
+
+    let data = {
+        bal: 0, en: 1000, max: 1000, tPow: 1, pass: 0, 
+        lv: { tap: 0, pass: 0 }, taps: 0,
+        name: user.first_name, av: "https://i.pravatar.cc/150?u=1"
+    };
+
+    // --- CORE ENGINE ---
+    async function init() {
+        let p = 0;
+        const loader = setInterval(() => {
+            p += 2; document.getElementById('p-fill').style.width = p + "%";
+            if(p >= 100) { clearInterval(loader); showApp(); }
+        }, 30);
+
+        try {
+            const doc = await db.collection("users").doc(uid).get();
+            if(doc.exists) data = { ...data, ...doc.data() };
+            else await db.collection("users").doc(uid).set(data);
+        } catch(e) { console.log("Firebase error"); }
+    }
+
+    function showApp() {
+        document.getElementById('splash').style.display = 'none';
+        document.getElementById('app').style.display = 'flex';
+        updateUI();
+
+        setInterval(() => {
+            if(data.pass > 0) data.bal += data.pass;
+            if(data.en < data.max) data.en = Math.min(data.max, data.en + 4);
+            updateUI();
+        }, 1000);
+
+        setInterval(() => db.collection("users").doc(uid).set(data, {merge:true}), 5000);
+    }
+
+    function updateUI() {
+        document.getElementById('bal-txt').innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/261/261882.png"> ${Math.floor(data.bal).toLocaleString()}`;
+        document.getElementById('wal-bal').innerText = Math.floor(data.bal).toLocaleString();
+        document.getElementById('pass').innerText = data.pass;
+        document.getElementById('en-txt').innerText = `${data.en} / ${data.max}`;
+        document.getElementById('en-bar').style.width = (data.en/data.max*100) + "%";
+        document.getElementById('h-name').innerText = data.name;
+        document.getElementById('h-av').src = data.av;
+        document.getElementById('p-av').src = data.av;
+        document.getElementById('p-name').innerText = data.name;
+        
+        // Profile stats
+        document.getElementById('p-total-taps').innerText = data.taps;
+        document.getElementById('p-power').innerText = data.tPow;
+        document.getElementById('p-pass').innerText = data.pass + "/s";
+        
+        // Boost lvls
+        document.getElementById('l-tap').innerText = data.lv.tap;
+        document.getElementById('l-pass').innerText = data.lv.pass;
+    }
+
+    // --- ACTIONS ---
+    document.getElementById('tap-btn').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if(data.en >= data.tPow) {
+            data.bal += data.tPow; data.en -= data.tPow; data.taps++;
+            updateUI();
+            tg.HapticFeedback.impactOccurred('medium');
+            const t = e.touches[0];
+            const p = document.createElement('div');
+            p.className = 'pop'; p.innerText = `+${data.tPow}`;
+            p.style.left = t.clientX + 'px'; p.style.top = t.clientY + 'px';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 700);
         }
+    });
 
-        // --- ACTIONS ---
-        document.getElementById('tap-btn').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if(data.en >= data.tPow) {
-                data.bal += data.tPow; data.en -= data.tPow; data.taps++;
-                updateUI();
-                tg.HapticFeedback.impactOccurred('medium');
-                
-                const t = e.touches[0];
-                const p = document.createElement('div');
-                p.className = 'pop'; p.innerText = `+${data.tPow}`;
-                p.style.left = t.clientX + 'px'; p.style.top = t.clientY + 'px';
-                document.body.appendChild(p);
-                setTimeout(() => p.remove(), 800);
-            }
+    function switchPage(p, el) {
+        document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
+        document.querySelectorAll('.n-item').forEach(nb => nb.classList.remove('active'));
+        document.getElementById('page-'+p).classList.add('active');
+        if(el) el.classList.add('active');
+        if(p === 'rank') loadRank();
+        tg.HapticFeedback.selectionChanged();
+    }
+
+    async function loadRank() {
+        const list = document.getElementById('rank-list');
+        list.innerHTML = "";
+        const snap = await db.collection("users").orderBy("bal", "desc").limit(10).get();
+        let i = 1;
+        snap.forEach(doc => {
+            const d = doc.data();
+            list.innerHTML += `<div class="rank-item"><b>#${i}</b><img src="${d.av}" style="width:35px; border-radius:50%;"><div style="flex:1"><b>${d.name}</b><br><small style="color:#555">Level ${1 + Math.floor(d.bal/10000)}</small></div><b style="color:var(--gold)">${(d.bal/1000).toFixed(1)}k <small>GEM</small></b></div>`;
+            i++;
         });
+    }
 
-        function switchPage(p, el) {
-            document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
-            document.querySelectorAll('.n-item').forEach(nb => nb.classList.remove('active'));
-            document.getElementById('page-'+p).classList.add('active');
-            if(el) el.classList.add('active');
-            if(p === 'rank') loadRank();
-            tg.HapticFeedback.selectionChanged();
-        }
+    function buy(type) {
+        let cost = type === 'tap' ? (data.lv.tap + 1) * 500 : (data.lv.pass + 1) * 2000;
+        if(data.bal >= cost) {
+            data.bal -= cost;
+            if(type === 'tap') { data.lv.tap++; data.tPow++; }
+            else { data.lv.pass++; data.pass += 5; }
+            updateUI(); tg.showAlert("Protocol Updated! 🚀");
+        } else tg.showAlert("Insufficient Gems!");
+    }
 
-        async function loadRank() {
-            const list = document.getElementById('rank-list');
-            const podium = document.getElementById('podium-area');
-            list.innerHTML = "<p style='text-align:center; color:#333;'>Syncing Leaderboard...</p>";
-            
-            const snap = await db.collection("users").orderBy("bal", "desc").limit(15).get();
-            list.innerHTML = "";
-            podium.innerHTML = "";
-            
-            let players = [];
-            snap.forEach(doc => players.push(doc.data()));
+    function watchAd() {
+        if(!window.Adsgram) return;
+        const ad = window.Adsgram.init({ blockId: AD_ID });
+        ad.show().then(() => {
+            data.bal += 100000; data.en = data.max; updateUI();
+            tg.showAlert("Sync Success: +100k GEMS!");
+        }).catch(() => tg.showAlert("Protocol error."));
+    }
 
-            // Render Podium
-            if(players.length >= 3) {
-                podium.innerHTML = `
-                    <div class="p-item">
-                        <img src="${players[1].av}" class="p-av" style="border-color:silver">
-                        <div class="p-box">#2<br>🥈</div>
-                    </div>
-                    <div class="p-item">
-                        <img src="${players[0].av}" class="p-av" style="width:80px; height:80px; border-color:gold">
-                        <div class="p-box center">#1<br>🥇</div>
-                    </div>
-                    <div class="p-item">
-                        <img src="${players[2].av}" class="p-av" style="border-color:#CD7F32">
-                        <div class="p-box">#3<br>🥉</div>
-                    </div>
-                `;
-            }
+    function invite() {
+        const link = `https://t.me/GeminicoinBot?start=${uid}`;
+        tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Join Gemini Titan! 💎`);
+    }
 
-            players.forEach((p, i) => {
-                list.innerHTML += `
-                    <div class="rank-item" style="${p.name === data.name ? 'border: 1px solid var(--gold); background:rgba(255,215,0,0.05)' : ''}">
-                        <b style="width:25px; color:#555">#${i+1}</b>
-                        <img src="${p.av}" style="width:35px; height:35px; border-radius:50%; border:1px solid #333;">
-                        <div style="flex:1"><b>${p.name}</b><br><small style="color:#444">Level ${1 + Math.floor(p.bal/50000)}</small></div>
-                        <b style="color:var(--gold)">${(p.bal/1000).toFixed(1)}k</b>
-                    </div>
-                `;
-                if(p.name === data.name) document.getElementById('p-global').innerText = `#${i+1}`;
-            });
-        }
+    function withdraw() {
+        if(data.bal < 10000000) return tg.showAlert("Minimum 10M Gems required.");
+        tg.showAlert("Withdrawal Sync Initialized.");
+    }
 
-        function buy(type) {
-            let cost = 0;
-            if(type === 'tap') cost = (data.lv.tap + 1) * 500;
-            if(type === 'pass') cost = (data.lv.pass + 1) * 2000;
-            if(type === 'max') cost = (data.lv.max + 1) * 5000;
+    function connect() { tg.showAlert("Connecting to TON Web3..."); }
 
-            if(data.bal >= cost) {
-                data.bal -= cost;
-                if(type === 'tap') { data.lv.tap++; data.tPow += 1; }
-                if(type === 'pass') { data.lv.pass++; data.pass += 5; }
-                if(type === 'max') { data.lv.max++; data.max += 500; data.en += 500; }
-                updateUI();
-                tg.showAlert("Upgrade Successful! 🚀");
-                tg.HapticFeedback.notificationOccurred('success');
-            } else {
-                tg.showAlert("Insufficient Gems!");
-            }
-        }
-
-        // --- TASKS ---
-        function doTask(id, link, reward) {
-            if(data.tasks[id]) return tg.showAlert("Protocol already completed.");
-            tg.openLink(link);
-            setTimeout(() => {
-                data.bal += reward;
-                data.tasks[id] = true;
-                updateUI();
-                tg.showAlert(`Reward Claimed: +${reward.toLocaleString()} GEMS!`);
-            }, 5000);
-        }
-
-        function watchAd() {
-            tg.showConfirm("Initialize Surveillance Ad Sync?", (ok) => {
-                if(ok) {
-                    setTimeout(() => {
-                        data.bal += 25000;
-                        updateUI();
-                        tg.showAlert("Reward Claimed: +25,000 GEMS!");
-                    }, 3000);
-                }
-            });
-        }
-
-        // --- DAILY REWARDS ---
-        function showDaily() {
-            const grid = document.getElementById('daily-grid');
-            grid.innerHTML = "";
-            for(let i=1; i<=28; i++) {
-                let status = "";
-                if(i <= data.streak) status = "claimed";
-                if(i === data.streak + 1) status = "active";
-                grid.innerHTML += `<div class="day-box ${status}">Day ${i}<br><b>${i*500}</b></div>`;
-            }
-            document.getElementById('daily-modal').style.display = 'block';
-        }
-
-        function claimDaily() {
-            const now = Date.now();
-            const dayInMs = 24 * 60 * 60 * 1000;
-            if(now - data.lastDaily < dayInMs) {
-                return tg.showAlert("Protocol on cooldown. Return in 24 hours.");
-            }
-            data.streak++;
-            const reward = data.streak * 5000;
-            data.bal += reward;
-            data.lastDaily = now;
-            updateUI();
-            tg.showAlert(`Day ${data.streak} Claimed: +${reward} GEMS!`);
-            closeModal('daily-modal');
-        }
-
-        // --- SEEK WISDOM ---
-        function seekWisdom() {
-            const quotes = [
-                "Patience is the fastest path to wealth.",
-                "The diamond only forms under pressure.",
-                "Small taps create giant mountains.",
-                "A Titan is defined by their consistency.",
-                "Trust the protocol, master the mine."
-            ];
-            const q = quotes[Math.floor(Math.random()*quotes.length)];
-            tg.showAlert(`THE ORACLE SAYS:\n\n"${q}"\n\nReward: +1,000 GEM`);
-            data.bal += 1000;
-            updateUI();
-        }
-
-        function invite() {
-            const url = `https://t.me/GeminicoinBot?start=${uid}`;
-            tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=Join Gemini Titan! 💎 Build your mining empire!`);
-        }
-
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function connectWallet(type) { tg.showAlert(`Protocol Sync: Connecting to ${type} API...`); }
-        function withdraw() { tg.showAlert("Withdrawals unlock at 10,000,000 GEMS."); }
-
-        init();
-    </script>
-</body>
-</html>
+    init();
+</script>
