@@ -16,11 +16,11 @@
 
         :root {
             --gold: #FFD700;
-            --gold-glow: rgba(255, 215, 0, 0.3);
             --bg: #000000;
             --card: #0A0A0A;
-            --border: rgba(255, 215, 0, 0.1);
             --grey: #888888;
+            --border: rgba(255, 215, 0, 0.1);
+            --blue: #4aa3ff;
             --red: #ff4a4a;
         }
 
@@ -30,78 +30,84 @@
             font-family: 'Rajdhani', sans-serif; overflow: hidden; user-select: none;
         }
 
-        /* --- LOADING SCREEN --- */
-        #splash {
-            position: fixed; inset: 0; background: #000; z-index: 10000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
-        .s-logo { width: 100px; filter: drop-shadow(0 0 15px var(--gold)); margin-bottom: 30px; }
-        .s-title { font-family: 'Orbitron'; font-size: 28px; font-weight: 900; letter-spacing: 4px; color: var(--gold); }
-
         /* --- HEADER --- */
-        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.8); position: sticky; top: 0; z-index: 100; }
+        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; background: var(--bg); }
         .h-user { display: flex; align-items: center; gap: 10px; }
-        .h-av-box { width: 35px; height: 35px; background: #111; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid #222; }
-        .h-info span { color: var(--grey); font-size: 10px; font-weight: bold; display: block;}
+        .h-av-box { width: 38px; height: 38px; background: #151515; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1px solid #222; }
+        .h-info span { color: var(--grey); font-size: 10px; font-weight: 800; display: block; }
         .h-info b { font-size: 13px; }
-        .seek-btn { background: rgba(255, 215, 0, 0.1); border: 1px solid var(--gold); padding: 6px 14px; border-radius: 20px; color: var(--gold); font-size: 10px; font-weight: bold; display: flex; align-items: center; gap: 6px; box-shadow: 0 0 10px var(--gold-glow); cursor: pointer;}
+        .seek-btn { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); padding: 8px 15px; border-radius: 20px; color: var(--gold); font-size: 11px; font-weight: 900; display: flex; align-items: center; gap: 8px; cursor: pointer; }
 
         /* --- NAVIGATION --- */
-        nav { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(10, 10, 10, 0.98); border-top: 1px solid #111; display: flex; justify-content: space-around; align-items: center; z-index: 5000; padding-bottom: 10px; }
-        .n-item { text-align: center; color: #444; font-size: 9px; font-weight: 700; flex: 1; transition: 0.2s; cursor: pointer;}
-        .n-item i { font-size: 22px; display: block; margin-bottom: 5px; }
+        nav { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(0,0,0,0.95); border-top: 1px solid #111; display: flex; justify-content: space-around; align-items: center; z-index: 5000; padding-bottom: 15px; }
+        .n-item { text-align: center; color: #444; font-size: 10px; font-weight: 700; flex: 1; transition: 0.2s; cursor: pointer; }
+        .n-item i { font-size: 20px; display: block; margin-bottom: 5px; }
         .n-item.active { color: var(--gold); }
 
-        /* --- PAGES --- */
+        /* --- MAIN --- */
         main { height: 100vh; overflow-y: auto; padding: 10px 20px 100px; scrollbar-width: none; }
         main::-webkit-scrollbar { display: none; }
         .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- MINE PAGE (PROFILE REDESIGN) --- */
-        .elite-header { text-align: center; margin-top: 10px; }
-        .badge-row { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
-        .badge { padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
-        .badge.gold { background: rgba(255,215,0,0.1); color: var(--gold); border: 1px solid var(--gold); }
-        .badge.blue { background: rgba(0,100,255,0.1); color: #4aa3ff; border: 1px solid #0064ff; }
-        
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
-        .stat-card { background: #0A0A0A; border: 1px solid #111; padding: 15px; border-radius: 20px; }
-        .stat-label { color: var(--grey); font-size: 11px; font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; gap: 5px;}
-        .stat-val { font-family: 'Orbitron'; font-size: 18px; color: var(--gold); font-weight: 900; }
+        /* --- PROFILE PAGE UI (AS PER IMAGES) --- */
+        .profile-header { text-align: center; margin-top: 20px; }
+        .profile-header h2 { font-size: 28px; margin: 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .badge-row { display: flex; justify-content: center; gap: 8px; margin: 15px 0; }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; border: 1px solid transparent; }
+        .badge.gold { background: rgba(255,215,0,0.1); color: var(--gold); border-color: var(--gold); }
+        .badge.blue { background: rgba(0,100,255,0.1); color: var(--blue); border-color: var(--blue); }
 
-        .control-btn { background: #0A0A0A; border: 1px solid #111; padding: 18px; border-radius: 25px; display: flex; align-items: center; gap: 15px; margin-bottom: 12px; width: 100%; color: white; text-align: right; position: relative;}
-        .control-icon { width: 45px; height: 45px; background: #111; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px;}
-        .control-info b { font-size: 16px; display: block;}
-        .control-info small { color: var(--grey); font-size: 11px; font-weight: 700;}
-        .chevron { position: absolute; left: 20px; color: #222;}
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 25px 0; }
+        .stat-card { background: var(--card); border: 1px solid #151515; padding: 20px; border-radius: 25px; }
+        .stat-label { color: var(--grey); font-size: 11px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+        .stat-val { font-family: 'Orbitron'; font-size: 20px; color: var(--gold); font-weight: 900; font-style: italic; }
 
-        .terminate-btn { background: rgba(255, 74, 74, 0.05); border: 1px solid rgba(255, 74, 74, 0.2); padding: 18px; border-radius: 25px; color: var(--red); font-family: 'Orbitron'; font-weight: 800; font-size: 12px; width: 100%; margin-top: 10px; text-align: center; letter-spacing: 2px;}
+        .section-title { color: var(--grey); font-size: 12px; font-weight: 900; margin: 30px 0 15px; letter-spacing: 2px; text-transform: uppercase; }
+        .control-item { background: var(--card); border: 1px solid #151515; padding: 20px; border-radius: 30px; display: flex; align-items: center; gap: 18px; margin-bottom: 12px; position: relative; cursor: pointer; }
+        .c-icon-box { width: 50px; height: 50px; background: #111; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--grey); }
+        .c-text b { font-size: 17px; display: block; margin-bottom: 2px; }
+        .c-text small { color: var(--grey); font-size: 11px; font-weight: 700; display: block; }
+        .c-chevron { position: absolute; left: 25px; color: #222; }
 
-        /* --- WALLET --- */
-        .wal-card { background: linear-gradient(145deg, #0F0F0F, #050505); border: 1px solid var(--border); border-radius: 25px; padding: 30px; text-align: center; margin-bottom: 25px; }
-        .wal-bal { font-family: 'Orbitron'; font-size: 45px; font-weight: 900; margin: 15px 0; }
-        .gem-tag { background: #1a1a1a; padding: 4px 12px; border-radius: 6px; color: var(--gold); font-size: 12px; font-weight: 900; }
+        .terminate-btn { background: rgba(255, 74, 74, 0.05); border: 1px solid rgba(255, 74, 74, 0.1); padding: 20px; border-radius: 30px; color: var(--red); font-family: 'Orbitron'; font-weight: 800; font-size: 12px; width: 100%; margin-top: 15px; text-align: center; letter-spacing: 3px; }
 
-        /* --- POP ANIMATION --- */
+        /* --- WALLET UI (IMAGE 1) --- */
+        .wal-card { background: linear-gradient(180deg, #151515 0%, #000 100%); border: 1px solid #222; border-radius: 35px; padding: 45px 20px; text-align: center; margin-bottom: 30px; }
+        .wal-bal { font-family: 'Orbitron'; font-size: 60px; font-weight: 900; margin: 15px 0; letter-spacing: -2px; }
+        .gem-tag { background: #111; padding: 5px 15px; border-radius: 8px; color: var(--gold); font-size: 13px; font-weight: 900; border: 1px solid #222; }
+        .btn-row { display: flex; gap: 12px; margin-top: 40px; }
+        .btn-w { flex: 1; padding: 18px; border-radius: 18px; background: white; color: black; border: none; font-weight: 900; font-family: 'Orbitron'; font-size: 13px; }
+        .btn-h { flex: 1; padding: 18px; border-radius: 18px; background: #111; color: white; border: 1px solid #222; font-weight: 900; font-family: 'Orbitron'; font-size: 13px; }
+
+        .notice-box { background: rgba(255,215,0,0.03); border: 1px solid rgba(255,215,0,0.08); padding: 18px; border-radius: 20px; display: flex; align-items: center; gap: 15px; margin-top: 25px; }
+        .notice-box i { color: var(--gold); font-size: 18px; }
+        .notice-box p { margin: 0; color: var(--grey); font-size: 11px; font-style: italic; line-height: 1.5; }
+
+        /* --- RANK UI --- */
+        .podium { display: flex; align-items: flex-end; justify-content: center; gap: 12px; margin: 40px 0; height: 180px; }
+        .pod-user { text-align: center; width: 90px; }
+        .pod-av { width: 70px; height: 70px; border-radius: 50%; border: 3px solid #222; margin-bottom: 10px; overflow: hidden; }
+        .pod-av.first { width: 95px; height: 95px; border-color: var(--gold); }
+        .pod-box { border-radius: 15px 15px 5px 5px; font-family: 'Orbitron'; font-weight: 900; padding: 10px 0; }
+        .pod-box.p1 { height: 110px; background: var(--gold); color: black; }
+        .pod-box.p2 { height: 85px; background: #222; }
+        .pod-box.p3 { height: 65px; background: #3d2b1f; }
+
+        /* --- CLICKER --- */
+        .click-area { height: 260px; display: flex; justify-content: center; align-items: center; }
+        .gem-btn { width: 200px; height: 200px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 50px rgba(255,215,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 90px; color: black; transition: 0.1s; cursor: pointer; }
+        .gem-btn:active { transform: scale(0.92); }
+
+        /* POP ANIMATION */
         .pop { position: absolute; color: var(--gold); font-weight: 900; font-family: 'Orbitron'; font-size: 32px; pointer-events: none; animation: popUp 0.8s ease-out forwards; z-index: 1000; }
         @keyframes popUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-120px); } }
-        
-        /* CLICKER */
-        .click-area { height: 200px; display: flex; justify-content: center; align-items: center; margin: 20px 0;}
-        .clicker-btn { width: 160px; height: 160px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 40px var(--gold-glow); display: flex; align-items: center; justify-content: center; font-size: 70px; color: black; transition: 0.1s; cursor: pointer;}
-        .clicker-btn:active { transform: scale(0.92); }
     </style>
 </head>
 <body>
 
-    <div id="splash">
-        <img src="https://cdn-icons-png.flaticon.com/512/261/261882.png" class="s-logo">
-        <div class="s-title">GEMINICOIN</div>
-    </div>
-
-    <div id="app" style="display:none;">
+    <div id="app">
         <header>
             <div class="h-user">
                 <div class="h-av-box"><i class="fas fa-user"></i></div>
@@ -116,10 +122,10 @@
         </header>
 
         <main>
-            <!-- MINE PAGE (REDESIGNED) -->
+            <!-- MINE / PROFILE PAGE -->
             <div id="page-mine" class="page active">
-                <div class="elite-header">
-                    <h2 id="m-rank-title" style="margin:0; font-size:28px;">Elite Operative <i class="fas fa-check-circle" style="color:#4aa3ff; font-size:18px;"></i></h2>
+                <div class="profile-header">
+                    <h2>Elite Operative <i class="fas fa-check-circle" style="color:var(--blue); font-size:20px;"></i></h2>
                     <div class="badge-row">
                         <div class="badge gold">Platinum League</div>
                         <div class="badge blue">Firebase Synced</div>
@@ -128,86 +134,113 @@
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-label"><i class="fas fa-hand-pointer"></i> TOTAL TAPS</div>
+                        <div class="stat-label"><i class="fas fa-hand-pointer"></i> Total Taps</div>
                         <div class="stat-val" id="st-taps">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label"><i class="fas fa-bolt"></i> CLICK POWER</div>
+                        <div class="stat-label"><i class="fas fa-bolt"></i> Click Power</div>
                         <div class="stat-val" id="st-pwr">1</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label"><i class="fas fa-clock"></i> PASSIVE RATE</div>
+                        <div class="stat-label"><i class="fas fa-clock"></i> Passive Rate</div>
                         <div class="stat-val" id="st-passive">0/s</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label"><i class="fas fa-globe"></i> GLOBAL RANK</div>
-                        <div class="stat-val" id="st-rank">#1,402</div>
+                        <div class="stat-label"><i class="fas fa-globe"></i> Global Rank</div>
+                        <div class="stat-val">#1,402</div>
                     </div>
                 </div>
 
                 <div class="click-area">
-                    <div class="clicker-btn" id="tap-btn"><i class="fas fa-gem"></i></div>
+                    <div class="gem-btn" id="tap-btn"><i class="fas fa-gem"></i></div>
                 </div>
 
-                <div style="color:var(--grey); font-size:11px; font-weight:bold; letter-spacing:2px; margin-bottom:15px;">MINING CONTROLS</div>
+                <div class="section-title">Mining Controls</div>
                 
-                <button class="control-btn" onclick="showPage('wallet', document.querySelector('.n-item:last-child'))">
-                    <div class="control-icon"><i class="fas fa-wallet"></i></div>
-                    <div class="control-info">
+                <div class="control-item" onclick="showPage('wallet', document.querySelector('.n-item:last-child'))">
+                    <div class="c-icon-box"><i class="fas fa-wallet"></i></div>
+                    <div class="c-text">
                         <b>Crypto Wallet</b>
                         <small>WITHDRAW & DEPOSIT</small>
                     </div>
-                    <i class="fas fa-chevron-left chevron"></i>
-                </button>
+                    <i class="fas fa-chevron-left c-chevron"></i>
+                </div>
 
-                <button class="control-btn">
-                    <div class="control-icon"><i class="fas fa-history"></i></div>
-                    <div class="control-info">
+                <div class="control-item">
+                    <div class="c-icon-box"><i class="fas fa-history"></i></div>
+                    <div class="c-text">
                         <b>Ledger History</b>
                         <small>ALL GEM MOVEMENT</small>
                     </div>
-                    <i class="fas fa-chevron-left chevron"></i>
-                </button>
+                    <i class="fas fa-chevron-left c-chevron"></i>
+                </div>
 
                 <button class="terminate-btn">TERMINATE PROTOCOL</button>
             </div>
 
-            <!-- WALLET PAGE -->
+            <!-- WALLET PAGE (IMAGE 1) -->
             <div id="page-wallet" class="page">
                 <div class="wal-card">
-                    <div style="color:var(--grey); font-size:12px; font-weight:900;">AVAILABLE BALANCE</div>
+                    <div style="color:var(--grey); font-size:12px; font-weight:900; letter-spacing:1.5px;">AVAILABLE BALANCE</div>
                     <div class="wal-bal" id="w-bal">0</div>
                     <span class="gem-tag">GEM</span>
-                    <div style="display:flex; gap:10px; margin-top:25px;">
-                        <button style="flex:1; padding:16px; border-radius:15px; background:white; color:black; border:none; font-weight:900;" onclick="withdraw()">WITHDRAW</button>
-                        <button style="flex:1; padding:16px; border-radius:15px; background:#111; color:white; border:1px solid #222; font-weight:900;">HISTORY</button>
+                    <div class="btn-row">
+                        <button class="btn-w" onclick="withdraw()">WITHDRAW</button>
+                        <button class="btn-h">HISTORY</button>
                     </div>
                 </div>
-                
-                <div style="background:#0A0A0A; border:1px solid #111; padding:20px; border-radius:20px; display:flex; align-items:center; justify-content:space-between;" onclick="connectWallet()">
-                    <div style="display:flex; align-items:center; gap:15px;">
-                        <div style="width:40px; height:40px; background:#111; border-radius:10px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-plus"></i></div>
-                        <div><b>Connect Wallet</b><br><small style="color:var(--grey);">TON / ETH supported</small></div>
+
+                <div class="section-title">Web3 Connection</div>
+                <div class="control-item">
+                    <div class="c-icon-box"><i class="fas fa-plus"></i></div>
+                    <div class="c-text">
+                        <b>Connect Wallet</b>
+                        <small>TON / ETH supported</small>
                     </div>
-                    <i class="fas fa-chevron-left"></i>
+                    <i class="fas fa-chevron-left c-chevron"></i>
+                </div>
+
+                <div class="notice-box">
+                    <i class="fas fa-shield-halved"></i>
+                    <p>"Ensure your wallet is non-custodial before initiating a transfer."</p>
                 </div>
             </div>
 
-            <!-- BOOST PAGE -->
-            <div id="page-boost" class="page">
-                <h1 style="font-family:'Orbitron'; font-size:24px;">BOOST HUB</h1>
-                <div id="boost-list"></div>
+            <!-- EARN PAGE -->
+            <div id="page-earn" class="page">
+                <h1 style="font-family:'Orbitron'; font-size:32px; font-style:italic;">EARN STATION</h1>
+                <p style="color:var(--grey); font-weight:900; font-size:12px; margin-bottom:30px;">HIGH YIELD REWARDS SYSTEM</p>
+                
+                <div class="control-item" onclick="claimTask(2500, 'Rewarded Ad')">
+                    <div class="c-icon-box" style="color:var(--gold);"><i class="fas fa-play"></i></div>
+                    <div class="c-text"><b>REWARDED AD</b><small>INSTANT 2,500 GEM + ENERGY</small></div>
+                </div>
+
+                <div class="section-title">Active Protocols</div>
+                <div class="control-item" onclick="claimTask(50000, 'Briefing')">
+                    <div class="c-icon-box"><i class="fas fa-play"></i></div>
+                    <div class="c-text"><b>GEMINI PROTOCOL BRIEFING</b><small>+50,000 GEM</small></div>
+                </div>
+                <div class="control-item" onclick="claimTask(125000, 'Sentiment')">
+                    <div class="c-icon-box"><i class="fas fa-chart-line"></i></div>
+                    <div class="c-text"><b>MARKET SENTIMENT ANALYSIS</b><small>+125,000 GEM</small></div>
+                </div>
             </div>
-            
+
             <!-- RANK PAGE -->
             <div id="page-rank" class="page">
-                <h1 style="text-align:center; font-family:'Orbitron';">Top Tappers</h1>
+                <h1 style="text-align:center; font-family:'Orbitron'; font-size:35px; margin:0;">Top Tappers</h1>
+                <p style="text-align:center; color:var(--grey); margin-bottom:30px;">Join the elite of GEM miners</p>
+                
+                <div class="podium" id="podium-area"></div>
                 <div id="rank-list"></div>
             </div>
         </main>
 
         <nav>
             <div class="n-item active" onclick="showPage('mine', this)"><i class="fas fa-cube"></i>MINE</div>
+            <div class="n-item" onclick="showPage('earn', this)"><i class="fas fa-play"></i>EARN</div>
+            <div class="n-item" onclick="showPage('friends', this)"><i class="fas fa-user-group"></i>FRIENDS</div>
             <div class="n-item" onclick="showPage('boost', this)"><i class="fas fa-bolt"></i>BOOST</div>
             <div class="n-item" onclick="showPage('rank', this)"><i class="fas fa-trophy"></i>RANK</div>
             <div class="n-item" onclick="showPage('wallet', this)"><i class="fas fa-wallet"></i>WALLET</div>
@@ -215,7 +248,7 @@
     </div>
 
     <script>
-        // --- 1. FIREBASE & TG ---
+        // --- 1. CONFIG ---
         const firebaseConfig = {
             apiKey: "AIzaSyBMN49BmTeQ4OaFbSuiC2AaELHdkOuc_8U",
             authDomain: "geminicoins-9f1a5.firebaseapp.com",
@@ -229,67 +262,46 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        const user = tg.initDataUnsafe.user || { id: "test_user", first_name: "Miner #402" };
+        const user = tg.initDataUnsafe.user || { id: "dev_user", first_name: "TapperUser" };
         const uid = String(user.id);
 
-        // --- 2. STATE ---
         let data = {
             bal: 0,
             totalTaps: 0,
             tapPwr: 1,
             passRate: 0,
-            lastUpdate: Date.now(),
-            levels: { tap: 0, gpu: 0, ai: 0 }
+            lastUpdate: Date.now()
         };
 
-        const upgrades = [
-            { id: 'tap', name: 'Nano-Tapping', cost: 100, add: 1, icon: 'fa-fingerprint' },
-            { id: 'gpu', name: 'GPU Cluster', cost: 500, add: 5, icon: 'fa-server' },
-            { id: 'ai', name: 'AI Optimizer', cost: 2000, add: 20, icon: 'fa-brain' }
-        ];
-
-        // --- 3. CORE LOGIC ---
+        // --- 2. CORE ---
         async function init() {
             const doc = await db.collection("users").doc(uid).get();
             if(doc.exists) {
-                data = { ...data, ...doc.data() };
-                calculateOfflineEarnings();
+                const cloud = doc.data();
+                const now = Date.now();
+                const diff = (now - cloud.lastUpdate) / 1000;
+                const earned = Math.max(0, cloud.passRate * diff);
+                data = { ...cloud, bal: cloud.bal + earned, lastUpdate: now };
             } else {
                 await db.collection("users").doc(uid).set(data);
             }
 
             document.getElementById('h-username').innerText = user.first_name;
             updateUI();
-            renderBoosts();
-            
-            setTimeout(() => {
-                document.getElementById('splash').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
-            }, 2000);
 
-            // Passive Income - Fixed logic
+            // Passive Income Logic (Every 1s)
             setInterval(() => {
                 if(data.passRate > 0) {
-                    const now = Date.now();
-                    const diff = (now - data.lastUpdate) / 1000;
-                    data.bal += data.passRate * diff;
-                    data.lastUpdate = now;
+                    data.bal += data.passRate;
+                    data.lastUpdate = Date.now();
                     updateUI();
                 }
             }, 1000);
 
-            // Auto-save
-            setInterval(() => db.collection("users").doc(uid).set(data, {merge:true}), 10000);
-        }
-
-        function calculateOfflineEarnings() {
-            const now = Date.now();
-            const diff = (now - data.lastUpdate) / 1000;
-            if(diff > 5) {
-                const earned = data.passRate * diff;
-                data.bal += earned;
-                data.lastUpdate = now;
-            }
+            // Sync with Firebase (Every 10s)
+            setInterval(() => {
+                db.collection("users").doc(uid).set(data, {merge:true});
+            }, 10000);
         }
 
         function updateUI() {
@@ -300,12 +312,12 @@
             document.getElementById('st-passive').innerText = data.passRate + "/s";
         }
 
-        // --- 4. ACTIONS ---
+        // TAPPING
         document.getElementById('tap-btn').addEventListener('click', (e) => {
             data.bal += data.tapPwr;
             data.totalTaps += 1;
             updateUI();
-            tg.HapticFeedback.impactOccurred('light');
+            tg.HapticFeedback.impactOccurred('medium');
 
             const pop = document.createElement('div');
             pop.className = 'pop';
@@ -319,75 +331,51 @@
         function showPage(p, el) {
             document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
             document.querySelectorAll('.n-item').forEach(x => x.classList.remove('active'));
-            document.getElementById('page-'+p).classList.add('active');
+            document.getElementById('page-' + p).classList.add('active');
             el.classList.add('active');
             if(p === 'rank') loadRank();
         }
 
-        function renderBoosts() {
-            const list = document.getElementById('boost-list');
+        async function loadRank() {
+            const list = document.getElementById('rank-list');
+            const pod = document.getElementById('podium-area');
+            const snap = await db.collection("users").orderBy("bal", "desc").limit(15).get();
+            let users = [];
+            snap.forEach(d => users.push(d.data()));
+
+            pod.innerHTML = `
+                <div class="pod-user"><div class="pod-av"><i class="fas fa-user"></i></div><div class="pod-box p2">#2<br>2</div></div>
+                <div class="pod-user"><div class="pod-av first"><i class="fas fa-user"></i></div><div class="pod-box p1">#1<br>1</div></div>
+                <div class="pod-user"><div class="pod-av"><i class="fas fa-user"></i></div><div class="pod-box p3">#3<br>3</div></div>
+            `;
+
             list.innerHTML = "";
-            upgrades.forEach(u => {
-                const lvl = data.levels[u.id] || 0;
-                const cost = Math.floor(u.cost * Math.pow(1.5, lvl));
+            users.forEach((u, i) => {
                 list.innerHTML += `
-                    <div style="background:#0A0A0A; border:1px solid #111; padding:15px; border-radius:20px; display:flex; align-items:center; gap:15px; margin-bottom:10px;" onclick="buyBoost('${u.id}')">
-                        <div style="width:50px; height:50px; background:#111; border-radius:15px; display:flex; align-items:center; justify-content:center; color:var(--gold);"><i class="fas ${u.icon}"></i></div>
-                        <div style="flex:1;"><b>${u.name}</b><br><small style="color:var(--grey);">Lvl ${lvl}</small></div>
-                        <div style="font-weight:900;">${cost.toLocaleString()} <i class="fas fa-gem" style="color:var(--gold);"></i></div>
+                    <div style="background:var(--card); margin-bottom:10px; padding:20px; border-radius:25px; display:flex; align-items:center; gap:15px; border:1px solid #151515;">
+                        <b style="color:var(--grey); width:30px;">#${i+1}</b>
+                        <div style="flex:1;"><b>Player</b><br><small style="color:var(--grey);">Level ${1 + Math.floor(u.bal/200000)}</small></div>
+                        <div style="color:var(--gold); font-family:Orbitron; font-weight:900;">${(u.bal/1000).toFixed(1)}k <span style="font-size:10px;">GEM</span></div>
                     </div>
                 `;
             });
         }
 
-        function buyBoost(id) {
-            const u = upgrades.find(x => x.id === id);
-            const lvl = data.levels[id] || 0;
-            const cost = Math.floor(u.cost * Math.pow(1.5, lvl));
-
-            if(data.bal >= cost) {
-                data.bal -= cost;
-                data.levels[id]++;
-                if(id === 'tap') data.tapPwr += u.add;
-                else data.passRate += u.add;
-                updateUI();
-                renderBoosts();
-                tg.showAlert("Upgrade Successful!");
-            } else {
-                tg.showAlert("Insufficient Gems!");
-            }
+        function claimTask(amt, n) {
+            tg.showConfirm(`Initiate ${n}?`, (ok) => {
+                if(ok) {
+                    setTimeout(() => {
+                        data.bal += amt;
+                        updateUI();
+                        tg.showAlert("Success! GEM added.");
+                    }, 1500);
+                }
+            });
         }
 
         function withdraw() {
-            if(data.bal < 500000) {
-                tg.showAlert("Minimum withdraw is 500,000 GEM");
-                return;
-            }
-            tg.showPopup({
-                title: 'Withdraw Gems',
-                message: 'Enter your Wallet Address (TON/ETH):',
-                buttons: [{id: 'ok', type: 'default', text: 'Confirm'}]
-            }, (id) => {
-                tg.showAlert("Withdraw request sent! Protocol verifying...");
-            });
-        }
-
-        async function loadRank() {
-            const list = document.getElementById('rank-list');
-            list.innerHTML = "Loading...";
-            const snap = await db.collection("users").orderBy("bal", "desc").limit(10).get();
-            list.innerHTML = "";
-            let i = 1;
-            snap.forEach(doc => {
-                const d = doc.data();
-                list.innerHTML += `
-                    <div style="display:flex; align-items:center; gap:15px; padding:15px; border-bottom:1px solid #111;">
-                        <b style="color:var(--grey);">#${i++}</b>
-                        <div style="flex:1;"><b>Player</b></div>
-                        <div style="color:var(--gold); font-weight:900;">${Math.floor(d.bal).toLocaleString()}</div>
-                    </div>
-                `;
-            });
+            if(data.bal < 1000000) tg.showAlert("Min withdraw: 1,000,000 GEM");
+            else tg.showAlert("Protocol under maintenance.");
         }
 
         init();
