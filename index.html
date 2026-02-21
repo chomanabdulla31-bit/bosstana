@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GEMINI TITAN V13.0 - SUPREME</title>
+    <title>GEMINI TITAN V14 - SUPREME</title>
     
-    <!-- SDKs -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -18,88 +17,88 @@
         :root {
             --gold: #FFD700;
             --blue: #00D2FF;
-            --bg: #050505;
-            --card: #111111;
+            --dark-card: #0F0F0F;
+            --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 215, 0, 0.2);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body {
-            margin: 0; background-color: var(--bg); color: white;
+            margin: 0; background: #050505; color: white;
             font-family: 'Rajdhani', 'Noto Sans Arabic', sans-serif;
             overflow: hidden; user-select: none;
-            background: radial-gradient(circle at top, #1a1a05 0%, #050505 100%);
+            background: radial-gradient(circle at top right, #1a1a05 0%, #050505 100%);
         }
 
-        /* Loading Screen */
+        /* Splash Screen */
         #splash { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .loader-bar { width: 200px; height: 4px; background: #111; margin-top: 20px; border-radius: 10px; overflow: hidden; }
+        .loader-bar { width: 200px; height: 4px; background: #111; margin-top: 25px; border-radius: 10px; overflow: hidden; }
         .loader-fill { height: 100%; width: 0%; background: var(--gold); box-shadow: 0 0 15px var(--gold); transition: 0.3s; }
 
         .app-container { display: none; height: 100vh; flex-direction: column; }
         
         /* Header */
-        header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.85); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); }
-        .u-info { display: flex; align-items: center; gap: 10px; }
-        .u-info img { width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--gold); }
+        header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.85); border-bottom: 1px solid var(--border); backdrop-filter: blur(15px); }
+        .u-info { display: flex; align-items: center; gap: 12px; }
+        .u-info img { width: 45px; height: 45px; border-radius: 14px; border: 2px solid var(--gold); object-fit: cover; box-shadow: 0 0 10px rgba(255,215,0,0.2); }
 
         /* Pages */
-        .content { flex-grow: 1; overflow-y: auto; padding: 20px; padding-bottom: 110px; scrollbar-width: none; }
+        .content { flex-grow: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; scrollbar-width: none; }
         .content::-webkit-scrollbar { display: none; }
-        .page { display: none; animation: slideUp 0.4s ease; }
+        .page { display: none; animation: slideFade 0.4s ease; }
         .page.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideFade { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Mine UI */
         .hero { text-align: center; margin: 10px 0 30px; }
-        .hero h1 { font-family: 'Orbitron'; font-size: 45px; color: var(--gold); margin: 5px 0; text-shadow: 0 0 25px rgba(255,215,0,0.4); }
-        .coin-trigger { width: 250px; height: 250px; margin: 0 auto; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, #222 0%, #000 100%); border: 8px solid #111; cursor: pointer; position: relative; box-shadow: 0 0 40px #000; }
-        .coin-trigger img { width: 140px; filter: drop-shadow(0 0 15px var(--gold)); transition: 0.1s; }
-        .coin-trigger:active img { transform: scale(0.92); }
+        .hero h1 { font-family: 'Orbitron'; font-size: 48px; color: var(--gold); margin: 5px 0; text-shadow: 0 0 30px rgba(255,215,0,0.4); }
+        .coin-box { width: 260px; height: 260px; margin: 0 auto; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, #222 0%, #000 100%); border: 8px solid #111; cursor: pointer; position: relative; box-shadow: 0 0 50px #000; }
+        .coin-box img { width: 150px; filter: drop-shadow(0 0 15px var(--gold)); transition: 0.1s; }
+        .coin-box:active img { transform: scale(0.9); }
 
-        /* Cards & Grids */
-        .glass-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 15px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .item-card { background: #080808; border: 1px solid #222; padding: 15px; border-radius: 18px; text-align: center; cursor: pointer; border-bottom: 3px solid #222; }
-        .item-card:active { transform: scale(0.96); border-bottom-width: 1px; }
-        .item-card i { font-size: 30px; color: var(--gold); margin-bottom: 10px; display: block; }
+        /* Generic Cards */
+        .glass-card { background: var(--dark-card); border: 1px solid var(--border); border-radius: 24px; padding: 20px; margin-bottom: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        /* Profile UI Specialized */
+        .profile-header { position: relative; text-align: center; margin-bottom: 25px; }
+        .profile-img-container { position: relative; display: inline-block; }
+        .profile-img-container img { width: 110px; height: 110px; border-radius: 30px; border: 3px solid var(--gold); object-fit: cover; }
+        .edit-badge { position: absolute; bottom: -5px; right: -5px; background: var(--blue); color: #000; width: 30px; height: 30px; border-radius: 10px; display: flex; justify-content: center; align-items: center; border: 2px solid #000; font-size: 14px; }
 
-        /* Social/Video Rows */
-        .row { display: flex; align-items: center; gap: 15px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .row-icon { width: 45px; height: 45px; background: #000; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #222; }
+        .av-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 15px; max-height: 180px; overflow-y: auto; padding: 5px; }
+        .av-img { width: 100%; aspect-ratio: 1; border-radius: 12px; border: 2px solid transparent; cursor: pointer; transition: 0.2s; object-fit: cover; }
+        .av-img.selected { border-color: var(--gold); transform: scale(1.05); }
 
-        /* Chat */
-        .chat-area { height: 250px; overflow-y: auto; background: #000; border-radius: 15px; padding: 15px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; }
-        .msg { max-width: 80%; padding: 10px; border-radius: 12px; font-size: 13px; }
-        .msg.support { align-self: flex-start; background: #222; color: var(--gold); }
-        .msg.me { align-self: flex-end; background: var(--gold); color: #000; }
+        /* Chat UI Supreme */
+        .chat-window { height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 15px; background: #080808; border-radius: 20px; border: 1px solid #1a1a1a; margin-bottom: 12px; }
+        .bubble { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 14px; position: relative; line-height: 1.5; }
+        .bubble.admin { align-self: flex-start; background: #1a1a1a; color: #eee; border-bottom-left-radius: 4px; border: 1px solid #333; }
+        .bubble.me { align-self: flex-end; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; font-weight: 600; border-bottom-right-radius: 4px; }
+        .chat-input-group { display: flex; gap: 10px; }
 
         /* Nav Bar */
-        nav { position: fixed; bottom: 15px; left: 15px; right: 15px; height: 80px; background: rgba(10,10,10,0.95); backdrop-filter: blur(15px); border-radius: 25px; border: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+        nav { position: fixed; bottom: 20px; left: 15px; right: 15px; height: 80px; background: rgba(10,10,10,0.96); backdrop-filter: blur(20px); border-radius: 30px; border: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -10px 40px rgba(0,0,0,0.8); }
         .n-item { text-align: center; color: #444; font-size: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .n-item.active { color: var(--gold); transform: translateY(-5px); }
-        .n-item i { font-size: 22px; display: block; margin-bottom: 4px; }
+        .n-item.active { color: var(--gold); }
+        .n-item i { font-size: 24px; display: block; margin-bottom: 5px; text-shadow: 0 0 10px currentColor; }
 
-        /* Avatar Grid */
-        .av-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 15px; }
-        .av-img { width: 100%; aspect-ratio: 1; border-radius: 10px; border: 2px solid transparent; cursor: pointer; }
-        .av-img.selected { border-color: var(--gold); }
+        /* Buttons & Inputs */
+        .btn-prime { width: 100%; background: linear-gradient(45deg, var(--gold), #ff8c00); color: #000; border: none; padding: 16px; border-radius: 16px; font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,215,0,0.2); }
+        .btn-prime:active { transform: scale(0.98); }
+        input { width: 100%; background: #000; border: 1px solid #222; padding: 14px; border-radius: 14px; color: white; margin-bottom: 12px; font-family: inherit; }
+        input:focus { border-color: var(--gold); }
 
-        /* Buttons */
-        .gold-btn { width: 100%; background: var(--gold); color: #000; border: none; padding: 15px; border-radius: 15px; font-weight: 900; font-size: 14px; cursor: pointer; text-transform: uppercase; }
-        input, textarea { width: 100%; background: #000; border: 1px solid #222; padding: 12px; border-radius: 12px; color: white; margin-bottom: 10px; font-family: inherit; }
-
-        /* Tap Anim */
-        .pop { position: absolute; color: white; font-weight: 900; font-size: 38px; pointer-events: none; animation: floatUp 0.8s forwards; text-shadow: 0 0 10px gold; }
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-150px); } }
+        /* Animation Pop */
+        .pop { position: absolute; color: white; font-weight: 900; font-size: 38px; pointer-events: none; animation: floatUp 0.8s forwards; text-shadow: 0 0 15px var(--gold); }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-160px); } }
     </style>
 </head>
 <body>
 
-    <!-- Splash -->
+    <!-- Splash Screen -->
     <div id="splash">
         <img src="https://cdn-icons-png.flaticon.com/512/2163/2163350.png" width="100" style="filter: drop-shadow(0 0 20px gold);">
-        <h2 style="font-family:'Orbitron'; color:gold; margin-top:20px; letter-spacing:4px;">GEMINI TITAN V13</h2>
+        <h2 style="font-family:'Orbitron'; color:gold; margin-top:20px; letter-spacing:5px;">TITAN SUPREME</h2>
         <div class="loader-bar"><div class="loader-fill" id="load-f"></div></div>
     </div>
 
@@ -108,9 +107,9 @@
         <header>
             <div class="u-info">
                 <img id="top-av" src="">
-                <div><b id="top-n">...</b><br><span style="color:gold; font-size:10px;">TITAN ELITE</span></div>
+                <div><b id="top-n">...</b><br><span style="color:gold; font-size:10px; letter-spacing:1px;">SUPREME TITAN</span></div>
             </div>
-            <div onclick="toggleLang()" style="border:1px solid gold; color:gold; padding:5px 10px; border-radius:8px; font-size:12px; font-weight:bold;">KU/EN</div>
+            <div onclick="toggleLang()" style="border:1.5px solid gold; color:gold; padding:6px 12px; border-radius:10px; font-size:12px; font-weight:bold; cursor:pointer;">KU/EN</div>
         </header>
 
         <div class="content">
@@ -118,142 +117,106 @@
             <!-- PAGE: MINE -->
             <div id="p-mine" class="page active">
                 <div class="hero">
-                    <p style="font-size:11px; color:#666; letter-spacing:2px;" data-i18n="total">TOTAL GEMS BALANCE</p>
+                    <p style="font-size:12px; color:#555; letter-spacing:2px;" data-i18n="total">TOTAL GEMS BALANCE</p>
                     <h1 id="bal">0</h1>
-                    <div style="color:var(--blue); font-size:14px; font-weight:bold;">⚡ +<span id="pass">0</span> /S <span data-i18n="passive">PASSIVE</span></div>
+                    <div style="color:var(--blue); font-size:15px; font-weight:bold;">⚡ +<span id="pass">0</span> /S <span data-i18n="passive">PASSIVE</span></div>
                 </div>
 
-                <div class="coin-trigger" id="tap-btn">
+                <div class="coin-box" id="tap-btn">
                     <img src="https://cdn-icons-png.flaticon.com/512/2163/2163350.png">
                 </div>
 
                 <div class="glass-card" style="margin-top:40px;">
-                    <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:13px;">
-                        <span data-i18n="energy">ENERGY SYNC</span>
+                    <div style="display:flex; justify-content:space-between; font-weight:900; font-size:13px; color:var(--blue);">
+                        <span data-i18n="energy">ENERGY CORE</span>
                         <span id="en-txt">1000/1000</span>
                     </div>
-                    <div style="height:12px; background:#000; border-radius:10px; margin-top:10px; border:1px solid #222; overflow:hidden;">
-                        <div id="en-bar" style="height:100%; width:100%; background:linear-gradient(90deg, gold, orange); transition:0.3s;"></div>
+                    <div style="height:14px; background:#000; border-radius:10px; margin-top:10px; border:1px solid #1a1a1a; overflow:hidden;">
+                        <div id="en-bar" style="height:100%; width:100%; background:linear-gradient(90deg, #FFD700, #ff8c00); transition:0.3s; box-shadow: 0 0 10px var(--gold);"></div>
                     </div>
                 </div>
             </div>
 
             <!-- PAGE: BOOST & CARDS -->
             <div id="p-boost" class="page">
-                <h2 data-i18n="cards" style="font-family:'Orbitron'; color:gold;">SPECIAL CARDS</h2>
-                <div class="grid-2">
-                    <div class="item-card" onclick="buyCard('gpu', 5000, 50)">
-                        <i class="fas fa-microchip"></i>
-                        <b>GPU Miner</b><br><small>+50/s</small>
-                        <div style="color:gold; font-size:11px; margin-top:5px;">5,000</div>
-                    </div>
-                    <div class="item-card" onclick="buyCard('ai', 20000, 250)">
-                        <i class="fas fa-robot"></i>
-                        <b>AI Bot</b><br><small>+250/s</small>
-                        <div style="color:gold; font-size:11px; margin-top:5px;">20,000</div>
-                    </div>
-                    <div class="item-card" onclick="buyCard('quant', 100000, 1500)">
-                        <i class="fas fa-atom"></i>
-                        <b>Quantum</b><br><small>+1500/s</small>
-                        <div style="color:gold; font-size:11px; margin-top:5px;">100,000</div>
-                    </div>
-                    <div class="item-card" onclick="buyCard('sat', 500000, 8000)">
-                        <i class="fas fa-satellite"></i>
-                        <b>Satellite</b><br><small>+8000/s</small>
-                        <div style="color:gold; font-size:11px; margin-top:5px;">500,000</div>
-                    </div>
-                </div>
-
-                <h2 style="margin-top:30px; font-family:'Orbitron'; color:gold;">DAILY COMBO</h2>
-                <div class="glass-card" style="text-align:center;">
-                    <p style="font-size:12px; color:#888;">Find 3 secret cards to win 5,000,000 GEMS!</p>
-                    <div style="display:flex; justify-content:center; gap:10px; margin:15px 0;">
-                        <div style="width:60px; height:80px; background:#000; border:2px dashed gold; border-radius:12px;"></div>
-                        <div style="width:60px; height:80px; background:#000; border:2px dashed gold; border-radius:12px;"></div>
-                        <div style="width:60px; height:80px; background:#000; border:2px dashed gold; border-radius:12px;"></div>
-                    </div>
-                    <button class="gold-btn" style="padding:10px;" onclick="tg.showAlert('بەیانی وەرەوە!')">CLAIM COMBO</button>
+                <h2 data-i18n="cards" style="font-family:'Orbitron'; color:gold;">MINING CARDS</h2>
+                <div class="grid-2" id="cards-grid">
+                    <!-- Cards are generated via JS for cleaner code -->
                 </div>
             </div>
 
             <!-- PAGE: TASKS -->
             <div id="p-tasks" class="page">
-                <h2 data-i18n="tasks" style="font-family:'Orbitron'; color:gold;">PROTOCOLS</h2>
+                <h2 data-i18n="tasks" style="font-family:'Orbitron'; color:gold;">EARN PROTOCOLS</h2>
                 <div class="glass-card">
-                    <div class="row" onclick="watchAd(50000)">
-                        <div class="row-icon" style="color:gold;"><i class="fas fa-play-circle"></i></div>
-                        <div style="flex:1"><b>Watch Video (30s)</b><br><small>+50,000 GEMS</small></div>
+                    <div style="display:flex; align-items:center; gap:15px; padding:15px; background:rgba(255,215,0,0.05); border-radius:15px; margin-bottom:15px;" onclick="watchAd(100000)">
+                        <div style="font-size:30px; color:gold;"><i class="fas fa-play-circle"></i></div>
+                        <div style="flex:1"><b>Video Reward</b><br><small>+100,000 GEMS</small></div>
                         <i class="fas fa-chevron-right"></i>
                     </div>
-                    <div class="row" onclick="tg.openTelegramLink('https://t.me/yourlink')">
-                        <div class="row-icon" style="color:#24A1DE;"><i class="fab fa-telegram"></i></div>
-                        <div style="flex:1"><b>Join Telegram</b><br><small>+100,000 GEMS</small></div>
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <div class="row" onclick="tg.openLink('https://twitter.com/yourlink')">
-                        <div class="row-icon"><i class="fab fa-twitter"></i></div>
-                        <div style="flex:1"><b>Follow Twitter (X)</b><br><small>+100,000 GEMS</small></div>
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <div class="row" onclick="tg.openLink('https://tiktok.com/@yourlink')">
-                        <div class="row-icon" style="color:#ff0050;"><i class="fab fa-tiktok"></i></div>
-                        <div style="flex:1"><b>Follow TikTok</b><br><small>+100,000 GEMS</small></div>
-                        <i class="fas fa-check"></i>
-                    </div>
+                    <div id="social-list"></div>
                 </div>
-
-                <h2 style="margin-top:25px; font-family:'Orbitron'; color:gold;">SQUAD SYNC</h2>
+                
+                <h2 style="font-family:'Orbitron'; color:gold; margin-top:25px;">SQUAD INVITE</h2>
                 <div class="glass-card" style="text-align:center;">
-                    <i class="fas fa-user-plus" style="font-size:40px; color:gold; margin-bottom:10px;"></i>
+                    <i class="fas fa-user-group" style="font-size:40px; color:var(--blue); margin-bottom:15px;"></i>
                     <h1 id="f-count" style="margin:0;">0</h1>
                     <p data-i18n="friend_d">Invite friends to get 50,000 GEMS!</p>
-                    <button class="gold-btn" onclick="invite()">INVITE FRIEND</button>
-                </div>
-            </div>
-
-            <!-- PAGE: WALLET -->
-            <div id="p-wallet" class="page">
-                <h2 data-i18n="wallet" style="font-family:'Orbitron'; color:gold;">CASH OUT</h2>
-                <div class="grid-2">
-                    <div class="item-card" onclick="selW('ZainCash')"><i class="fas fa-mobile-alt"></i>ZainCash</div>
-                    <div class="item-card" onclick="selW('TON')"><i class="fas fa-gem"></i>TON</div>
-                    <div class="item-card" onclick="selW('ETH')"><i class="fab fa-ethereum"></i>ETH</div>
-                    <div class="item-card" onclick="selW('GooglePlay')"><i class="fab fa-google-play"></i>Gift Cards</div>
-                </div>
-                <div class="glass-card" style="margin-top:20px;">
-                    <input type="text" id="w-in" placeholder="Enter Number / Address">
-                    <button class="gold-btn" onclick="withdraw()">SUBMIT WITHDRAWAL</button>
-                    <p style="text-align:center; font-size:10px; color:#555; margin-top:10px;">Min: 10,000,000 GEMS</p>
+                    <button class="btn-prime" onclick="invite()">INVITE LINK</button>
                 </div>
             </div>
 
             <!-- PAGE: PROFILE & SUPPORT -->
             <div id="p-profile" class="page">
-                <h2 data-i18n="profile" style="font-family:'Orbitron'; color:gold;">TITAN IDENTITY</h2>
-                <div class="glass-card" style="text-align:center;">
-                    <img id="p-av" src="" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--gold);">
-                    <input type="text" id="p-name" style="text-align:center; margin-top:15px; font-weight:bold;">
-                    <button class="gold-btn" style="padding:10px;" onclick="saveP()">SAVE NAME</button>
-                    
+                <h2 data-i18n="profile" style="font-family:'Orbitron'; color:gold;">IDENTITY CORE</h2>
+                <div class="glass-card">
+                    <div class="profile-header">
+                        <div class="profile-img-container">
+                            <img id="p-av" src="">
+                            <div class="edit-badge"><i class="fas fa-pen"></i></div>
+                        </div>
+                    </div>
+                    <input type="text" id="p-name" placeholder="Enter Display Name" style="text-align:center; font-weight:bold; font-size:18px;">
+                    <input type="text" id="p-custom-av" placeholder="Paste Image URL (Optional)" style="text-align:center; font-size:12px; border-style:dashed;">
+                    <button class="btn-prime" onclick="saveP()">UPDATE IDENTITY</button>
+
+                    <h4 style="margin:20px 0 10px; font-size:13px; color:var(--blue);">ELITE AVATAR SELECTION</h4>
                     <div class="av-grid" id="av-grid"></div>
                 </div>
 
-                <h2 style="margin-top:30px; font-family:'Orbitron'; color:var(--blue);">SUPPORT CHAT</h2>
+                <h2 style="margin-top:30px; font-family:'Orbitron'; color:var(--blue);">DIRECT SUPPORT</h2>
                 <div class="glass-card">
-                    <div class="chat-area" id="chat">
-                        <div class="msg support">سڵاو! چۆن دەتوانین یارمەتیت بدەین؟</div>
+                    <div class="chat-window" id="chat">
+                        <div class="bubble admin">سڵاو بەڕێزم! چۆن دەتوانین یارمەتیت بدەین؟</div>
                     </div>
-                    <div style="display:flex; gap:10px;">
-                        <input type="text" id="c-in" placeholder="Message..." style="margin:0;">
-                        <button class="gold-btn" style="width:80px; padding:0;" onclick="sendC()">SEND</button>
+                    <div class="chat-input-group">
+                        <input type="text" id="c-in" placeholder="Write message..." style="margin:0;">
+                        <button class="btn-prime" style="width:80px; padding:0;" onclick="sendC()"><i class="fas fa-paper-plane"></i></button>
                     </div>
                 </div>
             </div>
 
             <!-- PAGE: RANK -->
             <div id="p-rank" class="page">
-                <h2 data-i18n="rank" style="font-family:'Orbitron'; color:gold;">GLOBAL RANK</h2>
+                <h2 data-i18n="rank" style="font-family:'Orbitron'; color:gold;">TITAN RANKINGS</h2>
                 <div id="rank-list"></div>
+            </div>
+
+            <!-- PAGE: WALLET -->
+            <div id="p-wallet" class="page">
+                <h2 data-i18n="wallet" style="font-family:'Orbitron'; color:gold;">CASH OUT</h2>
+                <div class="glass-card">
+                    <div class="grid-2">
+                        <div class="item-card" onclick="selW('ZainCash', this)" style="background:#111; padding:15px; border-radius:15px; text-align:center; border:1px solid #222;">
+                            <i class="fas fa-mobile-screen" style="font-size:24px; color:var(--gold);"></i><br><small>ZainCash</small>
+                        </div>
+                        <div class="item-card" onclick="selW('TON', this)" style="background:#111; padding:15px; border-radius:15px; text-align:center; border:1px solid #222;">
+                            <i class="fas fa-gem" style="font-size:24px; color:var(--blue);"></i><br><small>TON</small>
+                        </div>
+                    </div>
+                    <input type="text" id="w-in" placeholder="Account Number / Wallet Address" style="margin-top:20px;">
+                    <button class="btn-prime" onclick="withdraw()">SUBMIT WITHDRAWAL</button>
+                </div>
             </div>
 
         </div>
@@ -262,15 +225,15 @@
         <nav>
             <div class="n-item active" onclick="go('mine',this)"><i class="fas fa-hammer"></i>MINE</div>
             <div class="n-item" onclick="go('boost',this)"><i class="fas fa-rocket"></i>CARDS</div>
-            <div class="n-item" onclick="go('tasks',this)"><i class="fas fa-tasks"></i>TASKS</div>
+            <div class="n-item" onclick="go('tasks',this)"><i class="fas fa-tasks-check"></i>TASKS</div>
             <div class="n-item" onclick="go('wallet',this)"><i class="fas fa-wallet"></i>WALLET</div>
-            <div class="n-item" onclick="go('profile',this)"><i class="fas fa-user-circle"></i>PROFILE</div>
+            <div class="n-item" onclick="go('profile',this)"><i class="fas fa-user-astronaut"></i>PROFILE</div>
             <div class="n-item" onclick="go('rank',this)"><i class="fas fa-trophy"></i>RANK</div>
         </nav>
     </div>
 
     <script>
-        // --- CONFIG ---
+        // --- CONFIG & DATA ---
         const firebaseConfig = {
             apiKey: "AIzaSyBMN49BmTeQ4OaFbSuiC2AaELHdkOuc_8U",
             authDomain: "geminicoins-9f1a5.firebaseapp.com",
@@ -285,21 +248,21 @@
         tg.expand();
 
         const AD_ID = "23328";
-        const user = tg.initDataUnsafe.user || { id: "dev_999", first_name: "Titan_Supreme" };
+        const user = tg.initDataUnsafe.user || { id: "dev_user_99", first_name: "Titan" };
         const uid = String(user.id);
 
         let data = {
             bal: 0, en: 1000, max: 1000, pass: 0, 
-            name: user.first_name, av: "https://i.pravatar.cc/150?u=1",
+            name: user.first_name, av: "https://i.pravatar.cc/150?u=titan",
             friends: 0, lang: "KU", method: "ZainCash"
         };
 
-        const texts = {
-            KU: { total: "کۆی گێمەکان", passive: "خۆکار", energy: "وزەی پڕۆتۆکۆڵ", cards: "کارتەکان", tasks: "ئەرکەکان", wallet: "کێشانەوە", profile: "پڕۆفایل", rank: "ڕیزبەندی", friend_d: "هاوڕێکانت بانگهێشت بکە بۆ بردنەوەی ٥٠ هەزار!" },
-            EN: { total: "TOTAL GEMS", passive: "PASSIVE", energy: "ENERGY SYNC", cards: "CARDS", tasks: "TASKS", wallet: "WITHDRAW", profile: "PROFILE", rank: "RANK", friend_d: "Invite friends to get 50,000 GEMS!" }
+        const translations = {
+            KU: { total: "کۆی گێمەکان", passive: "داهاتی خۆکار", energy: "سەرچاوەی وزە", cards: "کارتەکان", tasks: "ئەرکەکان", wallet: "کێشانەوە", profile: "پڕۆفایل", rank: "ڕیزبەندی", friend_d: "هاوڕێکانت بانگهێشت بکە بۆ بردنەوەی ٥٠ هەزار گێم!" },
+            EN: { total: "TOTAL GEMS", passive: "PASSIVE", energy: "ENERGY CORE", cards: "CARDS", tasks: "TASKS", wallet: "WITHDRAW", profile: "PROFILE", rank: "RANK", friend_d: "Invite friends to get 50,000 GEMS!" }
         };
 
-        // --- CORE ---
+        // --- CORE SYSTEM ---
         async function init() {
             const doc = await db.collection("users").doc(uid).get();
             if(doc.exists) data = { ...data, ...doc.data() };
@@ -308,7 +271,9 @@
             updateUI();
             applyLang();
             buildAvatars();
+            loadCards();
 
+            // Splash Animation
             let p = 0;
             const loader = setInterval(() => {
                 p += 20;
@@ -320,14 +285,14 @@
                 }
             }, 150);
 
+            // Loops
             setInterval(() => {
-                if(data.pass > 0) data.bal += data.pass;
+                if(data.pass > 0) data.bal += (data.pass / 1);
                 if(data.en < data.max) data.en = Math.min(data.max, data.en + 5);
                 updateUI();
             }, 1000);
 
             setInterval(() => db.collection("users").doc(uid).set(data, {merge:true}), 5000);
-            loadRank();
         }
 
         function updateUI() {
@@ -342,7 +307,7 @@
             document.getElementById('f-count').innerText = data.friends;
         }
 
-        // --- TAP ---
+        // --- TAP SYSTEM ---
         document.getElementById('tap-btn').addEventListener('touchstart', (e) => {
             e.preventDefault();
             const count = e.touches.length;
@@ -361,29 +326,37 @@
             }
         });
 
-        // --- UPGRADES ---
-        function buyCard(type, cost, p) {
+        // --- CARDS & UPGRADES ---
+        function loadCards() {
+            const grid = document.getElementById('cards-grid');
+            const cardTypes = [
+                { id: 'gpu', n: 'GPU Miner', c: 5000, p: 50, i: 'fa-microchip' },
+                { id: 'ai', n: 'AI Protocol', c: 20000, p: 250, i: 'fa-robot' },
+                { id: 'quant', n: 'Quantum CPU', c: 100000, p: 1500, i: 'fa-atom' },
+                { id: 'sat', n: 'Satellite Node', c: 500000, p: 8000, i: 'fa-satellite' }
+            ];
+            grid.innerHTML = cardTypes.map(c => `
+                <div class="item-card" onclick="buyCard('${c.id}', ${c.c}, ${c.p})" style="background:#111; padding:20px; border-radius:20px; text-align:center; border:1px solid #222; border-bottom:4px solid #222;">
+                    <i class="fas ${c.i}" style="font-size:30px; color:gold; margin-bottom:10px;"></i><br>
+                    <b>${c.n}</b><br><small>+${c.p}/s</small>
+                    <div style="color:gold; font-size:12px; margin-top:8px; font-weight:bold;">${c.c.toLocaleString()}</div>
+                </div>
+            `).join('');
+        }
+
+        function buyCard(id, cost, p) {
             if(data.bal >= cost) {
                 data.bal -= cost; data.pass += p;
-                updateUI(); tg.showAlert("Success!");
-            } else tg.showAlert("No GEMS!");
+                updateUI(); tg.showAlert("Purchase Successful! 🚀");
+            } else tg.showAlert("Insufficient Gems!");
         }
 
-        function watchAd(r) {
-            if(!window.Adsgram) return;
-            const ad = window.Adsgram.init({ blockId: AD_ID });
-            ad.show().then(() => {
-                data.bal += r; updateUI();
-                tg.showAlert("Reward Claimed!");
-            }).catch(() => tg.showAlert("Video Failed."));
-        }
-
-        // --- PROFILE & RANK ---
+        // --- PROFILE & CHAT ---
         function buildAvatars() {
             const grid = document.getElementById('av-grid');
             for(let i=1; i<=20; i++) {
                 const img = document.createElement('img');
-                const url = `https://i.pravatar.cc/150?u=${i+10}`;
+                const url = `https://i.pravatar.cc/150?u=${i+200}`;
                 img.src = url; img.className = 'av-img';
                 img.onclick = () => {
                     data.av = url;
@@ -397,78 +370,106 @@
 
         function saveP() {
             const n = document.getElementById('p-name').value;
-            if(n) { data.name = n; updateUI(); tg.showAlert("Saved!"); }
+            const customAv = document.getElementById('p-custom-av').value;
+            if(n) data.name = n;
+            if(customAv) data.av = customAv;
+            updateUI(); 
+            tg.showAlert("Identity Synchronized! ✅");
         }
 
-        async function loadRank() {
-            const list = document.getElementById('rank-list');
-            const snap = await db.collection("users").orderBy("bal", "desc").limit(15).get();
-            list.innerHTML = "";
-            let i = 1;
-            snap.forEach(doc => {
-                const d = doc.data();
-                list.innerHTML += `<div class="row">
-                    <b style="width:25px; color:gold;">#${i}</b>
-                    <img src="${d.av}" style="width:30px; border-radius:50%;">
-                    <div style="flex:1"><b>${d.name}</b></div>
-                    <div>${Math.floor(d.bal).toLocaleString()}</div>
-                </div>`;
-                i++;
-            });
-        }
-
-        // --- SUPPORT ---
         function sendC() {
             const val = document.getElementById('c-in').value;
             if(!val) return;
+            const chat = document.getElementById('chat');
             const d = document.createElement('div');
-            d.className = 'msg me'; d.innerText = val;
-            document.getElementById('chat').appendChild(d);
+            d.className = 'bubble me'; d.innerText = val;
+            chat.appendChild(d);
+            chat.scrollTop = chat.scrollHeight;
             document.getElementById('c-in').value = "";
             db.collection("support").add({ uid, msg: val, date: Date.now() });
+            
             setTimeout(() => {
                 const s = document.createElement('div');
-                s.className = 'msg support'; s.innerText = "Support: نامەکەت گەیشت، بەم زووانە وەڵامت دەدەینەوە.";
-                document.getElementById('chat').appendChild(s);
-            }, 1000);
+                s.className = 'bubble admin'; s.innerText = "نامەکەت گەیشتە تیمی پشتگیری، بەم زووانە وەڵامت دەدەینەوە.";
+                chat.appendChild(s);
+                chat.scrollTop = chat.scrollHeight;
+            }, 1200);
         }
 
-        // --- WALLET ---
-        function selW(m) { data.method = m; tg.showAlert("Selected: " + m); }
+        // --- RANKING ---
+        async function loadRank() {
+            const list = document.getElementById('rank-list');
+            list.innerHTML = `<p style="text-align:center; color:gray;">Syncing rankings...</p>`;
+            try {
+                const snap = await db.collection("users").orderBy("bal", "desc").limit(20).get();
+                list.innerHTML = "";
+                let i = 1;
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    list.innerHTML += `
+                        <div style="display:flex; align-items:center; gap:12px; padding:12px; background:rgba(255,255,255,0.02); border-radius:15px; margin-bottom:8px; border:1px solid rgba(255,215,0,0.05);">
+                            <b style="width:25px; color:${i<=3?'gold':'#555'}; font-family:'Orbitron';">#${i}</b>
+                            <img src="${d.av}" style="width:35px; height:35px; border-radius:50%; border:1.5px solid ${i<=3?'gold':'#222'};">
+                            <div style="flex:1"><b>${d.name}</b></div>
+                            <div style="font-weight:bold; color:gold;">${Math.floor(d.bal).toLocaleString()}</div>
+                        </div>`;
+                    i++;
+                });
+            } catch(e) { list.innerHTML = "<p>Failed to load rank.</p>"; }
+        }
+
+        // --- WALLET & OTHERS ---
+        function selW(m, el) { 
+            data.method = m; 
+            document.querySelectorAll('.item-card').forEach(c => c.style.borderColor = '#222');
+            el.style.borderColor = 'gold';
+            tg.showAlert("Method Selected: " + m); 
+        }
+
         function withdraw() {
             const val = document.getElementById('w-in').value;
-            if(!val) return tg.showAlert("Enter Details!");
-            if(data.bal < 10000000) return tg.showAlert("Need 10M GEMS!");
-            db.collection("withdrawals").add({ uid, method: data.method, info: val, amount: data.bal, date: Date.now() });
-            data.bal = 0; updateUI(); tg.showAlert("Request Sent!");
+            if(!val) return tg.showAlert("Please enter details!");
+            if(data.bal < 10000000) return tg.showAlert("Minimum 10M GEMS required.");
+            db.collection("withdrawals").add({ uid, method: data.method, info: val, amount: data.bal, date: Date.now(), status: 'pending' });
+            data.bal = 0; updateUI();
+            tg.showAlert("Request Submitted! 🏦");
+        }
+
+        function watchAd(r) {
+            if(!window.Adsgram) return;
+            const ad = window.Adsgram.init({ blockId: AD_ID });
+            ad.show().then(() => {
+                data.bal += r; updateUI();
+                tg.showAlert("Sync Reward: +100k GEMS! 🎬");
+            }).catch(() => tg.showAlert("Video stream failed."));
         }
 
         function invite() {
             const link = `https://t.me/GeminicoinBot?start=${uid}`;
-            tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Join me on Gemini Titan!`);
+            tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Join Gemini Titan Supreme and earn 50k GEMS! 💎`);
         }
 
-        // --- UTILS ---
         function go(p, el) {
             document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
             document.querySelectorAll('.n-item').forEach(ni => ni.classList.remove('active'));
             document.getElementById('p-'+p).classList.add('active');
             el.classList.add('active');
+            if(p === 'rank') loadRank();
             tg.HapticFeedback.selectionChanged();
         }
 
         function toggleLang() {
-            data.lang = data.lang === 'KU' ? 'EN' : 'KU';
+            data.lang = (data.lang === "KU") ? "EN" : "KU";
             applyLang();
         }
 
         function applyLang() {
-            const cur = texts[data.lang];
+            const cur = translations[data.lang];
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const k = el.getAttribute('data-i18n');
                 if(cur[k]) el.innerText = cur[k];
             });
-            document.dir = data.lang === 'KU' ? 'rtl' : 'ltr';
+            document.dir = (data.lang === "KU") ? "rtl" : "ltr";
         }
 
         init();
