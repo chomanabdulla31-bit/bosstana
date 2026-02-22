@@ -261,7 +261,7 @@
         // --- 2. ADSGRAM SDK ---
         const AdController = window.Adsgram ? window.Adsgram.init({ blockId: "23459" }) : null;
 
-        // --- 3. APP GLOBAL STATE ---
+        // --- 3. APP GLOBAL STATE (SYNCED WITH DB NAMES) ---
         const tg = window.Telegram.WebApp;
         tg.expand();
         const user = tg.initDataUnsafe.user || { id: "0000", first_name: "Geminian" };
@@ -320,7 +320,7 @@
                 runMainLoops();
                 renderUpgradeList();
             } catch(error) {
-                console.error("Critical Error:", error);
+                console.error("Critical Error during Bootstrap:", error);
             }
         }
 
@@ -354,7 +354,7 @@
                 }
             }, 100);
 
-            // Periodic Firebase Sync
+            // Periodic Firebase Sync every 20s
             setInterval(syncToFirebase, 20000);
         }
 
@@ -362,6 +362,7 @@
             appState.last = Date.now();
             try {
                 await db.collection("users").doc(uid).set(appState, {merge: true});
+                console.log("Database Sync Completed");
             } catch(e) { console.error("Sync Error", e); }
         }
 
@@ -450,7 +451,10 @@
                     appState.bal += amt; refreshUI(); syncToFirebase();
                     tg.showAlert(`+${amt.toLocaleString()} GEM SECURED!`);
                 }
-            } catch(e) { tg.showAlert("ڕیکلام لە ئێستادا بەردەست نییە."); }
+            } catch(e) { 
+                console.log(e);
+                tg.showAlert("Ads currently unavailable."); 
+            }
         }
 
         function renderUpgradeList() {
@@ -516,19 +520,19 @@
                     ctx.drawImage(img, 0, 0, 120, 120);
                     appState.av = canvas.toDataURL('image/jpeg', 0.6);
                     updateUIStrings(); syncToFirebase();
-                    tg.showAlert("پڕۆفایل نوێکرایەوە!");
+                    tg.showAlert("Profile Updated!");
                 };
             };
             reader.readAsDataURL(file);
         });
 
         function initWithdraw(method) {
-            if(appState.bal < 1000000) return tg.showAlert("پێویستت بە 1,000,000 کۆینە!");
+            if(appState.bal < 1000000) return tg.showAlert("1M GEM Required!");
             tg.showAlert(`داواکاری بۆ ڕاکێشانی ١ دۆلار لەرێگەی ${method} نێردرا.`);
         }
 
         function inviteFriend() {
-            tg.openTelegramLink(`https://t.me/share/url?url=https://t.me/Geminicoins_bot?start=${uid}&text=Join and earn! 💎`);
+            tg.openTelegramLink(`https://t.me/share/url?url=https://t.me/kurd4coin_bot/play?start=${uid}&text=Join me and earn! 💎`);
         }
 
         // Start Application
