@@ -16,8 +16,15 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap');
 
         :root {
-            --gold: #FFD700; --bg: #000; --card: #0A0A0A; --grey: #888;
-            --blue: #4aa3ff; --zain: #ff003c; --asia: #e21e26; --fastpay: #00a1e4;
+            --gold: #FFD700;
+            --bg: #000000;
+            --card: #0A0A0A;
+            --grey: #888888;
+            --border: #151515;
+            --blue: #4aa3ff;
+            --fastpay: #00a1e4;
+            --zain: #ff003c;
+            --asia: #e21e26;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -53,7 +60,7 @@
         .h-av-box { width: 40px; height: 40px; background: #111; border-radius: 12px; border: 1.5px solid #222; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .h-av-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- MINE PAGE --- */
+        /* --- MINE PAGE (DIAMOND) --- */
         .badges-container { display: flex; justify-content: center; gap: 12px; margin: 15px 0; }
         .badge { padding: 6px 18px; border-radius: 25px; font-size: 10px; font-weight: 900; text-transform: uppercase; border: 1.5px solid transparent; }
         .b-blue { background: #001a33; color: var(--blue); border-color: #003366; }
@@ -72,7 +79,7 @@
         .en-bar-bg-ui { width: 100%; height: 12px; background: #111; border-radius: 12px; overflow: hidden; border: 1px solid #1a1a1a; }
         .en-bar-fill-ui { height: 100%; background: var(--gold); width: 100%; box-shadow: 0 0 15px var(--gold); transition: width 0.25s; }
 
-        /* --- PROFILE --- */
+        /* --- PROFILE & PAYMENT --- */
         .profile-av-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 40px; }
         .av-premium-circle { width: 115px; height: 115px; background: #000; border-radius: 40px; border: 3px solid var(--gold); position: relative; box-shadow: 0 0 30px rgba(255,215,0,0.4); overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .av-premium-circle img { width: 100%; height: 100%; object-fit: cover; }
@@ -86,46 +93,40 @@
         .withdraw-card-full { background: linear-gradient(180deg, #151515, #000); padding: 40px 25px; border-radius: 45px; border: 1.8px solid #222; text-align: center; margin-bottom: 35px; }
         .bal-value-huge { font-family: 'Orbitron'; font-size: 55px; font-weight: 900; margin: 15px 0; letter-spacing: -3px; }
         .payment-methods-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 35px; }
-        .payment-box { background: #0D0D0D; border: 1.5px solid #1A1A1A; border-radius: 22px; padding: 20px 5px; display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; }
+        .payment-box { background: #0D0D0D; border: 1.5px solid #1A1A1A; border-radius: 22px; padding: 20px 5px; display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; transition: 0.2s; }
         .p-icon-circle { width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; }
         .zain-bg { background: var(--zain); } .asia-bg { background: var(--asia); } .fast-bg { background: var(--fastpay); }
 
-        /* --- RANK & LIST --- */
+        /* --- RANK --- */
+        .list-row-rank { background: #0A0A0A; padding: 22px; border-radius: 35px; display: flex; align-items: center; gap: 18px; margin-bottom: 12px; border: 1px solid #111; }
         .podium-ui { display: flex; align-items: flex-end; justify-content: center; gap: 15px; margin-bottom: 50px; height: 220px; }
         .podium-column { text-align: center; width: 105px; }
-        .podium-av { width: 75px; height: 75px; border-radius: 50%; border: 3px solid #222; margin: 0 auto 12px; overflow: hidden; background:#111; }
-        .podium-av.p1-av { width: 100px; height: 100px; border-color: var(--gold); box-shadow: 0 0 30px rgba(255,215,0,0.35); }
+        .podium-av { width: 75px; height: 75px; border-radius: 50%; border: 3px solid #222; margin: 0 auto 12px; overflow: hidden; background: #111; }
         .podium-av img { width: 100%; height: 100%; object-fit: cover; }
         .podium-step { border-radius: 20px 20px 5px 5px; padding: 15px 0; font-family: 'Orbitron'; font-weight: 900; font-size: 24px; }
         .ps1 { height: 130px; background: var(--gold); color: black; }
         .ps2 { height: 100px; background: #222; }
         .ps3 { height: 75px; background: #3d2b1f; }
-        .list-row-rank { background: #0A0A0A; padding: 22px; border-radius: 35px; display: flex; align-items: center; gap: 18px; margin-bottom: 12px; border: 1px solid #111; }
 
-        /* --- AD CARD --- */
-        .ad-card-premium { background: linear-gradient(90deg, #0A0A0A 0%, #151515 100%); border: 1.5px solid #222; border-radius: 30px; padding: 22px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; margin-bottom: 15px; }
-        .ad-card-premium:active { transform: scale(0.97); border-color: var(--gold); }
-        .ad-icon-ring { width: 55px; height: 55px; background: rgba(255, 215, 0, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 26px; }
-        .ad-badge { background: #ff003c; color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 8px; animation: pulseAd 1.5s infinite; }
-        @keyframes pulseAd { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-        /* WISDOM MODAL */
+        /* --- WISDOM MODAL --- */
         #wisdomModal { position: fixed; inset: 0; background: rgba(0,0,0,0.94); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(15px); }
         .wisdom-content-box { width: 88%; background: #0A0A0A; border: 3px solid var(--gold); border-radius: 45px; padding: 45px; text-align: center; }
 
-        /* POP EFFECT */
+        /* --- POP EFFECT --- */
         .tap-pop-up { position: absolute; color: white; font-weight: 900; font-size: 42px; pointer-events: none; animation: popUpAnim 0.8s ease-out forwards; z-index: 1000; font-family: 'Orbitron'; }
         @keyframes popUpAnim { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-130px); } }
     </style>
 </head>
 <body>
 
+    <!-- Splash Screen -->
     <div id="splash">
         <img src="https://cdn-icons-png.flaticon.com/512/261/261882.png" class="s-diamond">
         <div class="s-title">GEMINICOINS</div>
         <div class="s-bar-container"><div class="s-progress"></div></div>
     </div>
 
+    <!-- Wisdom Modal -->
     <div id="wisdomModal">
         <div class="wisdom-content-box">
             <i class="fas fa-brain" style="font-size:60px; color:var(--gold); margin-bottom:30px;"></i>
@@ -144,30 +145,44 @@
         <header>
             <div class="seek-btn" onclick="openWisdom()">SEEK WISDOM <i class="fas fa-brain"></i></div>
             <div class="h-user-info">
-                <div class="h-text"><span>STATUS: ELITE</span><b id="header-name">Loading...</b></div>
+                <div class="h-text"><span>STATUS: ACTIVE</span><b id="header-name">Loading...</b></div>
                 <div class="h-av-box" id="header-av-box"><i class="fas fa-user" style="color:#222; font-size:18px;"></i></div>
             </div>
         </header>
 
         <main>
+            <!-- MINE PAGE -->
             <div id="page-mine" class="page active">
-                <div class="badges-container"><div class="badge b-blue">DATABASE SYNCED</div><div class="badge b-gold">PREMIUM LEAGUE</div></div>
-                <div class="tap-zone"><div class="tap-btn-main" id="tap-trigger-btn"><div class="diamond-shape"></div></div></div>
+                <div class="badges-container">
+                    <div class="badge b-blue">DATABASE SYNCED</div>
+                    <div class="badge b-gold">PREMIUM LEAGUE</div>
+                </div>
+                <div class="tap-zone">
+                    <div class="tap-orbit"></div>
+                    <div class="tap-btn-main" id="tap-trigger-btn"><div class="diamond-shape"></div></div>
+                </div>
                 <div class="energy-card-ui">
                     <div class="en-labels"><span id="energy-text-val">1000 / 1000</span><span><i class="fas fa-bolt" style="color:var(--gold);"></i> ENERGY 100%</span></div>
                     <div class="en-bar-bg-ui"><div class="en-bar-fill-ui" id="energy-bar-fill"></div></div>
                 </div>
             </div>
 
+            <!-- PROFILE PAGE -->
             <div id="page-profile" class="page">
                 <div class="profile-av-header">
-                    <div class="av-premium-circle"><img id="profile-img-tag" style="display:none;"><i id="profile-av-icon" class="fas fa-user-astronaut" style="font-size:50px; color:#111;"></i><div class="camera-overlay" onclick="document.getElementById('avatarUploader').click()"><i class="fas fa-camera"></i></div></div>
+                    <div class="av-premium-circle">
+                        <img id="profile-img-tag" style="display:none;">
+                        <i id="profile-av-icon" class="fas fa-user-astronaut" style="font-size:50px; color:#111;"></i>
+                        <div class="camera-overlay" onclick="document.getElementById('avatarUploader').click()"><i class="fas fa-camera"></i></div>
+                    </div>
                     <h2 style="margin:20px 0 5px; font-size:32px;">Elite Operative <i class="fas fa-check-circle" style="color:var(--blue);"></i></h2>
-                    <div id="profile-uid-text" style="color:var(--grey); font-weight:800;">Miner #000</div>
+                    <div id="profile-uid-text" style="color:var(--grey); font-weight:800; font-size:14px;">Miner #000</div>
                 </div>
                 <div class="stats-container">
                     <div class="stat-item-box"><span>TOTAL TAPS</span><b id="stat-total-taps">0</b></div>
                     <div class="stat-item-box"><span>CLICK POWER</span><b id="stat-click-pwr">1</b></div>
+                    <div class="stat-item-box"><span>PASSIVE RATE</span><b id="stat-passive-rate">0/s</b></div>
+                    <div class="stat-item-box"><span>GLOBAL RANK</span><b id="stat-global-rank">#1</b></div>
                 </div>
                 <div class="withdraw-card-full">
                     <div style="color:var(--grey); font-size:14px; font-weight:900;">AVAILABLE BALANCE</div>
@@ -180,16 +195,22 @@
                 </div>
             </div>
 
+            <!-- RANK PAGE -->
             <div id="page-rank" class="page">
                 <h1 style="text-align:center; font-family:'Orbitron'; font-size:35px; color:var(--gold); margin-bottom:40px;">TOP TAPPERS</h1>
+                <div class="podium-ui" id="podium-root-container"></div>
                 <div id="full-rank-list-area"></div>
             </div>
 
+            <!-- EARN PAGE -->
             <div id="page-earn" class="page">
                 <h1 style="font-family:'Orbitron'; font-size:38px; margin-bottom:30px;">EARN STATION</h1>
-                <div class="ad-card-premium" onclick="watchAdReward(2000)">
-                    <div style="display:flex; align-items:center; gap:15px;"><div class="ad-icon-ring"><i class="fas fa-play-circle"></i></div><div><b>SAYREKRDNY REKLAM</b><br><small style="color:var(--gold);">+2,000 GEM</small></div></div>
-                    <div class="ad-badge">LIVE</div>
+                <div onclick="watchAdReward(2000)" style="background:linear-gradient(90deg, #111, #181818); padding:20px; border-radius:25px; border:1px solid #222; display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin-bottom:15px;">
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <div style="width:50px; height:50px; background:rgba(255,215,0,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--gold);"><i class="fas fa-play"></i></div>
+                        <div><b>SAYREKRDNY REKLAM</b><br><small style="color:var(--gold);">+2,000 GEM</small></div>
+                    </div>
+                    <div style="background:#ff003c; font-size:10px; padding:3px 8px; border-radius:5px; font-weight:900;">LIVE</div>
                 </div>
                 <div class="list-row-rank" onclick="tg.openLink('https://t.me/your_channel')">
                     <div style="flex:1;"><b>JOIN TELEGRAM CHANNEL</b><br><small style="color:var(--gold);">+10,000 GEM</small></div>
@@ -197,15 +218,27 @@
                 </div>
             </div>
 
+            <!-- BOOST PAGE -->
             <div id="page-boost" class="page">
                 <h1 style="font-family:'Orbitron'; font-size:35px; margin-bottom:35px;">BOOST HUB</h1>
                 <div id="boost-items-root"></div>
+            </div>
+
+            <!-- FRIENDS PAGE -->
+            <div id="page-friends" class="page">
+                <h1 style="font-family:'Orbitron'; font-size:35px; margin-bottom:35px; text-align:center;">NETWORK</h1>
+                <div class="withdraw-card-full">
+                    <i class="fas fa-users" style="font-size:50px; color:var(--gold); margin-bottom:20px;"></i>
+                    <p>Invite partners to the elite network and receive <b>20,000 GEM</b> instantly!</p>
+                    <button onclick="inviteFriend()" style="width:100%; padding:20px; border-radius:15px; background:var(--gold); border:none; font-weight:900; cursor:pointer; font-family:Orbitron;">INVITE A FRIEND</button>
+                </div>
             </div>
         </main>
 
         <nav>
             <div class="n-item" onclick="switchPage('profile', this)"><i class="fas fa-user"></i>PROFILE</div>
             <div class="n-item" onclick="switchPage('earn', this)"><i class="fas fa-play"></i>EARN</div>
+            <div class="n-item" onclick="switchPage('friends', this)"><i class="fas fa-user-group"></i>FRIENDS</div>
             <div class="n-item" onclick="switchPage('boost', this)"><i class="fas fa-bolt"></i>BOOST</div>
             <div class="n-item" onclick="switchPage('rank', this)"><i class="fas fa-trophy"></i>RANK</div>
             <div class="n-item active" onclick="switchPage('mine', this)"><i class="fas fa-cube"></i>MINE</div>
@@ -213,6 +246,7 @@
     </div>
 
     <script>
+        // --- 1. FIREBASE INITIALIZATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyBMN49BmTeQ4OaFbSuiC2AaELHdkOuc_8U",
             authDomain: "geminicoins-9f1a5.firebaseapp.com",
@@ -223,154 +257,281 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+
+        // --- 2. ADSGRAM SDK ---
         const AdController = window.Adsgram ? window.Adsgram.init({ blockId: "23459" }) : null;
 
+        // --- 3. APP GLOBAL STATE ---
         const tg = window.Telegram.WebApp;
         tg.expand();
         const user = tg.initDataUnsafe.user || { id: "0000", first_name: "Geminian" };
         const uid = String(user.id);
 
-        let appState = { bal: 0, energy: 1000, maxEn: 1000, last: Date.now(), lv: { c: 0, g: 0, t: 0 }, name: user.first_name, pass: 0, av: "", taps: 0 };
+        let appState = {
+            bal: 0, energy: 1000, maxEn: 1000, 
+            last: Date.now(), 
+            lv: { c: 0, g: 0, t: 0 }, 
+            name: user.first_name, 
+            pass: 0, av: "", taps: 0
+        };
+
         let clickPwr = 1;
-        const upgrades = [
+
+        const upgradeData = [
             { id: 'c', name: 'Nano-Tapping', cost: 500, add: 1, icon: 'fa-fingerprint' },
             { id: 'g', name: 'GPU Cluster', cost: 5000, add: 10, icon: 'fa-server' },
             { id: 't', name: 'Fusion Core', cost: 3000, add: 500, icon: 'fa-atom' }
         ];
 
+        // --- 4. INITIALIZATION LOGIC ---
         async function bootstrap() {
             try {
-                const doc = await db.collection("users").doc(uid).get();
-                if(doc.exists) {
-                    const data = doc.data();
-                    const offline = Math.max(0, (data.pass || 0) * ((Date.now() - (data.last || Date.now())) / 1000));
-                    appState = { ...appState, ...data, bal: Number(data.bal || 0) + offline, last: Date.now() };
-                } else await db.collection("users").doc(uid).set(appState);
-                
+                const userDoc = await db.collection("users").doc(uid).get();
+                if(userDoc.exists) {
+                    const cloudData = userDoc.data();
+                    const now = Date.now();
+                    // Calculate Passive Earnings during offline
+                    const lastTime = cloudData.last || now;
+                    const secondsPassed = (now - lastTime) / 1000;
+                    const offlineEarnings = Math.max(0, (cloudData.pass || 0) * secondsPassed);
+                    
+                    appState = { 
+                        ...appState, 
+                        ...cloudData, 
+                        bal: Number(cloudData.bal || 0) + offlineEarnings, 
+                        last: now 
+                    };
+
+                    if(offlineEarnings > 50) {
+                        tg.showAlert(`بەخێربێیتەوە! کاتێک ئۆفلاین بوویت ${Math.floor(offlineEarnings).toLocaleString()} کۆینت کۆکردەوە.`);
+                    }
+                } else {
+                    await db.collection("users").doc(uid).set(appState);
+                }
+
                 updateUIStrings();
-                setTimeout(() => { document.getElementById('splash').style.display = 'none'; document.getElementById('app').style.display = 'block'; }, 2500);
-                refreshUI(); runLoops(); renderUpgrades();
-            } catch(e) { console.error(e); }
+                
+                setTimeout(() => {
+                    document.getElementById('splash').style.display = 'none';
+                    document.getElementById('app').style.display = 'block';
+                }, 3000);
+
+                refreshUI();
+                runMainLoops();
+                renderUpgradeList();
+            } catch(error) {
+                console.error("Critical Error:", error);
+            }
         }
 
         function updateUIStrings() {
             clickPwr = 1 + (appState.lv.c * 1);
             document.getElementById('header-name').innerText = appState.name;
             document.getElementById('profile-uid-text').innerText = "Miner #" + uid.slice(-4);
+            
             if(appState.av) {
-                document.getElementById('profile-img-tag').src = appState.av; document.getElementById('profile-img-tag').style.display = 'block';
+                const pImg = document.getElementById('profile-img-tag');
+                pImg.src = appState.av; pImg.style.display = 'block';
                 document.getElementById('profile-av-icon').style.display = 'none';
                 document.getElementById('header-av-box').innerHTML = `<img src="${appState.av}" style="width:100%;height:100%;object-fit:cover;">`;
             }
         }
 
-        function runLoops() {
-            setInterval(() => { if(appState.energy < appState.maxEn) { appState.energy = Math.min(appState.maxEn, appState.energy + 1.5); refreshUI(); } }, 2000);
-            setInterval(() => { if(appState.pass > 0) { appState.bal += (appState.pass / 10); refreshUI(); } }, 100);
-            setInterval(sync, 20000);
+        function runMainLoops() {
+            // Energy Regeneration
+            setInterval(() => {
+                if(appState.energy < appState.maxEn) {
+                    appState.energy = Math.min(appState.maxEn, appState.energy + 1.5);
+                    refreshUI();
+                }
+            }, 2000);
+
+            // Passive Income (Real-time Feel)
+            setInterval(() => {
+                if(appState.pass > 0) {
+                    appState.bal += (appState.pass / 10);
+                    refreshUI();
+                }
+            }, 100);
+
+            // Periodic Firebase Sync
+            setInterval(syncToFirebase, 20000);
         }
 
-        async function sync() { appState.last = Date.now(); await db.collection("users").doc(uid).set(appState, {merge: true}); }
+        async function syncToFirebase() {
+            appState.last = Date.now();
+            try {
+                await db.collection("users").doc(uid).set(appState, {merge: true});
+            } catch(e) { console.error("Sync Error", e); }
+        }
 
         function refreshUI() {
             document.getElementById('profile-balance-val').innerText = Math.floor(appState.bal).toLocaleString();
             document.getElementById('stat-total-taps').innerText = (appState.taps || 0).toLocaleString();
             document.getElementById('stat-click-pwr').innerText = clickPwr;
+            document.getElementById('stat-passive-rate').innerText = appState.pass + "/s";
             document.getElementById('energy-text-val').innerText = `${Math.floor(appState.energy)} / ${appState.maxEn}`;
             document.getElementById('energy-bar-fill').style.width = (appState.energy / appState.maxEn * 100) + "%";
         }
 
-        document.getElementById('tap-trigger-btn').addEventListener('touchstart', (e) => {
-            e.preventDefault();
+        // --- 5. TAPPING MECHANISM ---
+        document.getElementById('tap-trigger-btn').addEventListener('touchstart', (event) => {
+            event.preventDefault();
             if(appState.energy >= clickPwr) {
-                appState.bal += clickPwr; appState.taps += 1; appState.energy -= clickPwr;
-                refreshUI(); tg.HapticFeedback.impactOccurred('medium');
-                const t = e.touches[0]; createPop(t.clientX, t.clientY, `+${clickPwr}`);
+                appState.bal += clickPwr;
+                appState.taps += 1;
+                appState.energy -= clickPwr;
+                
+                refreshUI();
+                tg.HapticFeedback.impactOccurred('medium');
+
+                const touch = event.touches[0];
+                const pop = document.createElement('div');
+                pop.className = 'tap-pop-up';
+                pop.innerText = `+${clickPwr}`;
+                pop.style.left = touch.clientX + 'px';
+                pop.style.top = touch.clientY + 'px';
+                document.body.appendChild(pop);
+                setTimeout(() => pop.remove(), 800);
             }
         });
 
-        function createPop(x, y, txt) {
-            const p = document.createElement('div'); p.className = 'tap-pop-up'; p.innerText = txt;
-            p.style.left = x + 'px'; p.style.top = y + 'px'; document.body.appendChild(p);
-            setTimeout(() => p.remove(), 800);
-        }
-
-        function switchPage(pID, el) {
+        // --- 6. PAGE NAVIGATION ---
+        function switchPage(pageID, element) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.n-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('page-' + pID).classList.add('active'); el.classList.add('active');
-            if(pID === 'rank') fetchRank(); tg.HapticFeedback.selectionChanged();
+            document.getElementById('page-' + pageID).classList.add('active');
+            element.classList.add('active');
+            tg.HapticFeedback.selectionChanged();
+            if(pageID === 'rank') fetchLeaderboard();
         }
 
-        async function fetchRank() {
-            const list = document.getElementById('full-rank-list-area'); list.innerHTML = "<p style='text-align:center;'>Accessing Database Protocol...</p>";
-            const snap = await db.collection("users").orderBy("bal", "desc").limit(15).get();
-            list.innerHTML = "";
-            snap.forEach((doc, i) => {
-                const p = doc.data();
-                list.innerHTML += `<div class="list-row-rank" style="${doc.id === uid ? 'border-color:var(--gold);' : ''}">
-                    <div style="width:30px; font-weight:900;">#${i+1}</div>
-                    <div style="flex:1; text-align:right;"><b>${p.name}</b></div>
-                    <div style="font-family:Orbitron; color:var(--gold);">${Math.floor(p.bal/1000)}k</div>
-                </div>`;
+        async function fetchLeaderboard() {
+            const listRoot = document.getElementById('full-rank-list-area');
+            const podiumRoot = document.getElementById('podium-root-container');
+            listRoot.innerHTML = "<p style='text-align:center;'>Accessing Database Protocol...</p>";
+            
+            const snapshot = await db.collection("users").orderBy("bal", "desc").limit(15).get();
+            let players = [];
+            snapshot.forEach(doc => players.push({id: doc.id, ...doc.data()}));
+
+            // Render Podium
+            podiumRoot.innerHTML = `
+                <div class="podium-column"><div class="podium-av"><img src="${players[1]?.av || ''}"></div><div class="podium-step ps2">#2</div></div>
+                <div class="podium-column"><div class="podium-av p1-av"><img src="${players[0]?.av || ''}"></div><div class="podium-step ps1">#1</div></div>
+                <div class="podium-column"><div class="podium-av"><img src="${players[2]?.av || ''}"></div><div class="podium-step ps3">#3</div></div>
+            `;
+
+            listRoot.innerHTML = "";
+            players.forEach((p, idx) => {
+                const isMe = (p.id === uid);
+                listRoot.innerHTML += `
+                    <div class="list-row-rank" style="${isMe ? 'border:1.5px solid var(--gold);' : ''}">
+                        <div style="width:30px; font-weight:900;">#${idx+1}</div>
+                        <img src="${p.av || ''}" style="width:45px; height:45px; border-radius:12px; background:#111; object-fit:cover;">
+                        <div style="flex:1; text-align:right; margin-right:15px;"><b>${p.name || 'Geminian'}</b></div>
+                        <div style="font-family:Orbitron; color:var(--gold); font-weight:900;">${Math.floor(p.bal/1000)}k</div>
+                    </div>
+                `;
             });
         }
 
+        // --- 7. CORE FEATURES ---
         async function watchAdReward(amt) {
-            if(!AdController) { tg.showConfirm("ڕیکلام بەردەست نییە بۆ تێست، پاداشت وەرئەگری؟", (ok) => { if(ok) { appState.bal += amt; refreshUI(); sync(); }}); return; }
+            if(!AdController) {
+                tg.showConfirm("ڕیکلام بەردەست نییە بۆ تێست، پاداشت وەرئەگری؟", (ok) => { 
+                    if(ok) { appState.bal += amt; refreshUI(); syncToFirebase(); }
+                });
+                return;
+            }
             try {
                 const res = await AdController.show();
-                if(res.done) { appState.bal += amt; refreshUI(); sync(); tg.showAlert(`+${amt.toLocaleString()} GEM SECURED!`); }
-            } catch(e) { tg.showAlert("No ads available."); }
+                if(res.done) {
+                    appState.bal += amt; refreshUI(); syncToFirebase();
+                    tg.showAlert(`+${amt.toLocaleString()} GEM SECURED!`);
+                }
+            } catch(e) { tg.showAlert("ڕیکلام لە ئێستادا بەردەست نییە."); }
         }
 
-        function renderUpgrades() {
-            const r = document.getElementById('boost-items-root'); r.innerHTML = "";
-            upgrades.forEach(up => {
-                const lvl = appState.lv[up.id] || 0;
-                const cost = Math.floor(up.cost * Math.pow(2.8, lvl));
-                r.innerHTML += `<div class="list-row-rank" onclick="buyUpgrade('${up.id}')">
-                    <div style="width:55px; height:55px; background:#111; border-radius:15px; display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:22px;"><i class="fas ${up.icon}"></i></div>
-                    <div style="flex:1; text-align:right; margin-right:15px;"><b>${up.name} <span style="color:var(--gold);">LV ${lvl}</span></b></div>
-                    <div style="font-family:Orbitron; font-weight:900;">${cost.toLocaleString()}</div>
-                </div>`;
+        function renderUpgradeList() {
+            const root = document.getElementById('boost-items-root');
+            root.innerHTML = "";
+            upgradeData.forEach(up => {
+                const currentLvl = appState.lv[up.id] || 0;
+                const cost = Math.floor(up.cost * Math.pow(2.8, currentLvl));
+                root.innerHTML += `
+                    <div class="list-row-rank" onclick="buyUpgrade('${up.id}')">
+                        <div style="width:55px; height:55px; background:#111; border-radius:18px; display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:24px;"><i class="fas ${up.icon}"></i></div>
+                        <div style="flex:1; text-align:right; margin-right:20px;"><b>${up.name} <span style="color:var(--gold);">LV ${currentLvl}</span></b><br><small style="color:var(--grey);">Upgrade Protocol</small></div>
+                        <div style="font-family:Orbitron; font-weight:900;">${cost.toLocaleString()}</div>
+                    </div>
+                `;
             });
         }
 
         function buyUpgrade(id) {
-            const up = upgrades.find(x => x.id === id);
-            const lvl = appState.lv[id] || 0;
-            const cost = Math.floor(up.cost * Math.pow(2.8, lvl));
+            const up = upgradeData.find(x => x.id === id);
+            const currentLvl = appState.lv[id] || 0;
+            const cost = Math.floor(up.cost * Math.pow(2.8, currentLvl));
+
             if(appState.bal >= cost) {
-                appState.bal -= cost; appState.lv[id] = lvl + 1;
-                if(id === 'c') clickPwr = 1 + (appState.lv.c * 1); else if(id === 't') appState.maxEn += up.add; else appState.pass += up.add;
-                renderUpgrades(); refreshUI(); sync();
+                appState.bal -= cost;
+                appState.lv[id] = currentLvl + 1;
+                
+                if(id === 'c') clickPwr = 1 + (appState.lv.c * 1);
+                else if(id === 't') appState.maxEn += up.add;
+                else appState.pass += up.add;
+
+                renderUpgradeList(); refreshUI(); syncToFirebase();
                 tg.HapticFeedback.notificationOccurred('success');
-            } else tg.showAlert("GEM پێویستت نییە!");
+            } else {
+                tg.showAlert("GEM پێویستت نییە!");
+            }
         }
 
-        function openWisdom() { 
-            const lw = localStorage.getItem('lw'); if(lw && (Date.now() - lw) < 86400000) return tg.showAlert("خەڵاتی ئەمڕۆت وەرگرتووە.");
-            document.getElementById('wisdomModal').style.display = 'flex'; 
+        function openWisdom() {
+            const lastTime = localStorage.getItem('lastW');
+            if(lastTime && (Date.now() - lastTime) < 86400000) return tg.showAlert("خەڵاتی ئەمڕۆت وەرگرتووە!");
+            document.getElementById('wisdomModal').style.display = 'flex';
         }
-        function claimWisdom() { appState.bal += 5000; localStorage.setItem('lw', Date.now()); document.getElementById('wisdomModal').style.display = 'none'; refreshUI(); sync(); }
+
+        function claimWisdom() {
+            appState.bal += 5000;
+            localStorage.setItem('lastW', Date.now());
+            document.getElementById('wisdomModal').style.display = 'none';
+            refreshUI(); syncToFirebase();
+        }
 
         document.getElementById('avatarUploader').addEventListener('change', function(e) {
-            const f = e.target.files[0]; if(!f) return;
-            const r = new FileReader();
-            r.onload = (ev) => {
-                const img = new Image(); img.src = ev.target.result;
+            const file = e.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
                 img.onload = () => {
-                    const c = document.createElement('canvas'); const ctx = c.getContext('2d');
-                    c.width = 120; c.height = 120; ctx.drawImage(img, 0,0,120,120);
-                    appState.av = c.toDataURL('image/jpeg', 0.6); updateUIStrings(); sync();
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = 120; canvas.height = 120;
+                    ctx.drawImage(img, 0, 0, 120, 120);
+                    appState.av = canvas.toDataURL('image/jpeg', 0.6);
+                    updateUIStrings(); syncToFirebase();
+                    tg.showAlert("پڕۆفایل نوێکرایەوە!");
                 };
             };
-            r.readAsDataURL(f);
+            reader.readAsDataURL(file);
         });
 
-        function initWithdraw(m) { if(appState.bal < 1000000) return tg.showAlert("1M GEM required for 1$."); tg.showAlert(`داواکاری ڕاکێشان بۆ ${m} نێردرا.`); }
+        function initWithdraw(method) {
+            if(appState.bal < 1000000) return tg.showAlert("پێویستت بە 1,000,000 کۆینە!");
+            tg.showAlert(`داواکاری بۆ ڕاکێشانی ١ دۆلار لەرێگەی ${method} نێردرا.`);
+        }
 
+        function inviteFriend() {
+            tg.openTelegramLink(`https://t.me/share/url?url=https://t.me/Geminicoins_bot?start=${uid}&text=Join and earn! 💎`);
+        }
+
+        // Start Application
         bootstrap();
     </script>
 </body>
