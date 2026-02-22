@@ -109,12 +109,13 @@
         .ad-badge { background: #ff003c; color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 8px; animation: pulseAd 1.5s infinite; }
         @keyframes pulseAd { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* POP-UP */
-        .tap-pop-up { position: absolute; color: white; font-weight: 900; font-size: 42px; pointer-events: none; animation: popUpAnim 0.8s ease-out forwards; z-index: 1000; font-family: 'Orbitron'; }
-        @keyframes popUpAnim { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-130px); } }
-        
+        /* WISDOM MODAL */
         #wisdomModal { position: fixed; inset: 0; background: rgba(0,0,0,0.94); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(15px); }
         .wisdom-content-box { width: 88%; background: #0A0A0A; border: 3px solid var(--gold); border-radius: 45px; padding: 45px; text-align: center; }
+
+        /* POP EFFECT */
+        .tap-pop-up { position: absolute; color: white; font-weight: 900; font-size: 42px; pointer-events: none; animation: popUpAnim 0.8s ease-out forwards; z-index: 1000; font-family: 'Orbitron'; }
+        @keyframes popUpAnim { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-130px); } }
     </style>
 </head>
 <body>
@@ -150,14 +151,8 @@
 
         <main>
             <div id="page-mine" class="page active">
-                <div class="badges-container">
-                    <div class="badge b-blue">DATABASE SYNCED</div>
-                    <div class="badge b-gold">PREMIUM LEAGUE</div>
-                </div>
-                <div class="tap-zone">
-                    <div class="tap-orbit"></div>
-                    <div class="tap-btn-main" id="tap-trigger-btn"><div class="diamond-shape"></div></div>
-                </div>
+                <div class="badges-container"><div class="badge b-blue">DATABASE SYNCED</div><div class="badge b-gold">PREMIUM LEAGUE</div></div>
+                <div class="tap-zone"><div class="tap-btn-main" id="tap-trigger-btn"><div class="diamond-shape"></div></div></div>
                 <div class="energy-card-ui">
                     <div class="en-labels"><span id="energy-text-val">1000 / 1000</span><span><i class="fas fa-bolt" style="color:var(--gold);"></i> ENERGY 100%</span></div>
                     <div class="en-bar-bg-ui"><div class="en-bar-fill-ui" id="energy-bar-fill"></div></div>
@@ -166,19 +161,13 @@
 
             <div id="page-profile" class="page">
                 <div class="profile-av-header">
-                    <div class="av-premium-circle">
-                        <img id="profile-img-tag" style="display:none;">
-                        <i id="profile-av-icon" class="fas fa-user-astronaut" style="font-size:50px; color:#111;"></i>
-                        <div class="camera-overlay" onclick="document.getElementById('avatarUploader').click()"><i class="fas fa-camera"></i></div>
-                    </div>
+                    <div class="av-premium-circle"><img id="profile-img-tag" style="display:none;"><i id="profile-av-icon" class="fas fa-user-astronaut" style="font-size:50px; color:#111;"></i><div class="camera-overlay" onclick="document.getElementById('avatarUploader').click()"><i class="fas fa-camera"></i></div></div>
                     <h2 style="margin:20px 0 5px; font-size:32px;">Elite Operative <i class="fas fa-check-circle" style="color:var(--blue);"></i></h2>
                     <div id="profile-uid-text" style="color:var(--grey); font-weight:800;">Miner #000</div>
                 </div>
                 <div class="stats-container">
                     <div class="stat-item-box"><span>TOTAL TAPS</span><b id="stat-total-taps">0</b></div>
                     <div class="stat-item-box"><span>CLICK POWER</span><b id="stat-click-pwr">1</b></div>
-                    <div class="stat-item-box"><span>PASSIVE RATE</span><b id="stat-passive-rate">0/s</b></div>
-                    <div class="stat-item-box"><span>GLOBAL RANK</span><b id="stat-global-rank">#1</b></div>
                 </div>
                 <div class="withdraw-card-full">
                     <div style="color:var(--grey); font-size:14px; font-weight:900;">AVAILABLE BALANCE</div>
@@ -193,20 +182,16 @@
 
             <div id="page-rank" class="page">
                 <h1 style="text-align:center; font-family:'Orbitron'; font-size:35px; color:var(--gold); margin-bottom:40px;">TOP TAPPERS</h1>
-                <div class="podium-ui" id="podium-root-container"></div>
                 <div id="full-rank-list-area"></div>
             </div>
 
             <div id="page-earn" class="page">
                 <h1 style="font-family:'Orbitron'; font-size:38px; margin-bottom:30px;">EARN STATION</h1>
                 <div class="ad-card-premium" onclick="watchAdReward(2000)">
-                    <div style="display:flex; align-items:center; gap:15px;">
-                        <div class="ad-icon-ring"><i class="fas fa-play-circle"></i></div>
-                        <div><b>SAYREKRDNY REKLAM</b><br><small style="color:var(--gold);">+2,000 GEM</small></div>
-                    </div>
+                    <div style="display:flex; align-items:center; gap:15px;"><div class="ad-icon-ring"><i class="fas fa-play-circle"></i></div><div><b>SAYREKRDNY REKLAM</b><br><small style="color:var(--gold);">+2,000 GEM</small></div></div>
                     <div class="ad-badge">LIVE</div>
                 </div>
-                <div class="list-row-rank" onclick="completeSocial('Telegram', 'https://t.me/your_channel', 10000)">
+                <div class="list-row-rank" onclick="tg.openLink('https://t.me/your_channel')">
                     <div style="flex:1;"><b>JOIN TELEGRAM CHANNEL</b><br><small style="color:var(--gold);">+10,000 GEM</small></div>
                     <i class="fab fa-telegram-plane" style="font-size:25px; color:var(--blue);"></i>
                 </div>
@@ -216,21 +201,11 @@
                 <h1 style="font-family:'Orbitron'; font-size:35px; margin-bottom:35px;">BOOST HUB</h1>
                 <div id="boost-items-root"></div>
             </div>
-
-            <div id="page-friends" class="page">
-                <h1 style="font-family:'Orbitron'; font-size:35px; margin-bottom:35px; text-align:center;">NETWORK</h1>
-                <div class="withdraw-card-full">
-                    <i class="fas fa-users" style="font-size:50px; color:var(--gold); margin-bottom:20px;"></i>
-                    <p>Invite partners to the elite network and receive <b>20,000 GEM</b> instantly!</p>
-                    <button onclick="inviteFriend()" style="width:100%; padding:20px; border-radius:15px; background:var(--gold); border:none; font-weight:900; cursor:pointer; font-family:Orbitron;">INVITE A FRIEND</button>
-                </div>
-            </div>
         </main>
 
         <nav>
             <div class="n-item" onclick="switchPage('profile', this)"><i class="fas fa-user"></i>PROFILE</div>
             <div class="n-item" onclick="switchPage('earn', this)"><i class="fas fa-play"></i>EARN</div>
-            <div class="n-item" onclick="switchPage('friends', this)"><i class="fas fa-user-group"></i>FRIENDS</div>
             <div class="n-item" onclick="switchPage('boost', this)"><i class="fas fa-bolt"></i>BOOST</div>
             <div class="n-item" onclick="switchPage('rank', this)"><i class="fas fa-trophy"></i>RANK</div>
             <div class="n-item active" onclick="switchPage('mine', this)"><i class="fas fa-cube"></i>MINE</div>
@@ -238,7 +213,6 @@
     </div>
 
     <script>
-        // --- 1. FIREBASE INITIALIZATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyBMN49BmTeQ4OaFbSuiC2AaELHdkOuc_8U",
             authDomain: "geminicoins-9f1a5.firebaseapp.com",
@@ -249,8 +223,6 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-
-        // --- 2. ADSGRAM SDK (Using Block ID: 23459) ---
         const AdController = window.Adsgram ? window.Adsgram.init({ blockId: "23459" }) : null;
 
         const tg = window.Telegram.WebApp;
@@ -258,41 +230,26 @@
         const user = tg.initDataUnsafe.user || { id: "0000", first_name: "Geminian" };
         const uid = String(user.id);
 
-        let appState = {
-            bal: 0, energy: 1000, maxEn: 1000, 
-            last: Date.now(), 
-            lv: { c: 0, g: 0, t: 0 }, 
-            name: user.first_name, 
-            pass: 0, av: "", taps: 0
-        };
-
+        let appState = { bal: 0, energy: 1000, maxEn: 1000, last: Date.now(), lv: { c: 0, g: 0, t: 0 }, name: user.first_name, pass: 0, av: "", taps: 0 };
         let clickPwr = 1;
-
-        const upgradeData = [
+        const upgrades = [
             { id: 'c', name: 'Nano-Tapping', cost: 500, add: 1, icon: 'fa-fingerprint' },
             { id: 'g', name: 'GPU Cluster', cost: 5000, add: 10, icon: 'fa-server' },
             { id: 't', name: 'Fusion Core', cost: 3000, add: 500, icon: 'fa-atom' }
         ];
 
-        // --- INITIALIZATION ---
         async function bootstrap() {
             try {
-                const userDoc = await db.collection("users").doc(uid).get();
-                if(userDoc.exists) {
-                    const cloudData = userDoc.data();
-                    const now = Date.now();
-                    const offlineEarnings = Math.max(0, (cloudData.pass || 0) * ((now - (cloudData.last || now)) / 1000));
-                    appState = { ...appState, ...cloudData, bal: Number(cloudData.bal || 0) + offlineEarnings, last: now };
-                    if(offlineEarnings > 50) tg.showAlert(`بەخێربێیتەوە! کاتێک ئۆفلاین بوویت ${Math.floor(offlineEarnings).toLocaleString()} کۆینت کۆکردەوە.`);
-                } else {
-                    await db.collection("users").doc(uid).set(appState);
-                }
+                const doc = await db.collection("users").doc(uid).get();
+                if(doc.exists) {
+                    const data = doc.data();
+                    const offline = Math.max(0, (data.pass || 0) * ((Date.now() - (data.last || Date.now())) / 1000));
+                    appState = { ...appState, ...data, bal: Number(data.bal || 0) + offline, last: Date.now() };
+                } else await db.collection("users").doc(uid).set(appState);
+                
                 updateUIStrings();
-                setTimeout(() => { 
-                    document.getElementById('splash').style.display = 'none'; 
-                    document.getElementById('app').style.display = 'block'; 
-                }, 3000);
-                refreshUI(); runLoops(); renderUpgradeList();
+                setTimeout(() => { document.getElementById('splash').style.display = 'none'; document.getElementById('app').style.display = 'block'; }, 2500);
+                refreshUI(); runLoops(); renderUpgrades();
             } catch(e) { console.error(e); }
         }
 
@@ -301,8 +258,7 @@
             document.getElementById('header-name').innerText = appState.name;
             document.getElementById('profile-uid-text').innerText = "Miner #" + uid.slice(-4);
             if(appState.av) {
-                const pImg = document.getElementById('profile-img-tag');
-                pImg.src = appState.av; pImg.style.display = 'block';
+                document.getElementById('profile-img-tag').src = appState.av; document.getElementById('profile-img-tag').style.display = 'block';
                 document.getElementById('profile-av-icon').style.display = 'none';
                 document.getElementById('header-av-box').innerHTML = `<img src="${appState.av}" style="width:100%;height:100%;object-fit:cover;">`;
             }
@@ -311,24 +267,19 @@
         function runLoops() {
             setInterval(() => { if(appState.energy < appState.maxEn) { appState.energy = Math.min(appState.maxEn, appState.energy + 1.5); refreshUI(); } }, 2000);
             setInterval(() => { if(appState.pass > 0) { appState.bal += (appState.pass / 10); refreshUI(); } }, 100);
-            setInterval(syncToFirebase, 20000);
+            setInterval(sync, 20000);
         }
 
-        async function syncToFirebase() {
-            appState.last = Date.now();
-            await db.collection("users").doc(uid).set(appState, {merge: true});
-        }
+        async function sync() { appState.last = Date.now(); await db.collection("users").doc(uid).set(appState, {merge: true}); }
 
         function refreshUI() {
             document.getElementById('profile-balance-val').innerText = Math.floor(appState.bal).toLocaleString();
             document.getElementById('stat-total-taps').innerText = (appState.taps || 0).toLocaleString();
             document.getElementById('stat-click-pwr').innerText = clickPwr;
-            document.getElementById('stat-passive-rate').innerText = appState.pass + "/s";
             document.getElementById('energy-text-val').innerText = `${Math.floor(appState.energy)} / ${appState.maxEn}`;
             document.getElementById('energy-bar-fill').style.width = (appState.energy / appState.maxEn * 100) + "%";
         }
 
-        // --- TAPPING ---
         document.getElementById('tap-trigger-btn').addEventListener('touchstart', (e) => {
             e.preventDefault();
             if(appState.energy >= clickPwr) {
@@ -352,67 +303,57 @@
         }
 
         async function fetchRank() {
-            const list = document.getElementById('full-rank-list-area');
-            const pod = document.getElementById('podium-root-container');
-            list.innerHTML = "<p style='text-align:center;'>Accessing Database...</p>";
+            const list = document.getElementById('full-rank-list-area'); list.innerHTML = "<p style='text-align:center;'>Accessing Database Protocol...</p>";
             const snap = await db.collection("users").orderBy("bal", "desc").limit(15).get();
-            let players = []; snap.forEach(doc => players.push({id: doc.id, ...doc.data()}));
-            pod.innerHTML = `<div class="podium-column"><div class="podium-av"><img src="${players[1]?.av || ''}"></div><div class="podium-step ps2">#2</div></div><div class="podium-column"><div class="podium-av p1-av"><img src="${players[0]?.av || ''}"></div><div class="podium-step ps1">#1</div></div><div class="podium-column"><div class="podium-av"><img src="${players[2]?.av || ''}"></div><div class="podium-step ps3">#3</div></div>`;
             list.innerHTML = "";
-            players.forEach((p, i) => {
-                list.innerHTML += `<div class="list-row-rank" style="${p.id === uid ? 'border-color:var(--gold);' : ''}">
+            snap.forEach((doc, i) => {
+                const p = doc.data();
+                list.innerHTML += `<div class="list-row-rank" style="${doc.id === uid ? 'border-color:var(--gold);' : ''}">
                     <div style="width:30px; font-weight:900;">#${i+1}</div>
-                    <img src="${p.av || ''}" style="width:45px; height:45px; border-radius:12px; background:#111; object-fit:cover;">
-                    <div style="flex:1; text-align:right; margin-right:15px;"><b>${p.name}</b></div>
+                    <div style="flex:1; text-align:right;"><b>${p.name}</b></div>
                     <div style="font-family:Orbitron; color:var(--gold);">${Math.floor(p.bal/1000)}k</div>
                 </div>`;
             });
         }
 
         async function watchAdReward(amt) {
-            if(!AdController) {
-                tg.showConfirm("ڕیکلام بەردەست نییە، وەکو تێست پاداشت وەردەگریت؟", (ok) => { if(ok) { appState.bal += amt; refreshUI(); syncToFirebase(); }});
-                return;
-            }
+            if(!AdController) { tg.showConfirm("ڕیکلام بەردەست نییە بۆ تێست، پاداشت وەرئەگری؟", (ok) => { if(ok) { appState.bal += amt; refreshUI(); sync(); }}); return; }
             try {
                 const res = await AdController.show();
-                if(res.done) { appState.bal += amt; refreshUI(); syncToFirebase(); tg.showAlert(`+${amt.toLocaleString()} GEM SECURED!`); }
-            } catch(e) { tg.showAlert("Ads not available."); }
+                if(res.done) { appState.bal += amt; refreshUI(); sync(); tg.showAlert(`+${amt.toLocaleString()} GEM SECURED!`); }
+            } catch(e) { tg.showAlert("No ads available."); }
         }
 
-        function renderUpgradeList() {
+        function renderUpgrades() {
             const r = document.getElementById('boost-items-root'); r.innerHTML = "";
-            upgradeData.forEach(up => {
+            upgrades.forEach(up => {
                 const lvl = appState.lv[up.id] || 0;
                 const cost = Math.floor(up.cost * Math.pow(2.8, lvl));
                 r.innerHTML += `<div class="list-row-rank" onclick="buyUpgrade('${up.id}')">
                     <div style="width:55px; height:55px; background:#111; border-radius:15px; display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:22px;"><i class="fas ${up.icon}"></i></div>
                     <div style="flex:1; text-align:right; margin-right:15px;"><b>${up.name} <span style="color:var(--gold);">LV ${lvl}</span></b></div>
-                    <div style="font-family:Orbitron;">${cost.toLocaleString()}</div>
+                    <div style="font-family:Orbitron; font-weight:900;">${cost.toLocaleString()}</div>
                 </div>`;
             });
         }
 
         function buyUpgrade(id) {
-            const up = upgradeData.find(x => x.id === id);
+            const up = upgrades.find(x => x.id === id);
             const lvl = appState.lv[id] || 0;
             const cost = Math.floor(up.cost * Math.pow(2.8, lvl));
             if(appState.bal >= cost) {
                 appState.bal -= cost; appState.lv[id] = lvl + 1;
                 if(id === 'c') clickPwr = 1 + (appState.lv.c * 1); else if(id === 't') appState.maxEn += up.add; else appState.pass += up.add;
-                renderUpgradeList(); refreshUI(); syncToFirebase();
+                renderUpgrades(); refreshUI(); sync();
                 tg.HapticFeedback.notificationOccurred('success');
-            } else tg.showAlert("کۆینی پێویستت نییە!");
+            } else tg.showAlert("GEM پێویستت نییە!");
         }
 
         function openWisdom() { 
             const lw = localStorage.getItem('lw'); if(lw && (Date.now() - lw) < 86400000) return tg.showAlert("خەڵاتی ئەمڕۆت وەرگرتووە.");
             document.getElementById('wisdomModal').style.display = 'flex'; 
         }
-        function claimWisdom() { 
-            appState.bal += 5000; localStorage.setItem('lw', Date.now());
-            document.getElementById('wisdomModal').style.display = 'none'; refreshUI(); syncToFirebase();
-        }
+        function claimWisdom() { appState.bal += 5000; localStorage.setItem('lw', Date.now()); document.getElementById('wisdomModal').style.display = 'none'; refreshUI(); sync(); }
 
         document.getElementById('avatarUploader').addEventListener('change', function(e) {
             const f = e.target.files[0]; if(!f) return;
@@ -422,15 +363,13 @@
                 img.onload = () => {
                     const c = document.createElement('canvas'); const ctx = c.getContext('2d');
                     c.width = 120; c.height = 120; ctx.drawImage(img, 0,0,120,120);
-                    appState.av = c.toDataURL('image/jpeg', 0.6); updateUIStrings(); syncToFirebase();
+                    appState.av = c.toDataURL('image/jpeg', 0.6); updateUIStrings(); sync();
                 };
             };
             r.readAsDataURL(f);
         });
 
-        function initWithdraw(m) { if(appState.bal < 1000000) return tg.showAlert("1M GEM required for 1$."); tg.showAlert(`Withdrawal request via ${m} submitted.`); }
-        function inviteFriend() { tg.openTelegramLink(`https://t.me/share/url?url=https://t.me/Geminicoins_bot?start=${uid}&text=Join and earn! 💎`); }
-        function completeSocial(n, l, r) { tg.openLink(l); setTimeout(() => { appState.bal += r; refreshUI(); syncToFirebase(); }, 3000); }
+        function initWithdraw(m) { if(appState.bal < 1000000) return tg.showAlert("1M GEM required for 1$."); tg.showAlert(`داواکاری ڕاکێشان بۆ ${m} نێردرا.`); }
 
         bootstrap();
     </script>
