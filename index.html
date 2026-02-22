@@ -119,14 +119,12 @@
 </head>
 <body>
 
-    <!-- Splash Screen -->
     <div id="splash">
         <img src="https://cdn-icons-png.flaticon.com/512/261/261882.png" class="s-diamond">
         <div class="s-title">GEMINICOINS</div>
         <div class="s-bar-container"><div class="s-progress"></div></div>
     </div>
 
-    <!-- Wisdom Modal -->
     <div id="wisdomModal">
         <div class="wisdom-content-box">
             <i class="fas fa-brain" style="font-size:60px; color:var(--gold); margin-bottom:30px;"></i>
@@ -151,7 +149,6 @@
         </header>
 
         <main>
-            <!-- MINE PAGE -->
             <div id="page-mine" class="page active">
                 <div class="badges-container">
                     <div class="badge b-blue">DATABASE SYNCED</div>
@@ -167,7 +164,6 @@
                 </div>
             </div>
 
-            <!-- PROFILE PAGE -->
             <div id="page-profile" class="page">
                 <div class="profile-av-header">
                     <div class="av-premium-circle">
@@ -195,14 +191,12 @@
                 </div>
             </div>
 
-            <!-- RANK PAGE -->
             <div id="page-rank" class="page">
                 <h1 style="text-align:center; font-family:'Orbitron'; font-size:35px; color:var(--gold); margin-bottom:40px;">TOP TAPPERS</h1>
                 <div class="podium-ui" id="podium-root-container"></div>
                 <div id="full-rank-list-area"></div>
             </div>
 
-            <!-- EARN PAGE -->
             <div id="page-earn" class="page">
                 <h1 style="font-family:'Orbitron'; font-size:38px; margin-bottom:30px;">EARN STATION</h1>
                 <div class="ad-card-premium" onclick="watchAdReward(2000)">
@@ -218,13 +212,11 @@
                 </div>
             </div>
 
-            <!-- BOOST PAGE -->
             <div id="page-boost" class="page">
                 <h1 style="font-family:'Orbitron'; font-size:35px; margin-bottom:35px;">BOOST HUB</h1>
                 <div id="boost-items-root"></div>
             </div>
 
-            <!-- FRIENDS PAGE -->
             <div id="page-friends" class="page">
                 <h1 style="font-family:'Orbitron'; font-size:35px; margin-bottom:35px; text-align:center;">NETWORK</h1>
                 <div class="withdraw-card-full">
@@ -258,11 +250,9 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // --- 2. ADSGRAM SDK ---
-        // لێرە Block ID خۆت دابنێ دوای ئەوەی لە Adsgram وەرتگرت
-        const AdController = window.Adsgram ? window.Adsgram.init({ blockId: "YOUR_BLOCK_ID" }) : null;
+        // --- 2. ADSGRAM SDK (Using Block ID: 23459) ---
+        const AdController = window.Adsgram ? window.Adsgram.init({ blockId: "23459" }) : null;
 
-        // --- 3. GLOBAL STATE (SYNCED WITH YOUR DB IMAGE) ---
         const tg = window.Telegram.WebApp;
         tg.expand();
         const user = tg.initDataUnsafe.user || { id: "0000", first_name: "Geminian" };
@@ -284,26 +274,16 @@
             { id: 't', name: 'Fusion Core', cost: 3000, add: 500, icon: 'fa-atom' }
         ];
 
-        // --- 4. INITIALIZATION ---
+        // --- INITIALIZATION ---
         async function bootstrap() {
             try {
                 const userDoc = await db.collection("users").doc(uid).get();
                 if(userDoc.exists) {
                     const cloudData = userDoc.data();
                     const now = Date.now();
-                    const secondsPassed = (now - (cloudData.last || now)) / 1000;
-                    const offlineEarnings = Math.max(0, (cloudData.pass || 0) * secondsPassed);
-                    
-                    appState = { 
-                        ...appState, 
-                        ...cloudData, 
-                        bal: Number(cloudData.bal || 0) + offlineEarnings, 
-                        last: now 
-                    };
-
-                    if(offlineEarnings > 10) {
-                        tg.showAlert(`بەخێربێیتەوە! کاتێک ئۆفلاین بوویت ${Math.floor(offlineEarnings).toLocaleString()} کۆینت کۆکردەوە.`);
-                    }
+                    const offlineEarnings = Math.max(0, (cloudData.pass || 0) * ((now - (cloudData.last || now)) / 1000));
+                    appState = { ...appState, ...cloudData, bal: Number(cloudData.bal || 0) + offlineEarnings, last: now };
+                    if(offlineEarnings > 50) tg.showAlert(`بەخێربێیتەوە! کاتێک ئۆفلاین بوویت ${Math.floor(offlineEarnings).toLocaleString()} کۆینت کۆکردەوە.`);
                 } else {
                     await db.collection("users").doc(uid).set(appState);
                 }
@@ -329,23 +309,8 @@
         }
 
         function runLoops() {
-            // Energy Regen
-            setInterval(() => { 
-                if(appState.energy < appState.maxEn) { 
-                    appState.energy = Math.min(appState.maxEn, appState.energy + 1.5); 
-                    refreshUI(); 
-                } 
-            }, 2000);
-            
-            // Passive Income
-            setInterval(() => { 
-                if(appState.pass > 0) { 
-                    appState.bal += (appState.pass / 10); 
-                    refreshUI(); 
-                } 
-            }, 100);
-
-            // Sync to Firebase every 20s
+            setInterval(() => { if(appState.energy < appState.maxEn) { appState.energy = Math.min(appState.maxEn, appState.energy + 1.5); refreshUI(); } }, 2000);
+            setInterval(() => { if(appState.pass > 0) { appState.bal += (appState.pass / 10); refreshUI(); } }, 100);
             setInterval(syncToFirebase, 20000);
         }
 
@@ -363,15 +328,12 @@
             document.getElementById('energy-bar-fill').style.width = (appState.energy / appState.maxEn * 100) + "%";
         }
 
-        // --- 5. TAPPING ---
+        // --- TAPPING ---
         document.getElementById('tap-trigger-btn').addEventListener('touchstart', (e) => {
             e.preventDefault();
             if(appState.energy >= clickPwr) {
-                appState.bal += clickPwr; 
-                appState.taps += 1; 
-                appState.energy -= clickPwr;
-                refreshUI(); 
-                tg.HapticFeedback.impactOccurred('medium');
+                appState.bal += clickPwr; appState.taps += 1; appState.energy -= clickPwr;
+                refreshUI(); tg.HapticFeedback.impactOccurred('medium');
                 const t = e.touches[0]; createPop(t.clientX, t.clientY, `+${clickPwr}`);
             }
         });
@@ -382,28 +344,20 @@
             setTimeout(() => p.remove(), 800);
         }
 
-        // --- 6. NAVIGATION ---
         function switchPage(pID, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.n-item').forEach(n => n.classList.remove('active'));
             document.getElementById('page-' + pID).classList.add('active'); el.classList.add('active');
-            if(pID === 'rank') fetchRank(); 
-            tg.HapticFeedback.selectionChanged();
+            if(pID === 'rank') fetchRank(); tg.HapticFeedback.selectionChanged();
         }
 
-        // --- 7. FEATURES ---
         async function fetchRank() {
             const list = document.getElementById('full-rank-list-area');
             const pod = document.getElementById('podium-root-container');
-            list.innerHTML = "<p style='text-align:center;'>Accessing Database Protocol...</p>";
-            const snap = await db.collection("users").orderBy("bal", "desc").limit(20).get();
+            list.innerHTML = "<p style='text-align:center;'>Accessing Database...</p>";
+            const snap = await db.collection("users").orderBy("bal", "desc").limit(15).get();
             let players = []; snap.forEach(doc => players.push({id: doc.id, ...doc.data()}));
-
-            pod.innerHTML = `
-                <div class="podium-column"><div class="podium-av"><img src="${players[1]?.av || ''}"></div><div class="podium-step ps2">#2</div></div>
-                <div class="podium-column"><div class="podium-av p1-av"><img src="${players[0]?.av || ''}"></div><div class="podium-step ps1">#1</div></div>
-                <div class="podium-column"><div class="podium-av"><img src="${players[2]?.av || ''}"></div><div class="podium-step ps3">#3</div></div>`;
-            
+            pod.innerHTML = `<div class="podium-column"><div class="podium-av"><img src="${players[1]?.av || ''}"></div><div class="podium-step ps2">#2</div></div><div class="podium-column"><div class="podium-av p1-av"><img src="${players[0]?.av || ''}"></div><div class="podium-step ps1">#1</div></div><div class="podium-column"><div class="podium-av"><img src="${players[2]?.av || ''}"></div><div class="podium-step ps3">#3</div></div>`;
             list.innerHTML = "";
             players.forEach((p, i) => {
                 list.innerHTML += `<div class="list-row-rank" style="${p.id === uid ? 'border-color:var(--gold);' : ''}">
@@ -417,18 +371,13 @@
 
         async function watchAdReward(amt) {
             if(!AdController) {
-                tg.showConfirm("Initialize test ad stream?", (ok) => { 
-                    if(ok) { appState.bal += amt; refreshUI(); syncToFirebase(); tg.showAlert("Test reward added!"); }
-                });
+                tg.showConfirm("ڕیکلام بەردەست نییە، وەکو تێست پاداشت وەردەگریت؟", (ok) => { if(ok) { appState.bal += amt; refreshUI(); syncToFirebase(); }});
                 return;
             }
             try {
                 const res = await AdController.show();
-                if(res.done) {
-                    appState.bal += amt; refreshUI(); syncToFirebase();
-                    tg.showAlert(`+${amt.toLocaleString()} GEM SECURED!`);
-                }
-            } catch(e) { tg.showAlert("No ads available currently."); }
+                if(res.done) { appState.bal += amt; refreshUI(); syncToFirebase(); tg.showAlert(`+${amt.toLocaleString()} GEM SECURED!`); }
+            } catch(e) { tg.showAlert("Ads not available."); }
         }
 
         function renderUpgradeList() {
@@ -439,7 +388,7 @@
                 r.innerHTML += `<div class="list-row-rank" onclick="buyUpgrade('${up.id}')">
                     <div style="width:55px; height:55px; background:#111; border-radius:15px; display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:22px;"><i class="fas ${up.icon}"></i></div>
                     <div style="flex:1; text-align:right; margin-right:15px;"><b>${up.name} <span style="color:var(--gold);">LV ${lvl}</span></b></div>
-                    <div style="font-family:Orbitron; font-weight:900;">${cost.toLocaleString()}</div>
+                    <div style="font-family:Orbitron;">${cost.toLocaleString()}</div>
                 </div>`;
             });
         }
@@ -450,24 +399,19 @@
             const cost = Math.floor(up.cost * Math.pow(2.8, lvl));
             if(appState.bal >= cost) {
                 appState.bal -= cost; appState.lv[id] = lvl + 1;
-                if(id === 'c') clickPwr = 1 + (appState.lv.c * 1);
-                else if(id === 't') appState.maxEn += up.add;
-                else appState.pass += up.add;
+                if(id === 'c') clickPwr = 1 + (appState.lv.c * 1); else if(id === 't') appState.maxEn += up.add; else appState.pass += up.add;
                 renderUpgradeList(); refreshUI(); syncToFirebase();
                 tg.HapticFeedback.notificationOccurred('success');
-            } else tg.showAlert("Not enough GEM resources!");
+            } else tg.showAlert("کۆینی پێویستت نییە!");
         }
 
-        function openWisdom() {
-            const lw = localStorage.getItem('lw');
-            if(lw && (Date.now() - lw) < 86400000) return tg.showAlert("Already claimed today!");
-            document.getElementById('wisdomModal').style.display = 'flex';
+        function openWisdom() { 
+            const lw = localStorage.getItem('lw'); if(lw && (Date.now() - lw) < 86400000) return tg.showAlert("خەڵاتی ئەمڕۆت وەرگرتووە.");
+            document.getElementById('wisdomModal').style.display = 'flex'; 
         }
-
-        function claimWisdom() {
+        function claimWisdom() { 
             appState.bal += 5000; localStorage.setItem('lw', Date.now());
-            document.getElementById('wisdomModal').style.display = 'none';
-            refreshUI(); syncToFirebase();
+            document.getElementById('wisdomModal').style.display = 'none'; refreshUI(); syncToFirebase();
         }
 
         document.getElementById('avatarUploader').addEventListener('change', function(e) {
@@ -478,31 +422,16 @@
                 img.onload = () => {
                     const c = document.createElement('canvas'); const ctx = c.getContext('2d');
                     c.width = 120; c.height = 120; ctx.drawImage(img, 0,0,120,120);
-                    appState.av = c.toDataURL('image/jpeg', 0.6); 
-                    updateUIStrings(); syncToFirebase();
+                    appState.av = c.toDataURL('image/jpeg', 0.6); updateUIStrings(); syncToFirebase();
                 };
             };
             r.readAsDataURL(f);
         });
 
-        function initWithdraw(m) {
-            if(appState.bal < 1000000) return tg.showAlert("1M GEM required for 1$ (1,500 IQD)");
-            tg.showAlert(`Withdrawal request of 1$ via ${m} submitted.`);
-        }
+        function initWithdraw(m) { if(appState.bal < 1000000) return tg.showAlert("1M GEM required for 1$."); tg.showAlert(`Withdrawal request via ${m} submitted.`); }
+        function inviteFriend() { tg.openTelegramLink(`https://t.me/share/url?url=https://t.me/Geminicoins_bot?start=${uid}&text=Join and earn! 💎`); }
+        function completeSocial(n, l, r) { tg.openLink(l); setTimeout(() => { appState.bal += r; refreshUI(); syncToFirebase(); }, 3000); }
 
-        function inviteFriend() {
-            tg.openTelegramLink(`https://t.me/share/url?url=https://t.me/Geminicoins_bot?start=${uid}&text=Join and earn elite rewards! 💎`);
-        }
-
-        function completeSocial(name, link, reward) {
-            tg.openLink(link);
-            setTimeout(() => {
-                appState.bal += reward; refreshUI(); syncToFirebase();
-                tg.showAlert(`+${reward.toLocaleString()} GEM SECURED!`);
-            }, 3000);
-        }
-
-        // Start App
         bootstrap();
     </script>
 </body>
